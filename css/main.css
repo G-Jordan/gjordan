@@ -1,0 +1,679 @@
+/* =========================================================
+   main.css — Theme-tool compatible
+   Uses variables set by Theme Binder / Site Theme modal:
+   --app-primary, --app-accent (and provides safe fallbacks)
+   ========================================================= */
+
+/* -------- Root tokens (theme-aware) -------- */
+:root{
+  /* Map legacy tokens to your new theme vars */
+  --primary-color: var(--app-primary, #5fa0ff);
+  --accent-color:  var(--app-accent,  #b478ff);
+  --glow-color:    var(--primary-color);
+
+  --dark-bg: #111;
+  --bg-overlay: rgba(0,0,0,.6);
+  --navbar-bg: var(--bg-overlay);
+
+  --text-muted:    #aaa;
+  --white-faint:   rgba(255,255,255,.05);
+  --white-hover:   rgba(255,255,255,.10);
+
+  --glow-box:      0 0 12px color-mix(in srgb, var(--primary-color) 35%, transparent);
+  --glow-shadow:   0 0 10px var(--primary-color);
+  --glow-border:   1px solid color-mix(in srgb, var(--primary-color) 65%, transparent);
+  --active-glow:   0 0 15px var(--primary-color);
+
+  /* Content/user-facing colors derived from theme */
+  --artist-color:   var(--accent-color);
+
+  /* Utility highlights derived from theme */
+  --highlight-cyan:   color-mix(in srgb, var(--primary-color) 40%, white);
+  --highlight-orange: color-mix(in srgb, var(--accent-color) 65%, #ffd599);
+  --highlight-blue:   color-mix(in srgb, var(--primary-color) 85%, white);
+
+  --modal-bg: #2b2b2b;
+
+  /* Pro nav chip tokens */
+  --chip-size: 44px;
+  --chip-radius: 12px;
+  --chip-gap: 12px;
+  --chip-ring: color-mix(in srgb, var(--app-primary,#5fa0ff) 45%, transparent);
+  --chip-bg: color-mix(in srgb, #0b0f14 78%, transparent);
+  --chip-grad: linear-gradient(90deg, var(--app-primary,#5fa0ff), var(--app-accent,#b478ff));
+}
+
+/* -------- Global base -------- */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: var(--dark-bg);
+  color: var(--accent-color);
+  font-family: Arial, sans-serif;
+  text-align: center;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch; /* smoother touch scroll */
+}
+
+/* Material Icons default */
+i.material-icons{
+  color: currentColor !important;
+  -webkit-text-fill-color: currentColor !important;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* -------- Navbar -------- */
+.navbar{
+  position: fixed; top: 0; left: 0; width: 100%;
+  background: var(--navbar-bg);
+  padding: 15px;
+  display: flex; align-items: center;
+  z-index: 1000;
+}
+.navbar-title{
+  flex-grow: 1; text-align: center;
+  font-size: 20px; font-weight: bold;
+  color: var(--accent-color);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent-color) 70%, transparent);
+}
+.menu-icon{
+  font-size: 30px; cursor: pointer;
+  margin-left: 15px; transition: transform .3s ease-in-out;
+  color: var(--primary-color);
+}
+.menu-icon.open{
+  transform: rotate(180deg);
+  color: var(--accent-color);
+}
+
+.menu{ display: flex; gap: 15px; }
+.menu a{
+  display: block; margin: 10px 20px; padding: 12px 20px;
+  background: var(--bg-overlay);
+  color: var(--accent-color);
+  border-radius: 12px;
+  border: 1px solid var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-color);
+  text-decoration: none; font-size: 18px;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--primary-color) 50%, transparent);
+  transition: all .3s ease; position: relative;
+}
+.menu a:hover{
+  background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+  color: var(--primary-color);
+  transform: scale(1.05);
+  box-shadow: 0 0 16px var(--primary-color), 0 0 32px var(--primary-color);
+}
+.menu a:hover::after{
+  content: ""; position: absolute; inset: -4px;
+  border-radius: 16px;
+  box-shadow: 0 0 8px var(--primary-color), 0 0 20px var(--primary-color);
+  animation: neonFlicker 1.2s infinite alternate;
+}
+.menu a.active{
+  animation: neonPulse 2s infinite ease-in-out;
+  color: var(--primary-color); font-weight: bold;
+  box-shadow: var(--active-glow);
+  border: 2px solid var(--primary-color);
+  border-radius: 12px; background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+  transform: scale(1.05);
+}
+#account-btn{ cursor: pointer; margin-right: 10px; font-size: 28px; color: var(--primary-color); }
+
+@keyframes neonFlicker { 0%{opacity:1} 50%{opacity:.7} 100%{opacity:1} }
+@keyframes neonPulse   { 0%{box-shadow:0 0 5px var(--primary-color)} 50%{box-shadow:0 0 15px var(--primary-color),0 0 25px var(--primary-color)} 100%{box-shadow:0 0 5px var(--primary-color)} }
+
+@media (max-width: 768px){
+  .menu{
+    display:none; flex-direction: column;
+    position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,.9);
+    width: 80%; border-radius: 10px; text-align:center; padding:10px 0;
+    opacity: 0; transition: opacity .5s, transform .5s;
+  }
+  .menu.show{ display:flex; opacity:1; transform:translateX(-50%) translateY(0); }
+  .menu-icon{ display:block; }
+}
+
+/* -------- Layout wrappers -------- */
+.container{ position: relative; z-index: 1; min-height: 100vh;
+  display:flex; flex-direction: column; align-items:center; justify-content:center;
+  padding-top: 0px;
+}
+.wrapper{ max-width: 600px; margin: 0 auto;
+  background: rgba(0,0,0,.4); padding: 20px; border-radius: 10px; backdrop-filter: blur(6px);
+}
+
+/* -------- Artwork / details -------- */
+.img-area img{ width: 100%; border-radius: 10px; }
+
+.song-details{ margin: 15px 0; }
+.song-details .name, .song-details .artist{ margin: 5px 0; }
+.song-details .name{ color: var(--text-muted); }
+.song-details .artist{ color: var(--artist-color); }
+
+/* -------- Music list -------- */
+.music-list{
+  background: rgba(0,0,0,.8);
+  border-radius: 12px; padding: 15px; box-shadow: var(--glow-box);
+}
+.music-list ul{ list-style:none; padding:0; }
+.music-list li{
+  background: var(--white-faint);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px; padding:10px; margin-bottom:10px;
+  display:flex; justify-content:space-between; align-items:center; cursor:pointer;
+  transition: transform .3s ease, background .3s ease, box-shadow .3s ease;
+  box-shadow: 0 0 8px var(--primary-color);
+}
+.music-list li:hover{ background: var(--white-hover); transform: scale(.98); }
+.music-list li.playing{
+  transform: scale(.95);
+  background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+  box-shadow: 0 0 10px var(--primary-color); color: var(--primary-color);
+}
+.music-list li .row{ display:flex; flex-direction:column; align-items:flex-start; text-align:left; width:100%; }
+.music-list li .row span{ color: var(--text-muted); }
+
+/* -------- Progress + timers -------- */
+.progress-area{ margin: 15px 0; position: relative; }
+.progress-bar{ background: var(--primary-color); height: 5px; width: 0; transition: width .1s linear; }
+.song-timer{ display:flex; justify-content:space-between; }
+
+/* -------- Player controls wrapper -------- */
+.controls{
+  display:flex; justify-content:center; gap:20px;
+  margin: 30px auto; padding: 10px 15px;
+  background: var(--bg-overlay); border-radius: 12px; box-shadow: var(--glow-box);
+  max-width: 95%;
+}
+.controls i{ cursor: pointer; }
+
+/* -------- Footer (icons back to original, squared wrappers) -------- */
+footer{
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Social strip container: gradient border, centered, square icon frames */
+.social-links{
+  display: flex;
+  align-items: center;
+  justify-content: center;          /* CENTER the icons row */
+  gap: 18px;
+  flex-wrap: wrap;
+  width: min(980px, 96vw);
+  margin: 0 auto;
+  padding: 14px 20px;
+  border-radius: 18px;
+  position: relative;
+  overflow: visible;
+
+  /* gradient border around the whole strip */
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--dark-bg), var(--dark-bg)) padding-box,
+    linear-gradient(135deg, var(--primary-color), var(--accent-color)) border-box;
+
+  box-shadow: 0 0 10px color-mix(in srgb, var(--primary-color) 22%, transparent);
+}
+
+/* optional subtle halo that won't block scroll/clicks */
+.social-links::after{
+  content:"";
+  position: absolute; inset: -8px;
+  border-radius: calc(18px + 8px);
+  pointer-events: none;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--primary-color) 26%, transparent);
+  opacity: .45;
+  animation: socialsGlow 6s ease-in-out infinite;
+}
+@keyframes socialsGlow{
+  0%,100% { transform: scale(0.995); opacity: .35; }
+  50%     { transform: scale(1.005); opacity: .55; }
+}
+/* Pause halo animation during scroll to reduce jank */
+body.is-scrolling .social-links::after{
+  animation-play-state: paused !important;
+}
+
+/* EACH icon link: SQUARED-OFF wrapper with gradient border */
+.social-links a{
+  display:flex; align-items:center; justify-content:center;
+  width: 60px; height: 60px;
+  border-radius: 12px;                /* square-ish corners */
+  border: 2px solid transparent;
+  background:
+    linear-gradient(#0000,#0000) padding-box,
+    linear-gradient(135deg, var(--primary-color), var(--accent-color)) border-box;
+  box-shadow: 0 1px 6px color-mix(in srgb, var(--primary-color) 24%, transparent);
+  transition: transform .18s ease, box-shadow .18s ease;
+  touch-action: manipulation;         /* improves touch scroll responsiveness */
+}
+.social-links a:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px var(--accent-color), 0 0 18px var(--primary-color);
+}
+
+/* ORIGINAL icons back (images/SVGs you provide) */
+.social-links img{
+  width: 40px; height: 40px; display: block;
+  pointer-events: none;
+}
+
+/* Branding block with gradient frame */
+.branding-footer{
+  display: block;
+  width: min(900px, 92vw);
+  margin: 0 auto;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-align: center;
+
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--bg-overlay), var(--bg-overlay)) padding-box,
+    linear-gradient(135deg, var(--primary-color), var(--accent-color)) border-box;
+
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 25%, transparent);
+  color: var(--accent-color);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--accent-color) 65%, transparent);
+}
+.branding-footer p{ margin: 6px 0; line-height: 1.4; }
+.branding-footer .tm{
+  font-weight: bold;
+  color: var(--highlight-cyan);
+  text-shadow: 0 0 6px var(--highlight-cyan);
+}
+
+/* motion-reduction for smoother scrolling on some devices */
+@media (prefers-reduced-motion: reduce){
+  * { animation: none !important; transition: none !important; }
+}
+
+/* -------- Modals -------- */
+.modal{
+  display:none; position:fixed; inset:0; z-index:2000;
+  background-color: rgba(0,0,0,.4);
+}
+.modal-content{
+  background-color: #1e1e1e; color: var(--text-muted);
+  margin: 60px auto; padding: 25px 20px; width: 90%; max-width: 400px;
+  border-radius: 16px; border: 1px solid var(--glow-color); box-shadow: 0 0 25px var(--glow-color);
+}
+.modal-content h2{
+  font-size: 24px; margin-bottom: 20px; text-align:center;
+  color: var(--accent-color);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--accent-color) 70%, transparent);
+}
+.modal-content input{
+  width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px;
+  background: var(--modal-bg); color: var(--accent-color); font-weight:bold;
+}
+.modal-content input::placeholder{ color: var(--text-muted); }
+.modal-content button{
+  display:inline-block; margin:6px 5px; padding:10px 16px; font-size:14px; font-weight:bold;
+  border:none; border-radius:6px; cursor:pointer;
+  background-color: var(--primary-color); color: #0b0d10;
+  box-shadow: 0 0 10px var(--primary-color); transition: all .2s ease-in-out;
+}
+.modal-content button:hover{
+  background-color: color-mix(in srgb, var(--primary-color) 15%, transparent);
+  color: var(--accent-color); transform: scale(1.03);
+  box-shadow: 0 0 15px var(--primary-color);
+}
+.modal-content .close{ float:right; font-size:24px; color: var(--accent-color); cursor:pointer; }
+
+/* -------- Toast -------- */
+#toast{
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--dark-bg); color: var(--primary-color);
+  padding: 14px 24px; border: 2px solid var(--primary-color); border-radius: 8px;
+  font-weight:bold; font-size:14px; z-index:3000; display:none;
+  box-shadow: var(--glow-shadow); animation: toastFade 3s ease-in-out;
+}
+@keyframes toastFade{
+  0%{opacity:0; transform: translateX(-50%) translateY(20px)}
+  10%,90%{opacity:1; transform: translateX(-50%) translateY(0)}
+  100%{opacity:0; transform: translateX(-50%) translateY(-10px)}
+}
+
+/* -------- Visualizer -------- */
+#audio-visualizer{
+  position: fixed; inset: 0;
+  width: 100vw !important; height: 100vh !important;
+  z-index: 0; pointer-events: none; opacity: .5; mix-blend-mode: screen;
+}
+#vz-open-editor{ position: fixed; right: 16px; bottom: 16px; z-index: 10000; }
+
+/* -------- Button micro-anim -------- */
+@keyframes buttonClick{ 0%{transform:scale(1) rotate(0)} 50%{transform:scale(1.3) rotate(15deg)} 100%{transform:scale(1) rotate(0)} }
+.btn-animate{ animation: buttonClick .3s ease; }
+
+/* -------- Reaction Buttons + Stats -------- */
+#reaction-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 12px 0;
+}
+#reaction-buttons button {
+  border-radius: 10px;
+  padding: 8px;
+}
+#song-stats {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-around;
+  font-weight: 500;
+  text-align: center;
+}
+#song-stats span { font-weight: 700; }
+
+/* --- Controls Theme Plugin compat shim --- */
+.controls[data-ctl-theme] .material-icons{
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  background-image: inherit !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+/* Neutralize global material-icons color ONLY inside themed controls */
+.controls[data-ctl-theme] i.material-icons{
+  color: transparent !important;
+}
+/* Palette menu always on top */
+#ctl-theme-menu,
+.ctl-theme-menu{
+  position: fixed !important;
+  z-index: 2147483000 !important;
+}
+/* Decorative effects don't catch clicks above the picker */
+.g73-controls-frame::before,
+.g73-controls-frame::after,
+.music-list .g73-list-frame::before,
+.music-list .g73-list-frame::after{
+  pointer-events: none !important;
+}
+/* Ensure normal stacking for controls */
+.controls[data-ctl-theme]{ position: relative; z-index: auto; }
+
+/* Footer container: isolate paints so halo doesn't trigger big repaints */
+footer, .social-links{ contain: paint; }
+.social-links::after{
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+@media (hover: none){
+  .social-links a:hover{
+    transform: none;
+    box-shadow: 0 1px 6px color-mix(in srgb, var(--primary-color) 24%, transparent);
+  }
+}
+
+/* ---- Footer Fans/Haters chips (Material Icons, centered) ---- */
+.footer-stats{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: min(980px, 96vw);
+  margin: 6px auto 0;
+}
+
+.stat-chip{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-overlay);
+  border-radius: 8px;             /* squared-ish corners */
+  isolation: isolate;
+}
+/* gradient border via masked pseudo (no harsh square outline) */
+.stat-chip::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  padding: 1px;                    /* border thickness */
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--primary-color) 90%, white),
+    color-mix(in srgb, var(--accent-color) 90%, white)
+  );
+  -webkit-mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+.stat-chip i.material-icons{ font-size: 20px; }
+
+/* Labels & values */
+.stat-label{
+  font-weight: 700;
+  letter-spacing: .2px;
+  color: var(--accent-color);
+}
+.stat-value{
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: var(--highlight-cyan);
+}
+
+/* Per-chip color cues */
+.footer-stats .stat-chip.fans i.material-icons{
+  color: var(--highlight-cyan) !important;
+  -webkit-text-fill-color: var(--highlight-cyan) !important;
+}
+.footer-stats .stat-chip.haters i.material-icons{
+  color: var(--highlight-orange) !important;
+  -webkit-text-fill-color: var(--highlight-orange) !important;
+}
+
+/* Hover feedback kept subtle (better scrolling) */
+.stat-chip:hover{
+  transform: translateY(-1px);
+  transition: transform .15s ease;
+}
+@media (hover: none){
+  .stat-chip:hover{ transform:none; }
+}
+
+/* =========================================================
+   Pro nav chips (login/logout + palette)
+   — clean borders, unified spacing, robust to dynamic DOM
+   ========================================================= */
+
+/* Base chip look for the button containers (if present) */
+.navbar .auth-chip,
+.navbar .theme-chip,              /* if the BUTTON has .theme-chip */
+.navbar #open-theme,              /* your JS-created palette button */
+.navbar #open-site-theme,         /* legacy id support */
+.navbar #account-btn,             /* login button/icon container */
+.navbar #logout-btn{              /* logout button/icon container */
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--chip-size);
+  height: var(--chip-size);
+  padding: 0;
+  line-height: 0;
+  border-radius: var(--chip-radius);
+  border: 1px solid var(--chip-ring);
+  background: var(--chip-bg);
+  box-shadow: 0 8px 18px rgba(0,0,0,.40);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  isolation: isolate;
+}
+
+/* Subtle gradient micro-border */
+.navbar .auth-chip::before,
+.navbar .theme-chip::before,
+.navbar #open-theme::before,
+.navbar #open-site-theme::before,
+.navbar #account-btn::before,
+.navbar #logout-btn::before{
+  content:"";
+  position:absolute; inset:0; border-radius: inherit; padding: 1px;
+  background: linear-gradient(135deg, var(--app-primary,#5fa0ff), var(--app-accent,#b478ff));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events:none; opacity:.65;
+}
+
+/* Icon gradient fill
+   - covers: <button><i class="material-icons">..</i></button>
+   - AND when your JS puts .theme-chip on the <i> itself */
+.navbar .auth-chip i.material-icons,
+.navbar .theme-chip i.material-icons,
+.navbar #open-theme i.material-icons,
+.navbar #open-site-theme i.material-icons,
+.navbar #account-btn i.material-icons,
+.navbar #logout-btn i.material-icons,
+.navbar i.theme-chip{ /* when the ICON itself has .theme-chip */
+  background-image: var(--chip-grad) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important; color: transparent !important;
+  font-size: 26px;
+  transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+}
+
+/* Hover/active/focus */
+.navbar .auth-chip:hover,
+.navbar .theme-chip:hover,
+.navbar #open-theme:hover,
+.navbar #open-site-theme:hover,
+.navbar #account-btn:hover,
+.navbar #logout-btn:hover{
+  box-shadow: 0 10px 24px rgba(0,0,0,.46);
+}
+.navbar .auth-chip:hover i.material-icons,
+.navbar .theme-chip:hover i.material-icons,
+.navbar #open-theme:hover i.material-icons,
+.navbar #open-site-theme:hover i.material-icons,
+.navbar #account-btn:hover i.material-icons,
+.navbar #logout-btn:hover i.material-icons,
+.navbar i.theme-chip:hover{
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--app-primary,#5fa0ff) 40%, transparent));
+}
+.navbar .auth-chip:active,
+.navbar .theme-chip:active,
+.navbar #open-theme:active,
+.navbar #open-site-theme:active,
+.navbar #account-btn:active,
+.navbar #logout-btn:active{
+  transform: translateY(1px);
+}
+.navbar .auth-chip:focus-visible,
+.navbar .theme-chip:focus-visible,
+.navbar #open-theme:focus-visible,
+.navbar #open-site-theme:focus-visible,
+.navbar #account-btn:focus-visible,
+.navbar #logout-btn:focus-visible{
+  outline: 2px solid color-mix(in srgb, var(--app-primary,#5fa0ff) 65%, transparent);
+  outline-offset: 2px;
+}
+
+/* Tiny glassiness on capable browsers */
+@supports (backdrop-filter: blur(6px)){
+  .navbar .auth-chip,
+  .navbar .theme-chip,
+  .navbar #open-theme,
+  .navbar #open-site-theme,
+  .navbar #account-btn,
+  .navbar #logout-btn{
+    background: color-mix(in srgb, #0b0f14 65%, transparent);
+    backdrop-filter: blur(6px);
+  }
+}
+
+/* Consistent spacing between the chips (covers both orders) */
+.navbar #open-theme + #account-btn,
+.navbar #open-theme + #logout-btn,
+.navbar #open-site-theme + #account-btn,
+.navbar #open-site-theme + #logout-btn,
+.navbar #account-btn + #open-theme,
+.navbar #logout-btn + #open-theme,
+.navbar #account-btn + #open-site-theme,
+.navbar #logout-btn + #open-site-theme,
+.navbar .auth-chip + .theme-chip,
+.navbar .theme-chip + .auth-chip,
+.navbar i.theme-chip + #account-btn,
+.navbar i.theme-chip + #logout-btn{
+  margin-left: var(--chip-gap);
+}
+
+/* Safety: if JS also sets inline margin-left, our spacing still wins */
+.navbar #open-theme{ margin-left: max(var(--chip-gap), 8px); }
+
+/* Keep the palette menu above everything */
+#ctl-theme-menu,
+.ctl-theme-menu{
+  position: fixed !important;
+  z-index: 2147483000 !important;
+}
+
+/* ----- Palette opener legacy fallback by ID (if you ever use #open-site-theme alone) ----- */
+#open-site-theme{
+  position: relative;
+  display: inline-grid; place-items: center;
+  width: var(--chip-size); height: var(--chip-size); border-radius: var(--chip-radius);
+  border: 1px solid var(--chip-ring);
+  background: var(--chip-bg);
+  box-shadow: 0 8px 20px rgba(0,0,0,.45);
+  cursor: pointer; user-select: none; outline: none;
+}
+#open-site-theme .material-icons{
+  background-image: var(--chip-grad) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important; color: transparent !important;
+  font-size: 26px; line-height: 1;
+  transition: transform .12s ease, filter .12s ease;
+}
+#open-site-theme:hover .material-icons{
+  transform: translateY(-1px) scale(1.04);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--app-primary,#5fa0ff) 55%, transparent));
+}
+#open-site-theme::after{
+  content:""; position:absolute; inset:-6px; border-radius:calc(var(--chip-radius) + 4px); pointer-events:none;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--app-primary,#5fa0ff) 32%, transparent);
+  opacity:.55; animation: chipGlow 4.8s ease-in-out infinite;
+}
+@keyframes chipGlow{ 0%,100%{transform:scale(.995);opacity:.40} 50%{transform:scale(1.005);opacity:.65} }
+
+/* Make the modal’s X button match the chip style (scoped to your modal) */
+#site-theme-modal .icon-btn{
+  all: unset;
+  display: inline-grid; place-items: center;
+  width: 40px; height: 40px; border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--app-primary,#5fa0ff) 55%, transparent);
+  background: color-mix(in srgb, #0b0f14 76%, transparent);
+  box-shadow: 0 8px 20px rgba(0,0,0,.45);
+  cursor: pointer;
+}
+#site-theme-modal .icon-btn .material-icons{
+  background-image: linear-gradient(90deg, var(--app-primary,#5fa0ff), var(--app-accent,#b478ff)) !important;
+  -webkit-background-clip: text !important; background-clip: text !important;
+  -webkit-text-fill-color: transparent !important; color: transparent !important;
+  font-size: 24px;
+}
+#site-theme-modal .icon-btn:hover .material-icons{
+  transform: translateY(-1px) scale(1.04);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--app-primary,#5fa0ff) 55%, transparent));
+}

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GJ Music Stats</title>
+  <style>
+    /* Basic styling for smooth in-place updates */
+    #songs div {
+      transition: background-color 0.3s ease;
+      padding: 10px;
+      margin-bottom: 5px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Firebase Song Player</h1>
+
+  <div id="auth">
+    <h2>Login or Register</h2>
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button>
+    <button onclick="logout()">Logout</button>
+    <p id="user-status"></p>
+  </div>
+
+  <div id="songs"><p>Please sign in to see songs.</p></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      onSnapshot,
+      doc,
+      updateDoc,
+      setDoc,
+      increment,
+      getDoc,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAwAjZWU_j85EbJYk8jE1IVpdOXkIMfG5Q",
+      authDomain: "gj-music-stats.firebaseapp.com",
+      projectId: "gj-music-stats",
+      storageBucket: "gj-music-stats.appspot.com",
+      messagingSenderId: "582857417308",
+      appId: "1:582857417308:web:067e047b07739ab81dbc99",
+      measurementId: "G-L48EX09QBQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth();
+
+    const songsRef = collection(db, "songs");
+    // Keep track of reaction subscriptions.
+    const reactionUnsubscribers = {};
+
+    // Subscribe to changes in the songs collection.
+    function subscribeToSongs() {
+      onSnapshot(songsRef, snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === "added" || change.type === "modified") {
+            updateSong(change.doc);
+          }
+          if (change.type === "removed") {
+            removeSong(change.doc);
+          }
+        });
+      });
+    }
+
+    // Update (or create) the DOM element for a single song.
+    async function updateSong(docSnap) {
+      const song = docSnap.data();
+      const songId = docSnap.id;
+      const container = document.getElementById("songs");
+
+      let songEl = document.getElementById("song-" + songId);
+      
+      if (!songEl) {
+        // If the song element doesn't exist, create it with initial placeholders.
+        songEl = document.createElement("div");
+        songEl.id = "song-" + songId;
+        container.appendChild(songEl);
+        songEl.innerHTML = `
+          <h3>${song.title}</h3>
+          <p id="stats-${songId}" data-views="${song.views}">
+            Views: ${song.views} | Likes: -- | Dislikes: --
+          </p>
+          <button onclick="playSong('${songId}')">Play</button>
+          <button onclick="addReaction('${songId}', 'like')">Like</button>
+          <button onclick="addReaction('${songId}', 'dislike')">Dislike</button>
+          <hr>
+        `;
+        // Subscribe to the song's reactions subcollection.
+        subscribeToSongReactions(songId);
+      } else {
+        // If the song element already exists, update only the view count.
+        const statsEl = document.getElementById("stats-" + songId);
+        if (statsEl) {
+          // Preserve the existing likes/dislikes text (if already updated by reactions)
+          const currentText = statsEl.textContent;
+          // Try to extract likes/dislikes if they are present.
+          let likesPart = "";
+          let dislikesPart = "";
+          const parts = currentText.split("|");
+          if (parts.length >= 3) {
+            // parts[0] is Views, parts[1] is Likes, parts[2] is Dislikes.
+            likesPart = parts[1].trim();
+            dislikesPart = parts[2].trim();
+          } else {
+            likesPart = "Likes: --";
+            dislikesPart = "Dislikes: --";
+          }
+          statsEl.setAttribute("data-views", song.views);
+          statsEl.textContent = `Views: ${song.views} | ${likesPart} | ${dislikesPart}`;
+        }
+      }
+    }
+
+    // Remove the song's DOM element and unsubscribe from reactions.
+    function removeSong(docSnap) {
+      const songId = docSnap.id;
+      const songEl = document.getElementById("song-" + songId);
+      if (songEl) {
+        songEl.remove();
+      }
+      if (reactionUnsubscribers[songId]) {
+        reactionUnsubscribers[songId]();
+        delete reactionUnsubscribers[songId];
+      }
+    }
+
+    // Subscribe to a song's reactions subcollection for real-time updates.
+    function subscribeToSongReactions(songId) {
+      const reactionsRef = collection(db, "songs", songId, "reactions");
+      const unsubscribe = onSnapshot(reactionsRef, snapshot => {
+        let likesCount = 0;
+        let dislikesCount = 0;
+        snapshot.forEach(rDoc => {
+          const data = rDoc.data();
+          if (data.reaction === "like") likesCount++;
+          else if (data.reaction === "dislike") dislikesCount++;
+        });
+        // Update only the likes/dislikes part of the stats.
+        const statsEl = document.getElementById("stats-" + songId);
+        if (statsEl) {
+          // Get the current views from the data attribute.
+          const currentViews = statsEl.getAttribute("data-views") || "0";
+          statsEl.textContent = `Views: ${currentViews} | Likes: ${likesCount} | Dislikes: ${dislikesCount}`;
+        }
+      });
+      reactionUnsubscribers[songId] = unsubscribe;
+    }
+
+    // Update the song's view count.
+    window.playSong = async function (id) {
+      try {
+        const songDoc = doc(db, "songs", id);
+        await updateDoc(songDoc, { views: increment(1) });
+      } catch (error) {
+        console.error("Error updating views:", error);
+      }
+    };
+
+    // Allow a user to add or update their reaction.
+    window.addReaction = async function (songId, reactionType) {
+      const user = auth.currentUser;
+      if (!user) return;
+      try {
+        const reactionRef = doc(db, "songs", songId, "reactions", user.uid);
+        const existingReaction = await getDoc(reactionRef);
+        if (existingReaction.exists()) {
+          const currentReaction = existingReaction.data().reaction;
+          if (currentReaction !== reactionType) {
+            await updateDoc(reactionRef, {
+              reaction: reactionType,
+              timestamp: Date.now()
+            });
+          }
+        } else {
+          await setDoc(reactionRef, {
+            reaction: reactionType,
+            timestamp: Date.now()
+          });
+        }
+      } catch (error) {
+        console.error("Error updating reaction:", error);
+      }
+    };
+
+    // Register a new user.
+    window.register = async function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    // Login an existing user.
+    window.login = async function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+
+    // Logout the current user.
+    window.logout = async function () {
+      try {
+        await signOut(auth);
+        document.getElementById("songs").innerHTML = "<p>Please sign in to see songs.</p>";
+      } catch (err) {
+        console.error("Error during logout:", err);
+      }
+    };
+
+    // Listen for authentication state changes.
+    onAuthStateChanged(auth, user => {
+      const status = document.getElementById("user-status");
+      const authBox = document.getElementById("auth");
+      if (user) {
+        status.innerText = `Signed in as: ${user.email}`;
+        authBox.style.display = "none";
+        subscribeToSongs();
+      } else {
+        status.innerText = "Not signed in";
+        authBox.style.display = "block";
+        document.getElementById("songs").innerHTML = "<p>Please sign in to see songs.</p>";
+      }
+    });
+  </script>
+</body>
+</html>

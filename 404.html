@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Page Not Found - G Jordan</title>
+
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet" />
+
+        <style>
+            :root {
+                --primary-color: limegreen;
+                --accent-color: gold;
+                --dark-bg: #111;
+                --text-color: #ddd;
+                --navbar-bg: #000;
+            }
+
+            /* General Styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: "Arial", sans-serif;
+                background: var(--dark-bg);
+                color: var(--text-color);
+                overflow-x: hidden;
+            }
+
+            /* Canvas Background */
+            #background-canvas {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: -1;
+                pointer-events: none;
+                opacity: 0.4;
+                mix-blend-mode: screen;
+            }
+
+            /* Navbar */
+            .navbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: var(--navbar-bg);
+                padding: 15px 20px;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+
+            .navbar-title {
+                font-size: 22px;
+                font-weight: bold;
+                color: var(--accent-color);
+                text-shadow: 0 0 8px var(--accent-color);
+                transition: all 0.4s ease;
+            }
+
+            .menu-icon {
+                font-size: 30px;
+                cursor: pointer;
+                transition: transform 0.4s ease;
+            }
+
+            .menu-icon.open {
+                transform: rotate(180deg);
+                color: red;
+            }
+
+            .menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 65px;
+                right: 20px;
+                background: rgba(0, 0, 0, 0.9);
+                border-radius: 10px;
+                padding: 10px;
+                text-align: right;
+                box-shadow: 0 0 12px var(--primary-color);
+            }
+
+            .menu a {
+                color: var(--accent-color);
+                text-decoration: none;
+                margin: 10px 0;
+                font-weight: bold;
+                display: block;
+                transition: color 0.3s;
+            }
+
+            .menu a:hover {
+                color: var(--primary-color);
+            }
+
+            .menu.show {
+                display: flex;
+                animation: fadeInMenu 0.5s ease forwards;
+            }
+
+            @keyframes fadeInMenu {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* 404 Container */
+            .error-container {
+                text-align: center;
+                margin: 100px auto 50px;
+                max-width: 600px;
+                padding: 30px;
+                background: rgba(0, 0, 0, 0.7);
+                border-radius: 15px;
+                box-shadow: 0 0 15px var(--primary-color);
+            }
+
+            .error-container h1 {
+                font-size: 100px;
+                margin-bottom: 10px;
+                color: var(--accent-color);
+                text-shadow: 0 0 8px var(--accent-color);
+            }
+
+            .error-container p {
+                font-size: 20px;
+                margin-bottom: 30px;
+            }
+
+            .error-container a {
+                display: inline-block;
+                padding: 12px 24px;
+                background: var(--primary-color);
+                color: black;
+                font-weight: bold;
+                border-radius: 8px;
+                text-decoration: none;
+                transition: background 0.3s;
+            }
+
+            .error-container a:hover {
+                background: var(--accent-color);
+            }
+
+            /* Footer */
+            footer {
+                text-align: center;
+                margin-top: 40px;
+                padding: 20px;
+                background: rgba(0, 0, 0, 0.8);
+                color: var(--accent-color);
+                font-size: 14px;
+                box-shadow: 0 0 8px var(--primary-color);
+                text-shadow: 0 0 6px var(--accent-color);
+            }
+        </style>
+    </head>
+
+    <body>
+        <canvas id="background-canvas"></canvas>
+
+        <!-- Navbar -->
+        <div class="navbar">
+            <span class="menu-icon" id="menuIcon" onclick="toggleMenu()"
+                >☰</span
+            >
+            <span class="navbar-title" id="navbarTitle"
+                >G Jordan's Official Webpage</span
+            >
+            <div class="menu" id="menu">
+                <a href="index.html">Home</a>
+                <a href="videos/player.html">Videos</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-container">
+            <h1>404</h1>
+            <p>Oops! The page you're looking for doesn't exist.</p>
+            <a href="index.html">Go Home</a>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            &copy; 2025 G Jordan |
+            <span style="color: limegreen">G73™ LLC</span>
+        </footer>
+
+        <!-- Scripts -->
+        <script>
+            // Navbar Toggle
+            function toggleMenu() {
+                const menu = document.getElementById("menu");
+                const menuIcon = document.getElementById("menuIcon");
+                const navbarTitle = document.getElementById("navbarTitle");
+                if (menu.classList.contains("show")) {
+                    menu.classList.remove("show");
+                    menuIcon.innerHTML = "☰";
+                    menuIcon.classList.remove("open");
+                    navbarTitle.innerText = "G Jordan's Official Webpage";
+                } else {
+                    menu.classList.add("show");
+                    menuIcon.innerHTML = "✖";
+                    menuIcon.classList.add("open");
+                    navbarTitle.innerText = "G Jordan’s World";
+                }
+            }
+        </script>
+
+        <script>
+            // Canvas Background Animation
+            const canvas = document.getElementById("background-canvas");
+            const ctx = canvas.getContext("2d");
+
+            let particlesArray;
+
+            function initParticles() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                particlesArray = [];
+                const numberOfParticles = 70;
+
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particlesArray.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 2 + 1,
+                        speedX: Math.random() * 0.5 - 0.25,
+                        speedY: Math.random() * 0.5 - 0.25,
+                        color: `hsl(${Math.random() * 360}, 100%, 60%)`
+                    });
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particlesArray.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+
+                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animateParticles);
+            }
+
+            window.addEventListener("resize", initParticles);
+
+            // Start animation
+            initParticles();
+            animateParticles();
+        </script>
+    </body>
+</html>

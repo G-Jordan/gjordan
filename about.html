@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About — G Jordan | G73.music</title>
+
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="preload" as="image" href="gjordan.jpg" />
+  <link rel="preload" as="image" href="gjordan2.jpg" />
+  <link rel="preload" as="image" href="gjordan3.jpg" />
+  <link rel="preload" as="image" href="gjordan4.jpg" />
+  <link rel="preload" as="image" href="gjordan5.jpg" />
+
+  <!-- Speed up remote images -->
+  <link rel="preconnect" href="https://cdn.pixabay.com" crossorigin />
+  <link rel="preconnect" href="https://images.weserv.nl" crossorigin />
+
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+  <style>
+    :root{
+      --primary-color:#5fa0ff; --accent-color:#b478ff; --navbar-bg:#000; --text-color:#e6eef8;
+      --card-bg:rgba(0,0,0,.65); --chip-bg:color-mix(in srgb, var(--accent-color) 10%, transparent);
+      --kbd-bg: rgba(255,255,255,.08); --kbd-br: 1px solid rgba(255,255,255,.2);
+    }
+
+    body{
+      margin:0; font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text-color);
+      background: linear-gradient(135deg,#111,#1a1a1a);
+      background-size: 400% 400%;
+      animation: bgPulse 18s ease infinite;
+      overflow-x: hidden;
+    }
+    @keyframes bgPulse{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    canvas#particles{position:fixed; inset:0; width:100%; height:100%; z-index:-1; pointer-events:none; opacity:.5; mix-blend-mode:screen;}
+
+    .navbar{
+      position:fixed; inset:0 0 auto 0; z-index:1000;
+      background: var(--navbar-bg);
+      display:flex; align-items:center; gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid color-mix(in srgb, var(--primary-color) 36%, transparent);
+      box-shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+    .menu-icon{font-size:28px; line-height:1; cursor:pointer; user-select:none; color: var(--accent-color); transition: transform .25s ease;}
+    .menu-icon.open{ transform: rotate(180deg); }
+    .navbar-title{
+      margin:0 auto; font: 900 18px/1.2 system-ui,Segoe UI,Roboto;
+      color: color-mix(in srgb, var(--primary-color) 88%, white 0%);
+      text-shadow: 0 0 10px color-mix(in srgb, var(--primary-color) 28%, transparent);
+      letter-spacing:.25px;
+    }
+    .menu{
+      position:fixed; left:50%; transform:translateX(-50%);
+      top:58px; width:min(92vw,720px);
+      display:none; flex-direction:column; gap:10px;
+      background: rgba(10,12,16,.92);
+      border:1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+      border-radius:12px; padding:12px; box-shadow: 0 10px 28px rgba(0,0,0,.5);
+      backdrop-filter: blur(6px);
+    }
+    .menu.show{ display:flex; }
+    .menu a{
+      display:block; padding:12px 14px; text-decoration:none; border-radius:10px;
+      color: color-mix(in srgb, var(--accent-color) 88%, white 0%);
+      border:1px solid color-mix(in srgb, var(--primary-color) 40%, transparent);
+      background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--primary-color) 24%, transparent);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .menu a:hover{
+      transform: translateY(-1px);
+      color: color-mix(in srgb, var(--primary-color) 92%, white 0%);
+      background: color-mix(in srgb, var(--accent-color) 14%, transparent);
+      border-color: color-mix(in srgb, var(--accent-color) 40%, transparent);
+    }
+
+    .container{ padding: calc(64px + 24px) 16px 40px; max-width: 1200px; margin: 0 auto; }
+
+    .profile{ display:grid; grid-template-columns: 1fr; gap:14px; place-items:center; text-align:center; }
+    @media(min-width:760px){ .profile{ grid-template-columns: 280px 1fr; text-align:left; align-items:center; } }
+    .profile-pic-wrapper{ position:relative; width:180px; height:180px; }
+    .fade-img{
+      position:absolute; inset:0; width:180px; height:180px; border-radius:50%; object-fit:cover;
+      border:4px solid color-mix(in srgb, var(--accent-color) 90%, white 0%);
+      box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 45%, transparent);
+      opacity:0; transition: opacity 1s ease-in-out;
+      animation: floatPic 4s ease-in-out infinite, fadeImages 25s infinite both;
+    }
+    .fade-img:nth-child(1){ animation-delay:0s } .fade-img:nth-child(2){ animation-delay:5s }
+    .fade-img:nth-child(3){ animation-delay:10s } .fade-img:nth-child(4){ animation-delay:15s }
+    .fade-img:nth-child(5){ animation-delay:20s }
+    @keyframes floatPic{ 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-8px) } }
+    @keyframes fadeImages{ 0%{opacity:0} 4%{opacity:1} 20%{opacity:1} 24%{opacity:0} 100%{opacity:0} }
+
+    .artist-name{
+      font: 900 clamp(22px, 4vw, 40px)/1.1 system-ui,Segoe UI,Roboto;
+      color: color-mix(in srgb, var(--accent-color) 92%, white 0%);
+      text-shadow: 0 0 10px color-mix(in srgb, var(--accent-color) 34%, transparent);
+      letter-spacing:.3px; margin:0;
+    }
+    .subtitle{
+      display:inline-block; margin-top:8px;
+      padding:8px 12px; border-radius:12px;
+      color: color-mix(in srgb, var(--primary-color) 90%, white 0%);
+      border:1px solid color-mix(in srgb, var(--primary-color) 35%, transparent);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--primary-color) 26%, transparent);
+      background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+      font-weight:800;
+    }
+
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+    .chip{
+      display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:999px;
+      background: var(--chip-bg);
+      border:1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+      font-weight:800; font-size:.95rem;
+    }
+    .chip i{ font-size:18px; color: color-mix(in srgb, var(--accent-color) 82%, black) }
+
+    /* TABS: vertical "music list" with collapse */
+    .tabs{ margin-top:22px; }
+    .tabbar{
+      display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px;
+    }
+    .toggle-tabs{
+      appearance:none; border:none; cursor:pointer; border-radius:10px;
+      padding:8px 12px; font-weight:900; display:inline-flex; align-items:center; gap:8px;
+      background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+      color: color-mix(in srgb, var(--accent-color) 92%, white);
+      border:1px solid color-mix(in srgb, var(--primary-color) 35%, transparent);
+      box-shadow: 0 0 10px color-mix(in srgb, var(--primary-color) 16%, transparent);
+    }
+    .toggle-tabs i{ font-size:20px }
+    .current-tab{ font-weight:800; opacity:.9 }
+
+    .tablist{
+      display:none; /* hidden when collapsed */
+      grid-template-columns: 1fr;
+      gap:8px;
+      max-height: 220px; /* only a few visible */
+      overflow:auto;
+      padding-right:4px;
+    }
+    .tabs.expanded .tablist{ display:grid; }
+
+    .tablist [role="tab"]{
+      appearance:none; border:none; cursor:pointer; border-radius:10px; padding:10px 12px; font-weight:900; text-align:left;
+      background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+      color: color-mix(in srgb, var(--accent-color) 90%, white);
+      border:1px solid color-mix(in srgb, var(--primary-color) 35%, transparent);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      display:flex; align-items:center; gap:10px;
+    }
+    .tablist [role="tab"] .tab-ic{ font-size:18px; opacity:.9; }
+    .tablist [role="tab"][aria-selected="true"]{
+      background: var(--prog-fill, linear-gradient(90deg, var(--primary-color), var(--accent-color)));
+      color:#0b0d10; border-color: color-mix(in srgb, var(--primary-color) 55%, transparent);
+      transform: translateY(-1px);
+    }
+
+    .tabpanel{
+      margin-top:12px; padding:16px; border-radius:14px;
+      background: var(--card-bg);
+      border:1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+      box-shadow: 0 10px 28px rgba(0,0,0,.45), 0 0 14px color-mix(in srgb, var(--primary-color) 22%, transparent);
+    }
+    .tabpanel[hidden]{ display:none }
+
+    /* Long-form content */
+    .about-article{
+      display:grid; gap:14px;
+      max-width: 78ch;
+      margin: 0 auto;
+      overflow-wrap: anywhere;
+    }
+    .about-article p{ line-height:1.65; margin:0 }
+    .about-article ul, .about-article ol{ padding-left: 1.2rem; margin: 0; display:grid; gap:.35rem }
+    .about-article blockquote{
+      margin:0; padding:10px 12px; border-left:3px solid color-mix(in srgb, var(--accent-color) 55%, transparent);
+      background: rgba(255,255,255,.04); border-radius:8px; font-style: italic;
+      color: color-mix(in srgb, var(--accent-color) 86%, white);
+    }
+    .about-article figure{
+      margin:0; display:grid; gap:8px; justify-items:center;
+      background: rgba(255,255,255,.03);
+      border:1px solid color-mix(in srgb, var(--primary-color) 26%, transparent);
+      border-radius:12px; padding:10px;
+    }
+    .about-article img{
+      width:100%; height:auto; display:block; border-radius:10px;
+      box-shadow: 0 0 12px color-mix(in srgb, var(--primary-color) 18%, transparent);
+      background:#0e141b; /* neutral, not blue */
+      min-height: 180px;   /* avoid layout jump */
+    }
+    .about-article figcaption{
+      font-size:.9rem; color: color-mix(in srgb, var(--primary-color) 86%, white);
+      text-align:center;
+    }
+
+    /* Badges */
+    .badges{ display:grid; gap:10px; margin-top:8px; grid-template-columns: repeat(2, minmax(0,1fr)); }
+    @media(min-width:560px){ .badges{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
+    @media(min-width:980px){ .badges{ grid-template-columns: repeat(4, minmax(0,1fr)); } }
+    .badge{
+      display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px;
+      border:1px solid color-mix(in srgb, var(--primary-color) 28%, transparent);
+      background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+      font-weight:900; letter-spacing:.2px;
+      box-shadow: 0 0 10px color-mix(in srgb, var(--primary-color) 16%, transparent);
+    }
+    .badge .icon{
+      width:28px; height:28px; display:grid; place-items:center; border-radius:8px;
+      background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+      border:1px solid color-mix(in srgb, var(--accent-color) 35%, transparent);
+      flex: 0 0 28px;
+    }
+    .badge svg, .badge i{ width:20px; height:20px; color: color-mix(in srgb, var(--app-accent, var(--accent-color)) 72%, black); fill: currentColor; -webkit-text-fill-color: currentColor; }
+    .badge small{ display:block; font-weight:700; opacity:.85 }
+
+    footer{
+      margin: 32px auto 0; padding: 18px 12px; text-align:center;
+      background:
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--primary-color) 8%, #000),
+          color-mix(in srgb, var(--accent-color) 10%, #000));
+      border-top:1px solid color-mix(in srgb, var(--primary-color) 26%, transparent);
+      color: color-mix(in srgb, var(--primary-color) 85%, white 0%);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--primary-color) 24%, transparent);
+    }
+    .social-links{ display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap }
+    .social-links a img{ height:28px; filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent-color) 30%, transparent)); transition: transform .2s ease, filter .2s ease }
+    .social-links a:hover img{ transform: translateY(-1px) scale(1.05); filter: drop-shadow(0 0 12px color-mix(in srgb, var(--primary-color) 40%, transparent)) }
+  </style>
+
+  <!-- ▼▼ G73 About Binder v2.3.3 ▼▼ -->
+  <script>
+  (()=>{
+    const $r = document.documentElement;
+    function loadPalette(){
+      try{ const s = JSON.parse(localStorage.getItem('siteThemeV1')||'null');
+        if (s?.main && s?.accent) return { primary:s.main, accent:s.accent }; }catch{}
+      try{ const t = JSON.parse(localStorage.getItem('themeSettings')||'null');
+        if (t?.mainColor && t?.accentColor) return { primary:t.mainColor, accent:t.accentColor }; }catch{}
+      const cs = getComputedStyle($r);
+      const p = (cs.getPropertyValue('--app-primary')||cs.getPropertyValue('--primary-color')).trim();
+      const a = (cs.getPropertyValue('--app-accent') ||cs.getPropertyValue('--accent-color')).trim();
+      return (p && a) ? { primary:p, accent:a } : { primary:'#00f0ff', accent:'#ff00f0' };
+    }
+    function applyVars({primary,accent}){
+      $r.style.setProperty('--app-primary', primary);
+      $r.style.setProperty('--app-accent',  accent);
+      $r.style.setProperty('--primary-color', primary);
+      $r.style.setProperty('--accent-color',  accent);
+      $r.style.setProperty('--prog-fill',     `linear-gradient(90deg, ${primary}, ${accent})`);
+      $r.style.setProperty('--g73-icon',        `color-mix(in srgb, ${accent} 68%, black)`);
+      $r.style.setProperty('--g73-icon-hover',  `color-mix(in srgb, ${accent} 82%, black)`);
+      $r.style.setProperty('--g73-icon-muted',  `color-mix(in srgb, ${accent} 55%, black)`);
+      $r.style.setProperty('--g73-icon-primary',`color-mix(in srgb, ${primary} 72%, black)`);
+      let meta = document.querySelector('meta[name="theme-color"]');
+      if (!meta){ meta = document.createElement('meta'); meta.name='theme-color'; document.head.appendChild(meta); }
+      meta.setAttribute('content', primary);
+      window.dispatchEvent(new CustomEvent('theme:changed', { detail:{ primary, accent, source:'about-binder-v2.3.3' } }));
+    }
+    function ensureIconReset(){
+      const id='g73-about-icon-reset';
+      if (document.getElementById(id)) return;
+      const css = `
+      i.material-icons, .icon-btn i, .icon-btn svg, .icon-btn svg path{
+        color: var(--g73-icon) !important; fill: currentColor !important;
+        -webkit-text-stroke: 0 !important; filter: none !important; text-shadow: none !important; box-shadow: none !important;
+        transition: color .12s ease;
+      }
+      .icon-btn:hover i, .icon-btn:hover svg{ color: var(--g73-icon-hover) !important; }`;
+      const el = document.createElement('style'); el.id=id; el.textContent=css; document.head.appendChild(el);
+    }
+    let queued=false;
+    const queue=()=>{ if(queued) return; queued=true; requestAnimationFrame(()=>{ queued=false; applyVars(loadPalette()); ensureIconReset(); }); };
+    if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', queue, {once:true}); else queue();
+    window.addEventListener('theme:changed', queue, {passive:true});
+    window.addEventListener('storage', (e)=>{ if (e.key==='siteThemeV1' || e.key==='themeSettings') queue(); }, {passive:true});
+    new MutationObserver(queue).observe($r, { attributes:true, attributeFilter:['style','class','data-theme'] });
+    window.G73AboutBinder = { apply: queue };
+  })();
+  </script>
+  <!-- ▲▲ G73 About Binder v2.3.3 ▲▲ -->
+</head>
+
+<body>
+  <canvas id="particles"></canvas>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>
+    <span class="navbar-title" id="navbarTitle">GJordan.music</span>
+    <div class="menu" id="menu" hidden>
+      <a href="index.html">Home</a>
+      <a href="player.html">Videos</a>
+      <a href="#">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <main class="container">
+
+    <!-- Hero / Identity -->
+    <section class="profile" aria-label="Header">
+      <div class="profile-pic-wrapper" aria-hidden="true">
+        <!-- HERO IMAGE STACK -->
+        <img src="gjordan.jpg"  class="fade-img" alt="" />
+        <img src="gjordan2.jpg" class="fade-img" alt="" />
+        <img src="gjordan3.jpg" class="fade-img" alt="" />
+        <img src="gjordan4.jpg" class="fade-img" alt="" />
+        <img src="gjordan5.jpg" class="fade-img" alt="" />
+      </div>
+
+      <div>
+        <h1 class="artist-name">G Jordan</h1>
+        <div class="subtitle">G73 — Music • Tech • Community</div>
+
+        <div class="chips" aria-label="Core values">
+          <span class="chip"><i class="material-icons" aria-hidden="true">favorite</i> Passion</span>
+          <span class="chip"><i class="material-icons" aria-hidden="true">construction</i> Hard Work</span>
+          <span class="chip"><i class="material-icons" aria-hidden="true">group</i> Collaboration</span>
+          <span class="chip"><i class="material-icons" aria-hidden="true">bolt</i> Innovation</span>
+          <span class="chip"><i class="material-icons" aria-hidden="true">public</i> Community</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="tabs expanded" aria-label="About G Jordan & G73">
+      <div class="tabbar">
+        <button id="tabsToggle" class="toggle-tabs" aria-expanded="true" aria-controls="sections-list">
+          <i class="material-icons" aria-hidden="true">queue_music</i>
+          Browse sections
+        </button>
+        <span id="currentTabLabel" class="current-tab">Mission</span>
+      </div>
+
+      <div id="sections-list" class="tablist" role="tablist" aria-label="Sections">
+        <button role="tab" aria-selected="true"  id="tab-mission"  aria-controls="panel-mission">
+          <i class="material-icons tab-ic" aria-hidden="true">flag</i><span>Mission</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-how"      aria-controls="panel-how">
+          <i class="material-icons tab-ic" aria-hidden="true">build</i><span>How It Works</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-artists"  aria-controls="panel-artists">
+          <i class="material-icons tab-ic" aria-hidden="true">mic</i><span>For Artists</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-fans"     aria-controls="panel-fans">
+          <i class="material-icons tab-ic" aria-hidden="true">groups</i><span>For Fans</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-tech"     aria-controls="panel-tech">
+          <i class="material-icons tab-ic" aria-hidden="true">memory</i><span>Tech Stack</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-arch"     aria-controls="panel-arch">
+          <i class="material-icons tab-ic" aria-hidden="true">account_tree</i><span>Architecture</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-privacy"  aria-controls="panel-privacy">
+          <i class="material-icons tab-ic" aria-hidden="true">lock</i><span>Privacy & Data</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-a11y"     aria-controls="panel-a11y">
+          <i class="material-icons tab-ic" aria-hidden="true">accessibility_new</i><span>Accessibility</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-rights"   aria-controls="panel-rights">
+          <i class="material-icons tab-ic" aria-hidden="true">gavel</i><span>Licensing & Rights</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-money"    aria-controls="panel-money">
+          <i class="material-icons tab-ic" aria-hidden="true">payments</i><span>Monetization</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-contrib"  aria-controls="panel-contrib">
+          <i class="material-icons tab-ic" aria-hidden="true">volunteer_activism</i><span>Contributing</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-faq"      aria-controls="panel-faq">
+          <i class="material-icons tab-ic" aria-hidden="true">help</i><span>FAQ</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-roadmap"  aria-controls="panel-roadmap">
+          <i class="material-icons tab-ic" aria-hidden="true">timeline</i><span>Roadmap</span>
+        </button>
+        <button role="tab" aria-selected="false" id="tab-press"    aria-controls="panel-press">
+          <i class="material-icons tab-ic" aria-hidden="true">campaign</i><span>Press & Contact</span>
+        </button>
+      </div>
+
+      <!-- Mission -->
+      <div id="panel-mission" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-mission">
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2017/01/18/17/14/night-1990623_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2016/11/29/05/08/architecture-1868667_1280.jpg|https://cdn.pixabay.com/photo/2016/11/18/16/00/bridge-1836873_1280.jpg"
+                 alt="Winter city lights reflecting on wet pavement" />
+            <figcaption>From cold sidewalks to bright stages — the mission is to turn pressure into purpose, and purpose into something people can use.</figcaption>
+          </figure>
+
+          <p><strong>G73</strong> began on a Kalamazoo winter curb where breath looked like smoke signals and boots pressed poems into salt grit. I was raised where the train tracks hum under the skin and the furnace cough keeps time. Family trees offered fruit and fractures; we learned rhythm from survival — stretch a dollar, stitch a dream, hide the bottle, find the beam. The world felt calibrated for people with a head start, so I tuned my heart like a kick drum in the dark and promised to keep tempo for anybody who needed a count-in.</p>
+          <blockquote>“If there is no struggle, there is no progress.” — Frederick Douglass</blockquote>
+          <p>This site is the grown version of that promise. It’s a place where therapy becomes melody and software becomes leverage; where music meets tools, where art meets clarity, where a .music domain carries real weight for real people. The mission is simple: empower indie and underground artists with community and technology that respect them — no gatekeepers, no gimmicks, and no mystery math. We move like a band: drummer heart, bassline patience, melody hope, lyrics honest, arrangement kind. We make it loud enough to hear and clear enough to trust.</p>
+          <p>Mama kept our lights up with a will and a whisper. I kept a notebook thick with bars and blisters, collected verses from walking and wisdom from listening. I saw what the powder stole and what bad choices tried to tell me; I chose a remix over a rerun. If trauma laid the stems down crooked, I would still find a way to groove straight. I learned that curly braces could hold me tighter than worry, and that a clean layout could calm a loud mind. In the basement I shaped bass and snares; on the phone I shaped pages and prayers.</p>
+          <blockquote>“For though the righteous fall seven times, they rise again.” — Proverbs 24:16</blockquote>
+          <p>G73 runs on three fuels: dignity, discipline, and delight. Dignity means the artist owns their voice and understands their rights. Discipline means we ship with care — readable type, honest contrast, pages that load on prepaid data and older phones. Delight means the little things matter: chips that glow like badges you’ve earned, tabs that behave, backgrounds that breathe, words that land. We talk plainly about privacy and money because trust is part of the music.</p>
+          <p>There’s a specific heartbeat to this place: Kalamazoo generosity mixed with internet efficiency. Neighbors, cousins, choirs of porches — that chorus taught me to make space for people and put the mic where the shy kid can reach it. Our mission is not only to publish songs; it’s to publish courage, to publish clarity, to publish next steps. We keep the wall low and the welcome high. We build simple rails anyone can ride: upload, theme, share, measure, improve. The future brings tickets, merch, and split accounting, but the core stays the same — people over platforms, respect over rhetoric, craft over clout.</p>
+          <blockquote>“Let your light shine before others, that they may see your good works and glorify your Father in heaven.” — Matthew 5:16</blockquote>
+          <p>Every decision here is personal. If a feature doesn’t help an artist keep their promise to their listeners, it waits. If a sentence isn’t clear enough for a tired parent reading on a phone at a bus stop, we rewrite it. If a tab jumps you to the top when you didn’t ask, we fix the motion so your body and browser both feel respected. The work is built entirely on an Android phone because that’s how most of our audience lives — and that constraint keeps us disciplined, mobile-first, and human-scale. G73 is a bridge, not a maze. It’s a hand on your shoulder that says: take the next right loop. We’ll walk it with you.</p>
+        </div>
+      </div>
+
+      <!-- How It Works -->
+      <div id="panel-how" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-how" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2015/07/17/22/43/student-849825_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2016/11/29/09/32/smartphone-1869510_1280.jpg|https://cdn.pixabay.com/photo/2014/04/05/11/20/mobile-phone-407151_1280.jpg"
+                 alt="Hands on a phone and notebook at a table" />
+            <figcaption>Everything here was designed, written, edited, and shipped on an Android phone. Constraints became craft.</figcaption>
+          </figure>
+
+          <p><strong>Human process, not jargon.</strong> This site runs like a song in three movements: listen, build, release...</p>
+          <p><strong>Phone-first workflow.</strong> Morning commute? Copy edits...</p>
+          <blockquote>“They that wait upon the Lord shall renew their strength.” — Isaiah 40:31</blockquote>
+          <p><strong>The pieces you feel.</strong> The profile section gives you the human first...</p>
+          <p><strong>Why it feels fast.</strong> We favor the open web and clean markup...</p>
+          <p><strong>Why it feels safe.</strong> Privacy here is practical...</p>
+          <p><strong>Why it feels like you.</strong> Theme colors are treated like mood lighting...</p>
+          <p><strong>Release, repeat.</strong> Work leaves the phone and meets the world...</p>
+        </div>
+      </div>
+
+      <!-- For Artists -->
+      <div id="panel-artists" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-artists" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2016/11/29/12/41/microphone-1869560_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2016/07/28/20/25/microphone-1548652_1280.jpg|https://cdn.pixabay.com/photo/2016/11/22/23/07/audio-1839126_1280.jpg"
+                 alt="Studio microphone in warm light" />
+            <figcaption>Creator-first rails: your voice, your vision, your receipts.</figcaption>
+          </figure>
+
+          <p><strong>Artist to artist:</strong> I built this to feel like an indie label’s best parts...</p>
+          <p><strong>Brand without a budget.</strong> Set colors that mirror your mood...</p>
+          <p><strong>Story as strategy.</strong> The Kalamazoo story belongs to more than me...</p>
+          <blockquote>“Iron sharpens iron...” — Proverbs 27:17</blockquote>
+          <p><strong>Materials that move.</strong> Press kits live in plain English...</p>
+          <p><strong>Ownership stays yours.</strong> You keep your masters...</p>
+          <p><strong>Built on a phone...</strong></p>
+        </div>
+      </div>
+
+      <!-- For Fans -->
+      <div id="panel-fans" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-fans" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2019/10/03/20/57/notebook-4119099_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2015/05/31/10/55/coffee-791439_1280.jpg|https://cdn.pixabay.com/photo/2015/01/08/18/30/office-593361_1280.jpg"
+                 alt="Notebook and coffee on a wooden table" />
+            <figcaption>Fans are the reason the room stays warm...</figcaption>
+          </figure>
+
+          <p><strong>Welcome in.</strong> This place is built for you to arrive...</p>
+          <p><strong>What you get.</strong> A fast site that respects your time...</p>
+          <p><strong>Why it’s personal.</strong> I grew up on porches and sidewalks...</p>
+          <p><strong>How to help.</strong> Share what hits you...</p>
+        </div>
+      </div>
+
+      <!-- Tech Stack -->
+      <div id="panel-tech" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-tech" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2016/11/29/09/32/smartphone-1869510_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2014/04/05/11/20/mobile-phone-407151_1280.jpg|https://cdn.pixabay.com/photo/2014/04/05/11/38/phone-407128_1280.jpg"
+                 alt="Hands holding a smartphone with city skyline" />
+            <figcaption>Stack truth: designed, written, edited, and shipped entirely on an Android phone.</figcaption>
+          </figure>
+
+          <p><strong>Purpose first, tools second.</strong> The stack exists to keep promises...</p>
+
+          <ul>
+            <li><strong>Authoring device:</strong> Android phone...</li>
+            <li><strong>Writing & editing:</strong> Acode Pro...</li>
+            <li><strong>Artwork:</strong> Photo Studio Pro...</li>
+            <li><strong>Front-end foundations:</strong> clean HTML...</li>
+            <li><strong>Design language:</strong> tokens, shadows...</li>
+            <li><strong>Images:</strong> Creator photos + Pixabay...</li>
+            <li><strong>AI assist:</strong> ChatGPT-4 and ChatGPT-5 (Thinking) for ideation, editing, and code review.</li>
+            <li><strong>Data:</strong> Firebase (as needed)...</li>
+            <li><strong>Versioning:</strong> GitHub...</li>
+            <li><strong>Tooling & deploy:</strong> Linux...</li>
+            <li><strong>Quality gates:</strong> content before cosmetics...</li>
+          </ul>
+
+          <div class="badges" aria-label="Technology badges">
+            <div class="badge" title="Android">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 6l-2-2M16 6l2-2" stroke="currentColor" stroke-width="2" fill="none"/><rect x="6" y="7" width="12" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="11" r="1" fill="currentColor"/><circle cx="14" cy="11" r="1" fill="currentColor"/></svg></span>
+              <div><div>Android</div><small>authoring device</small></div>
+            </div>
+            <div class="badge" title="Acode Pro">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 18h-3l-1.6-4H8.6L7 21H4L12 3zm0 6l-2 5h4l-2-5z" fill="currentColor"/></svg></span>
+              <div><div>Acode Pro</div><small>mobile IDE</small></div>
+            </div>
+            <div class="badge" title="Photo Studio Pro">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4M7.5 7.5l2.5 2.5M14 14l2.5 2.5M7.5 16.5l2.5-2.5M14 10l2.5-2.5" stroke="currentColor" stroke-width="1.6"/></svg></span>
+              <div><div>Photo Studio Pro</div><small>art & covers</small></div>
+            </div>
+            <div class="badge" title="HTML5">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3h16l-1.5 17-6.6 2-6.4-2L4 3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7h10l-.3 3H9.2l.2 2H16l-.3 3-3.7 1.2L8.4 15l-.2-2" fill="currentColor"/></svg></span>
+              <div><div>HTML5</div><small>structure</small></div>
+            </div>
+            <div class="badge" title="CSS3">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 3h16l-1.5 17-6.6 2-6.4-2L4 3z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7h10l-.4 4H9.5l.3 3H16l-.3 3-4 .9-3.8-1.2-.2-2" fill="currentColor"/></svg></span>
+              <div><div>CSS3</div><small>layout & theme</small></div>
+            </div>
+            <div class="badge" title="JavaScript">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><text x="12" y="15" text-anchor="middle" font-size="8" font-weight="900" fill="currentColor">JS</text></svg></span>
+              <div><div>JavaScript</div><small>UI & logic</small></div>
+            </div>
+            <div class="badge" title="Firebase">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19L6 5l4 6 3-8 6 16-7 3z" fill="currentColor"/></svg></span>
+              <div><div>Firebase</div><small>lightweight services</small></div>
+            </div>
+            <div class="badge" title="GitHub">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-3 19.5c.5.1.7-.2.7-.5v-2c-2.9.6-3.5-1.3-3.5-1.3-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.7.1-.7 1.1.1 1.6 1.2 1.6 1.2 1 .1 1.7-.7 2-1 .1-.7.4-1 .7-1.2-2.3-.3-4.7-1.2-4.7-5.2 0-1.1.4-2 1-2.7-.1-.2-.5-1.3.1-2.7 0 0 .9-.3 2.8 1a9.6 9.6 0 015.1 0c1.9-1.3 2.8-1 2.8-1 .6 1.4.2 2.5.1 2.7.6.7 1 1.6 1 2.7 0 4.1-2.4 4.9-4.8 5.2.4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5A10 10 0 0012 2z" fill="currentColor"/></svg></span>
+              <div><div>GitHub</div><small>version control</small></div>
+            </div>
+            <div class="badge" title="Linux">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c3 0 5 2 5 5v2c2 1 3 3 3 5a6 6 0 01-12 0c0-2 1-4 3-5V8c0-3 2-5 5-5z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="8.5" r=".8" fill="currentColor"/><circle cx="14" cy="8.5" r=".8" fill="currentColor"/></svg></span>
+              <div><div>Linux</div><small>tooling & deploy</small></div>
+            </div>
+            <div class="badge" title="ChatGPT-4">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7a4 4 0 014-4h8a4 4 0 014 4v5a4 4 0 01-4 4H9l-5 4V7z" fill="currentColor"/></svg></span>
+              <div><div>ChatGPT-4</div><small>assist</small></div>
+            </div>
+            <div class="badge" title="ChatGPT-5 (Thinking)">
+              <span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2a8 8 0 018 8c0 3.9-2.8 7.2-6.5 7.9L9 22l1.4-3.4A8 8 0 0112 2z" fill="currentColor"/></svg></span>
+              <div><div>ChatGPT-5</div><small>assist</small></div>
+            </div>
+          </div>
+
+          <p><strong>Bottom line:</strong> simple on purpose, powerful in practice...</p>
+        </div>
+      </div>
+
+      <!-- Architecture -->
+      <div id="panel-arch" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-arch" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2018/05/23/17/25/architecture-3424972_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2016/11/29/05/08/architecture-1868667_1280.jpg|https://cdn.pixabay.com/photo/2016/11/18/16/00/bridge-1836873_1280.jpg"
+                 alt="Modern architecture detail with repeating lines" />
+            <figcaption>Structure that serves the story...</figcaption>
+          </figure>
+
+          <p><strong>Keep the stack modular...</strong></p>
+          <p><strong>Why no heavy framework?</strong> Because the budget belongs to art...</p>
+          <p><strong>Failure as a feature.</strong> If an image fails, we swap...</p>
+          <p><strong>Layers in practice:</strong> UI, small behaviors...</p>
+        </div>
+      </div>
+
+      <!-- Privacy & Data -->
+      <div id="panel-privacy" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-privacy" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2015/06/08/15/11/lock-801624_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2015/03/26/09/41/lock-691431_1280.jpg|https://cdn.pixabay.com/photo/2014/04/05/11/38/lock-407073_1280.jpg"
+                 alt="Brass padlock on a wooden door" />
+            <figcaption>Track less, respect more...</figcaption>
+          </figure>
+
+          <p><strong>Plain language promise:</strong> we collect just enough...</p>
+          <p><strong>Your choices:</strong> Opt-in features are labeled clearly...</p>
+        </div>
+      </div>
+
+      <!-- Accessibility -->
+      <div id="panel-a11y" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-a11y" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2016/11/22/23/07/audio-1839126_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2016/07/28/20/25/microphone-1548652_1280.jpg|https://cdn.pixabay.com/photo/2016/11/29/12/41/microphone-1869560_1280.jpg"
+                 alt="Warm light near a microphone on stage" />
+            <figcaption>Accessibility is care in action...</figcaption>
+          </figure>
+
+          <p><strong>Current practices:</strong> logical headings; focusable tabs...</p>
+          <p><strong>On the way:</strong> captions/lyrics blocks...</p>
+        </div>
+      </div>
+
+      <!-- Licensing & Rights -->
+      <div id="panel-rights" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-rights" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2016/11/19/14/00/handshake-1835981_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2017/07/31/11/21/handshake-2554632_1280.jpg|https://cdn.pixabay.com/photo/2016/08/15/20/20/handshake-1598424_1280.jpg"
+                 alt="Handshake over a table" />
+            <figcaption>Plain-English rights and real respect.</figcaption>
+          </figure>
+
+          <p><strong>Creator ownership:</strong> you own your music...</p>
+          <p><strong>Clarity over cleverness:</strong> we explain terms...</p>
+        </div>
+      </div>
+
+      <!-- Monetization -->
+      <div id="panel-money" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-money" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2015/05/31/10/55/coffee-791439_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2017/08/07/00/33/coffee-2595547_1280.jpg|https://cdn.pixabay.com/photo/2015/01/08/18/30/office-593361_1280.jpg"
+                 alt="Coffee with open notebook and pen" />
+            <figcaption>Money follows meaning...</figcaption>
+          </figure>
+
+          <p><strong>Right now:</strong> community support...</p>
+          <p>We treat money as a tool, not a scoreboard...</p>
+        </div>
+      </div>
+
+      <!-- Contributing -->
+      <div id="panel-contrib" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-contrib" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2016/11/29/09/32/smartphone-1869510_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2014/04/05/11/20/mobile-phone-407151_1280.jpg|https://cdn.pixabay.com/photo/2014/04/05/11/38/phone-407128_1280.jpg"
+                 alt="Hands holding a smartphone — city backdrop" />
+            <figcaption>Bring your gift — design, camera, pen...</figcaption>
+          </figure>
+
+          <p><strong>How to help:</strong> report issues or ideas...</p>
+          <p><strong>Culture of care:</strong> credit where it’s due...</p>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="panel-faq" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-faq" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2017/07/31/11/21/handshake-2554632_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2016/11/19/14/00/handshake-1835981_1280.jpg|https://cdn.pixabay.com/photo/2016/08/15/20/20/handshake-1598424_1280.jpg"
+                 alt="Handshake in bright light" />
+            <figcaption>Short answers, long respect.</figcaption>
+          </figure>
+
+          <p><strong>Why the open web?</strong> Links last...</p>
+          <p><strong>Do I need an account to watch?</strong> No...</p>
+          <p><strong>Will themes break contrast?</strong> We choose colors...</p>
+          <p><strong>Did you really build this on a phone?</strong> Yes...</p>
+        </div>
+      </div>
+
+      <!-- Roadmap -->
+      <div id="panel-roadmap" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-roadmap" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2019/10/03/20/57/notebook-4119099_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2015/05/31/10/55/coffee-791439_1280.jpg|https://cdn.pixabay.com/photo/2015/01/08/18/30/office-593361_1280.jpg"
+                 alt="Notebook with planning notes and a pen" />
+            <figcaption>Roadmaps change; values don’t...</figcaption>
+          </figure>
+
+          <ul>
+            <li><strong>2025 Q1–Q2:</strong> creator analytics...</li>
+            <li><strong>2025 Q3:</strong> collaborative playlists...</li>
+            <li><strong>Ongoing:</strong> privacy improvements...</li>
+          </ul>
+          <p>We’ll keep listening and adjusting...</p>
+        </div>
+      </div>
+
+      <!-- Press & Contact -->
+      <div id="panel-press" class="tabpanel" role="tabpanel" tabindex="0" aria-labelledby="tab-press" hidden>
+        <div class="about-article">
+          <figure>
+            <img loading="lazy"
+                 src="https://cdn.pixabay.com/photo/2016/11/29/12/41/microphone-1869560_1280.jpg"
+                 data-altsrc="https://cdn.pixabay.com/photo/2016/07/28/20/25/microphone-1548652_1280.jpg|https://cdn.pixabay.com/photo/2016/11/22/23/07/audio-1839126_1280.jpg"
+                 alt="Microphone ready for interview" />
+            <figcaption>Press ready. Human first.</figcaption>
+          </figure>
+
+          <p><strong>Press kit (quick facts)</strong></p>
+          <ul>
+            <li><strong>Name:</strong> G Jordan (G73)</li>
+            <li><strong>Origin:</strong> Kalamazoo, MI</li>
+            <li><strong>Mission:</strong> Empower indie & underground artists with tech and community.</li>
+            <li><strong>Claim to craft:</strong> Site built entirely on an Android phone.</li>
+            <li><strong>Domain:</strong> gjordan.music</li>
+          </ul>
+          <p><strong>Media & interviews:</strong> For interviews, events, or collaborations, use the <a href="contact.html">contact page</a> with dates, format, and topics.</p>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <div class="social-links">
+      <a href="https://facebook.com" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/facebook.png" alt="Facebook" /></a>
+      <a href="https://instagram.com" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/instagram-new.png" alt="Instagram" /></a>
+      <a href="https://youtube.com" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/youtube-play.png" alt="YouTube" /></a>
+      <a href="https://tiktok.com" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/tiktok.png" alt="TikTok" /></a>
+    </div>
+    <div style="margin-top:10px">
+      &copy; 2025 G Jordan | <span class="tm">G73™ LLC</span>
+    </div>
+  </footer>
+
+  <!-- ===== Scripts ===== -->
+  <script>
+    function toggleMenu(){
+      const menu = document.getElementById('menu');
+      const icon = document.getElementById('menuIcon');
+      const title = document.getElementById('navbarTitle');
+      const open = menu.classList.toggle('show');
+      icon.classList.toggle('open', open);
+      icon.textContent = open ? '✖' : '☰';
+      title.textContent = open ? 'G Jordan’s World' : 'GJordan.music';
+      if (open) menu.removeAttribute('hidden'); else menu.setAttribute('hidden','');
+    }
+  </script>
+
+  <!-- ROBUST IMAGE LOADER (now exported so tab clicks can force-load) -->
+  <script>
+    (function(){
+      const SAFE_PIXEL = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='20'%3E%3Crect width='100%25' height='100%25' fill='%2310161c'/%3E%3C/svg%3E";
+
+      function toProxy(u){
+        try{
+          const noProto = u.replace(/^https?:\/\//,'');
+          return 'https://images.weserv.nl/?url=' + encodeURIComponent(noProto) + '&w=1280&fit=inside';
+        }catch(e){ return null; }
+      }
+
+      function attemptChain(img, force=false){
+        // mark eager if forcing
+        if (force){
+          img.removeAttribute('loading');
+          try { img.loading = 'eager'; } catch(_) {}
+        }
+
+        const tried = new Set();
+        const chain = [];
+
+        if (img.src) chain.push(img.src);
+
+        const alts = (img.getAttribute('data-altsrc')||'')
+          .split('|').map(s=>s.trim()).filter(Boolean);
+        chain.push(...alts);
+
+        const expanded = [];
+        chain.forEach(u=>{
+          if (!u || tried.has(u)) return;
+          expanded.push(u);
+          const p = toProxy(u);
+          if (p) expanded.push(p);
+        });
+
+        let idx = 0;
+        function next(){
+          if (idx < expanded.length){
+            const url = expanded[idx++];
+            if (tried.has(url)) return next();
+            tried.add(url);
+            img.src = url;
+          } else {
+            img.src = SAFE_PIXEL;
+          }
+        }
+
+        // if blank or broken or hidden-lazy, try now
+        if (!img.complete || img.naturalWidth < 2){
+          next();
+        }
+
+        img.addEventListener('error', next, {passive:true});
+        img.addEventListener('load', ()=>{ img.dataset.loaded = '1'; }, {once:true});
+      }
+
+      function ensurePanelImages(panel){
+        panel.querySelectorAll('img').forEach(img=>{
+          const looksBlank = (!img.complete || img.naturalWidth < 2 || img.src.startsWith('data:image/svg+xml'));
+          if (looksBlank || img.dataset.loaded!=='1'){
+            attemptChain(img, /*force*/ true);
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', ()=>{
+        document.querySelectorAll('.about-article img').forEach(img => attemptChain(img, false));
+      });
+
+      window.G73ImageTools = { attemptChain, ensurePanelImages, SAFE_PIXEL };
+    })();
+  </script>
+
+  <!-- Tabs (vertical list; auto-collapse + keyboard + hash + image refresh) -->
+  <script>
+    (function(){
+      const tabsRoot = document.querySelector('.tabs');
+      const toggleBtn = document.getElementById('tabsToggle');
+      const list = document.getElementById('sections-list');
+      const currentLabel = document.getElementById('currentTabLabel');
+
+      const tabs   = [...list.querySelectorAll('[role="tab"]')];
+      const panels = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+      const idMap  = Object.fromEntries(tabs.map((t,i)=>[t.id.replace('tab-',''), i]));
+
+      function setExpanded(expanded){
+        tabsRoot.classList.toggle('expanded', expanded);
+        toggleBtn.setAttribute('aria-expanded', String(expanded));
+      }
+
+      function activate(i, setHash=true, autoCollapse=false){
+        tabs.forEach((t,idx)=>{
+          const sel = idx===i;
+          t.setAttribute('aria-selected', sel);
+          panels[idx].hidden = !sel;
+          if (sel && setHash){
+            const key = t.id.replace('tab-','');
+            history.replaceState(null,'', '#'+key);
+            currentLabel.textContent = t.textContent.trim();
+          }
+        });
+
+        // Ensure images load for the active panel
+        if (window.G73ImageTools) {
+          window.G73ImageTools.ensurePanelImages(panels[i]);
+        }
+
+        if (autoCollapse) setExpanded(false);
+        if (autoCollapse) panels[i].focus({preventScroll:false});
+      }
+
+      tabs.forEach((t,i)=>{
+        t.addEventListener('click', (e)=>{ e.preventDefault(); activate(i, true, /*autoCollapse*/ true); });
+        t.addEventListener('keydown', (e)=>{
+          if (e.key==='ArrowDown' || e.key==='ArrowUp'){
+            e.preventDefault();
+            const dir = (e.key==='ArrowDown')?1:-1;
+            const n = (i+dir+tabs.length)%tabs.length;
+            tabs[n].focus();
+          } else if (e.key==='Enter' || e.key===' '){
+            e.preventDefault();
+            activate(i, true, true);
+          }
+        });
+      });
+
+      toggleBtn.addEventListener('click', ()=>{
+        setExpanded(!tabsRoot.classList.contains('expanded'));
+        if (tabsRoot.classList.contains('expanded')) {
+          const sel = list.querySelector('[role="tab"][aria-selected="true"]');
+          if (sel) sel.scrollIntoView({block:'nearest', inline:'nearest'});
+        }
+      });
+
+      function openFromHash(){
+        const key = (location.hash||'').replace('#','');
+        if (key && key in idMap) activate(idMap[key], false, false);
+      }
+      openFromHash();
+
+      const selected = list.querySelector('[role="tab"][aria-selected="true"]');
+      if (selected) currentLabel.textContent = selected.textContent.trim();
+
+      window.addEventListener('hashchange', openFromHash);
+    })();
+  </script>
+
+  <!-- Reveal-on-scroll (light) -->
+  <script>
+    (function(){
+      const els = [document.querySelector('.artist-name'), document.querySelector('.subtitle')].filter(Boolean);
+      const onScroll = ()=>{
+        els.forEach(el=>{
+          const r=el.getBoundingClientRect();
+          if (r.top < innerHeight - 100) el.style.opacity=1;
+        });
+      };
+      onScroll(); addEventListener('scroll', onScroll, {passive:true});
+    })();
+  </script>
+
+  <!-- Particles (preserved) -->
+  <script>
+    (function(){
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+      resize(); addEventListener('resize', resize);
+      for (let i=0;i<90;i++){
+        particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height,
+          r: Math.random()*2+1.2, dx:(Math.random()-.5)*.5, dy:(Math.random()-.5)*.5,
+          c: `hsla(${Math.random()*360},100%,60%,0.65)` });
+      }
+      function draw(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for (const p of particles){
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+          ctx.fillStyle = p.c; ctx.fill();
+          p.x+=p.dx; p.y+=p.dy;
+          if (p.x<0||p.x>canvas.width) p.dx*=-1;
+          if (p.y<0||p.y>canvas.height) p.dy*=-1;
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>

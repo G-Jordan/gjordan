@@ -1,0 +1,111 @@
+:root {  
+  /* theme defaults; JS will overwrite live */  
+  --bg:#0b0d10; --text:#e8eef5;  
+  --primary:#D4AF37; --secondary:#8B6B1B;  
+  --glow-alpha:.55; --glow-strength:1;  
+  --radius:12px; --base-font:14px;  
+  --grid-cols:2; --thumb-w:64px;  
+  --nav-h:56px; /* JS updates this */  
+}
+
+/* Global page */  
+html, body { height: 100%; margin:0; }  
+body {  
+  display:flex; flex-direction:column; min-height:100dvh;  
+  background:var(--bg); color:var(--text); font-size:var(--base-font);  
+  padding-top: var(--nav-h);  
+}
+
+/* Navbar fixed to top */  
+.navbar {  
+  position:fixed !important; top:0; left:0; right:0;  
+  z-index:1000 !important; width:100% !important;  
+  background: rgba(0,0,0,.25);  
+  border-bottom: 1px solid rgba(212,175,55,.35);  
+  backdrop-filter: blur(6px);  
+}
+
+/* Spacer */  
+#nav-spacer { height: var(--nav-h); width:100%; flex: 0 0 auto; }
+
+/* Header */  
+body > header {  
+  position: static !important; top:auto !important; height:auto !important;  
+  z-index:1 !important; padding:10px 0 !important; margin:0 !important; background:none !important; border:0 !important;  
+}
+
+/* MAIN layout */  
+body > main {  
+  flex:1 0 auto; width:100% !important;  
+  display:grid !important;  
+  grid-template-columns: 320px 1fr !important;  
+  grid-template-areas: "list player" !important;  
+  gap:16px !important; align-items:start !important;  
+  min-height:auto !important;  
+}  
+#list   { grid-area: list !important; position:relative !important; float:none !important; max-width:100% !important; }  
+#player { grid-area: player !important; position:relative !important; float:none !important; max-width:100% !important; }
+
+@media (max-width: 900px){  
+  body > main {  
+    grid-template-columns: 1fr !important;  
+    grid-template-areas:  
+      "player"  
+      "list" !important;  
+  }  
+  #list { max-height:45vh; overflow:auto; }  
+}
+
+/* Footer */  
+body > footer { position:static !important; margin-top:auto !important; clear:both !important; z-index:0 !important; width:100% !important; }  
+footer { text-align:center; padding:12px 8px; opacity:.9; }  
+footer .tm { color: var(--secondary); }
+
+/* Video */  
+/* AFTER */
+#video { position: static; top: auto; margin-top: 0; }
+
+/* Let videoShell be a normal container that can accept padding offset */
+#videoShell { position: relative; }
+
+/* Neutralize floats */  
+header, main, footer, .branding-footer {  
+  float:none !important; display:block !important; max-width:100% !important;  
+}
+
+/* Theme bindings */  
+.navbar .navbar-title { color: var(--text); }  
+.navbar a, .navbar .menu a { color: var(--primary); }
+
+.modal .modal-content,  
+#settings, .card, #list, #player, #videoShell {  
+  background: rgba(0,0,0,0.73);  
+  border: 1px solid rgba(139,107,27,0.25);  
+  border-radius: var(--radius);  
+  box-shadow: 0 0 calc(12px * var(--glow-strength)) rgba(0,0,0,var(--glow-alpha));  
+}
+
+button, .icon-btn { color: var(--text); }  
+button:hover, .icon-btn:hover { color: var(--primary); }  
+.meta .name { color: var(--primary); }
+
+/* Grid layout option */  
+main[data-layout="grid"] #list {  
+  display:grid; grid-template-columns: repeat(var(--grid-cols), minmax(0,1fr)); gap:12px;  
+}  
+main[data-layout="grid"] #list .thumb { width: var(--thumb-w); }
+/* Safety: don’t let absolutely-positioned children steal clicks over the play button */
+.music-list li{ contain: layout paint; }
+.music-list .g73-play-toggle{ pointer-events: auto; }
+/* mini row visualizer states */
+.music-list li.pre-playing .playing-visualizer,
+.music-list li.is-playing .playing-visualizer {
+  opacity: 1;
+  animation-play-state: running;
+}
+.music-list li.is-paused .playing-visualizer {
+  opacity: .85;
+  animation-play-state: paused;
+/* Safety: don’t let absolutely-positioned children steal clicks over the play button */
+/* Use ONLY layout containment so the scrubber/halo can render correctly */
+.music-list li{ contain: layout; }   /* was: layout paint */}

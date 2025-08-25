@@ -1,0 +1,100 @@
+/* Minimal modal + swatch grid (no action buttons) */
+#site-theme-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#site-theme-modal.open { display: flex; }
+#site-theme-modal .backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+#site-theme-modal .panel {
+  position: relative;
+  width: min(92vw, 720px);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(20,22,28,.88);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  color: #e8eef5;
+}
+#site-theme-modal .head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 4px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  margin-bottom: 10px;
+}
+#site-theme-modal .head h3 {
+  margin: 0; font-size: 16px; letter-spacing: .3px; font-weight: 800;
+}
+#site-theme-modal .grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  padding: 8px 2px 2px;
+}
+@media (max-width: 540px){
+  #site-theme-modal .grid { grid-template-columns: repeat(6, 1fr); }
+}
+.swatch {
+  height: 34px;
+  border-radius: 9px;
+  border: 2px solid rgba(255,255,255,.55);
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.swatch:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.45);
+  border-color: rgba(255,255,255,.8);
+}
+
+/* Small “live hint” strip inside the panel showing primary/accent/text */
+.legend {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+  margin-top: 10px;
+}
+.legend .chip {
+  height: 8px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* Nice navbar title pop when vars change */
+.navbar-title {
+  color: var(--accent-color, var(--app-accent, #b478ff)) !important;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--app-primary, #5fa0ff) 55%, transparent);
+}
+
+/* Buttons & icon accents pick up theme automatically via vars */
+button, .icon-btn, .g73-play, .controls [data-ctl-theme] .play-pause::before {
+  outline-color: var(--app-primary, #5fa0ff);
+  border-color: color-mix(in srgb, var(--app-primary, #5fa0ff) 30%, rgba(255,255,255,.12));
+}
+
+/* Title/artist below thumbnails */
+.g73-title { color: var(--text, var(--accent-color, #e8eef7)) !important; }
+.g73-artist { color: var(--artist-color, var(--app-accent, #b478ff)) !important; }
+
+/* Reaction row + counters box */
+#reaction-buttons button i.material-icons {
+  /* icons inherit these automatically */
+  color: currentColor;
+}
+/* Footer tint */
+footer, .branding-footer {
+  border-top: 1px solid color-mix(in srgb, var(--app-accent, #b478ff) 35%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--app-accent, #b478ff) 20%, transparent);
+}
+
+/* EQ button, volume knob, menus, visualizer editor button */
+#open-eq, #vz-open-editor, .volume, .menu-icon {
+  color: var(--app-primary, #5fa0ff);
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--app-primary, #5fa0ff) 35%, transparent));
+}
