@@ -144,8 +144,6 @@ Want to explore, remix, or contribute?
 
 - 🌐 **Website:** [https://gjordan.music](https://gjordan.music)
 - 📧 **Contact:** See [contact.html](contact.html)
-- 🎧 **Listen:** *(Add Spotify, YouTube, SoundCloud, or Bandcamp links here!)*
-- 🐦 **Social:** *(Add your Twitter/X, Instagram, or other socials!)*
 
 ---
 
