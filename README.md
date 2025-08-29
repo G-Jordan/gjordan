@@ -150,6 +150,5 @@ Want to explore, remix, or contribute?
 ---
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=24&pause=1000&color=00FFD7&center=true&vCenter=true&width=420&lines=Built+on+Android.+Powered+by+Passion.+Shared+with+the+World." alt="Typing SVG">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=24&pause=1000&color=FFD700&center=true&vCenter=true&width=420&lines=Built+on+Android.+Powered+by+Passion.+Shared+with+the+World." alt="Typing SVG">
 </p>
-```
