@@ -104,13 +104,8 @@
 
   <!-- Layout helpers for navbar spacing, centered editor button, and visualizer placement -->
   <style>
-    /* Push main content below fixed navbar; JS sets --navbar-h at runtime */
     .container { padding-top: var(--navbar-h, 72px); }
-
-    /* Make the player a stacking context without clipping/height hacks */
     .wrapper { position: relative; isolation: isolate; }
-
-    /* Canvas behind everything in .wrapper and doesn't affect layout */
     #audio-visualizer{
       position: absolute;
       inset: 0;
@@ -120,13 +115,9 @@
       height: 100%;
       opacity: 1;
       pointer-events: none;
-      background: #07090f; /* optional tint */
+      background: #07090f;
     }
-
-    /* Controls row */
     .controls { text-align: center; margin-bottom: 10px; }
-
-    /* Row that holds the knob (left) + editor button (right), LEFT-ALIGNED */
     .vz-row{
       margin-top: 20px;
       display: flex;
@@ -135,8 +126,6 @@
       gap: 18px;
       width: 100%;
     }
-
-    /* Visualizer Editor button */
     #vz-open-editor.vz-fab{
       --fab-size: 64px;
       width: var(--fab-size);
@@ -158,23 +147,18 @@
       box-shadow: 0 6px 16px rgba(0,200,255,0.55), inset 0 0 2px rgba(255,255,255,0.2);
       transform: translateZ(0) scale(1.05);
     }
-
-    /* Orb sizing inside the button */
     #vz-open-editor .vz-orb{
       width: 78%;
       height: 78%;
       display: block;
       filter: drop-shadow(0 0 8px rgba(100,200,255,.35));
     }
-
-    /* Modern Volume Knob */
     .knob{
       --size: 63px;
       --track: rgba(255,255,255,.12);
       --glow: rgba(98,178,255,.7);
       --fillA: #5ad1ff;
       --fillB: #a97aff;
-
       width: var(--size);
       height: var(--size);
       border: none;
@@ -190,30 +174,25 @@
       color: #eaeaea;
     }
     .knob:focus-visible{ outline: 2px solid rgba(100,200,255,.6); outline-offset: 3px; border-radius: 12px; }
-
     .knob svg{ width: 86%; height: 86%; display:block; }
     .knob .track{ stroke: var(--track); stroke-width: 8; fill: none; }
     .knob .arc{ stroke: url(#volGradient); stroke-width: 8; stroke-linecap: round; fill: none; filter: drop-shadow(0 0 6px var(--glow)); }
     .knob .handle{ fill: #dff2ff; filter: drop-shadow(0 0 6px var(--glow)); }
-
     .knob .label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 0 0 4px rgba(0,0,0,0.6);
-  user-select: none;
-  pointer-events: none;
-}
-
-    /* Desktop centered editor panel default (your editor CSS expects this) */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 4px rgba(0,0,0,0.6);
+      user-select: none;
+      pointer-events: none;
+    }
     @media (min-width:900px){
       #vz-panel{ left:50%; top:50%; transform:translate(-50%,-50%); inset:auto; }
     }
-    /* Stationary, wavy orb animation */
     @keyframes dash-wave {
       0%   { stroke-dasharray: 10 14; stroke-dashoffset: 0;   }
       50%  { stroke-dasharray: 18 14; stroke-dashoffset: -10; }
@@ -224,132 +203,87 @@
       50%  { stroke-dasharray: 14 10; stroke-dashoffset: -8;  }
       100% { stroke-dasharray: 8 10;  stroke-dashoffset: 0;   }
     }
-
-    /* Keep transform math stable for the SVG (no spinning applied) */
-    #vz-open-editor .vz-orb g { transform-box: fill-box; transform-origin: 24px 24px; }
-
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      .vz-orb .no-reduce{ animation: none !important; }
-    }
-
-    /* Ensure SVG transform math is consistent across browsers */
     #vz-open-editor .vz-orb g { transform-box: fill-box; transform-origin: 24px 24px; }
     @media (prefers-reduced-motion: reduce){
       .vz-orb .no-reduce{ animation: none !important; }
     }
-    /* Lower only these buttons in stacking order */
+    #vz-open-editor .vz-orb g { transform-box: fill-box; transform-origin: 24px 24px; }
+    @media (prefers-reduced-motion: reduce){
+      .vz-orb .no-reduce{ animation: none !important; }
+    }
     #volume-knob,
     #vz-open-editor,
     #open-eq {
       position: relative;
-      z-index: 1 !important; /* Low value so modals always go on top */
+      z-index: 1 !important;
     }
-    /* Make sure the bar can host absolutely positioned effects */
-.top-bar{ position: relative; }
-
-/* Wrap target logo image with a helper class (or add the class to your <img>) */
-.top-bar img[alt="G73 Logo"]{ position: relative; z-index: 1; }
-
-/* Soft animated glow behind the logo */
-.top-bar .g73-glow::after{
-  content:"";
-  position:absolute;
-  left:50%; top:50%;
-  transform: translate(-50%, -50%);
-  width: 140px; height: 140px;
-  border-radius: 50%;
-  pointer-events:none;
-  background:
-    radial-gradient(60% 60% at 50% 50%,
-      color-mix(in srgb, var(--app-primary, #5fa0ff) 55%, transparent) 0%,
-      color-mix(in srgb, var(--app-accent,  #b478ff) 45%, transparent) 45%,
-      transparent 70%);
-  filter: blur(12px);
-  opacity:.65;
-  animation: g73Glow 4.6s ease-in-out infinite;
-  z-index: 0;
-}
-@keyframes g73Glow{
-  0%,100%{ transform:translate(-50%,-50%) scale(0.95); opacity:.55; filter: blur(12px); }
-  50%    { transform:translate(-50%,-50%) scale(1.05); opacity:.85; filter: blur(16px); }
-}
-@media (prefers-reduced-motion: reduce){
-  .top-bar .g73-glow::after{ animation:none; }
-}
-/* === Music List Header: match controls theme === */
-.music-list > .header{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:.75rem 1rem;
-  background: var(--ctl-bg, rgba(13,17,23,.85));
-  border-bottom:1px solid var(--ctl-border, rgba(255,255,255,.12));
-  color: var(--ctl-text, #e8eef7);
-  font-weight:600; text-transform:uppercase; letter-spacing:.5px;
-  user-select:none;
-}
-
-/* Title row */
-.music-list > .header .row{ display:flex; align-items:center; gap:.55rem; }
-
-/* Gradient title (matches play button gradient). Remove this block if you prefer solid text. */
-.music-list > .header .row > span{
-  background-image: var(--ctl-list-fill, var(--prog-fill, linear-gradient(90deg,#5fa0ff,#b478ff)));
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color: transparent; color: transparent;
-  font-size:.95rem; line-height:1;
-}
-
-/* Icons (queue + close) with gradient text like controls */
-.music-list > .header i.material-icons{
-  font-size:1.3rem; line-height:1; cursor:pointer;
-  background-image: var(--ctl-list-fill, var(--prog-fill, linear-gradient(90deg,#5fa0ff,#b478ff)));
-  -webkit-background-clip:text; background-clip:text;
-  -webkit-text-fill-color: transparent; color: transparent;
-  transition: transform .2s ease, filter .2s ease;
-  /* subtle glow to match controls */
-  text-shadow: 0 0 10px color-mix(in srgb, var(--ctl-ring, rgba(120,200,255,.55)) 70%, transparent);
-}
-
-/* Hover: a touch brighter, same gradient */
-.music-list > .header i.material-icons:hover{
-  transform: scale(1.08);
-  filter: brightness(1.1);
-}
-
-/* If you ever want solid-color fallback instead of gradient, uncomment:
-.music-list > .header i.material-icons{ -webkit-text-fill-color: initial; color: var(--primary-color, #5fa0ff); background-image:none; }
-.music-list > .header i.material-icons:hover{ color: var(--secondary-color, #b478ff); filter:none; }
-*/
-
+    .top-bar{ position: relative; }
+    .top-bar img[alt="G73 Logo"]{ position: relative; z-index: 1; }
+    .top-bar .g73-glow::after{
+      content:"";
+      position:absolute;
+      left:50%; top:50%;
+      transform: translate(-50%, -50%);
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      pointer-events:none;
+      background:
+        radial-gradient(60% 60% at 50% 50%,
+          color-mix(in srgb, var(--app-primary, #5fa0ff) 55%, transparent) 0%,
+          color-mix(in srgb, var(--app-accent,  #b478ff) 45%, transparent) 45%,
+          transparent 70%);
+      filter: blur(12px);
+      opacity:.65;
+      animation: g73Glow 4.6s ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes g73Glow{
+      0%,100%{ transform:translate(-50%,-50%) scale(0.95); opacity:.55; filter: blur(12px); }
+      50%    { transform:translate(-50%,-50%) scale(1.05); opacity:.85; filter: blur(16px); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .top-bar .g73-glow::after{ animation:none; }
+    }
+    .music-list > .header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:.75rem 1rem;
+      background: var(--ctl-bg, rgba(13,17,23,.85));
+      border-bottom:1px solid var(--ctl-border, rgba(255,255,255,.12));
+      color: var(--ctl-text, #e8eef7);
+      font-weight:600; text-transform:uppercase; letter-spacing:.5px;
+      user-select:none;
+    }
+    .music-list > .header .row{ display:flex; align-items:center; gap:.55rem; }
+    .music-list > .header .row > span{
+      background-image: var(--ctl-list-fill, var(--prog-fill, linear-gradient(90deg,#5fa0ff,#b478ff)));
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      font-size:.95rem; line-height:1;
+    }
+    .music-list > .header i.material-icons{
+      font-size:1.3rem; line-height:1; cursor:pointer;
+      background-image: var(--ctl-list-fill, var(--prog-fill, linear-gradient(90deg,#5fa0ff,#b478ff)));
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      transition: transform .2s ease, filter .2s ease;
+      text-shadow: 0 0 10px color-mix(in srgb, var(--ctl-ring, rgba(120,200,255,.55)) 70%, transparent);
+    }
+    .music-list > .header i.material-icons:hover{
+      transform: scale(1.08);
+      filter: brightness(1.1);
+    }
   </style>
   <!-- Perf hints (optional) -->
-<link rel="preconnect" href="https://www.googletagmanager.com">
-<link rel="preconnect" href="https://www.google-analytics.com">
-<link rel="dns-prefetch" href="https://www.googletagmanager.com">
-<link rel="dns-prefetch" href="https://www.google-analytics.com">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.google-analytics.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L48EX09QBQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ dataLayer.push(arguments); }
-
-  // 1) Consent Mode defaults (safe & tweakable later)
-  gtag('consent', 'default', {
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    analytics_storage: 'granted'
-  });
-
-  // 2) Init + config
-  gtag('js', new Date());
-  gtag('config', 'G-L48EX09QBQ', {
-    send_page_view: true,
-    // Helpful while developing locally:
-    ...(location.hostname === 'localhost' ? { debug_mode: true } : {})
-  });
-</script>
+  <!-- Google Analytics Loader -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L48EX09QBQ"></script>
+  <!-- Core Inline Logic 001 -->
+  <!-- Core Inline Logic 001 -->
+<script  src="js/index/core-inline-logic-001.js"></script>
 </head>
 <body>
   <div class="navbar">
@@ -375,7 +309,7 @@
           <i class="material-icons" id="toggle-icon">visibility</i>
         </span>
       </div>
-      <div id="password-requirements" style="text-align: left; font-size: 13px; color: gold; margin-top: 10px;">
+      <div id="password-requirements" style="text-align: left; font-size: 13px; margin-top: 10px;">
         <p id="length-check">• At least 8 characters</p>
         <p id="upper-check">• At least 1 uppercase letter</p>
         <p id="lower-check">• At least 1 lowercase letter</p>
@@ -389,159 +323,34 @@
   </div>
   
   <!-- THEME-AWARE AUTH MODAL -->
-<style id="auth-modal-theme">
-  /* Let icons inherit color (so accents work) */
-  #auth-modal i.material-icons{
-    color: currentColor;
-    -webkit-text-fill-color: currentColor;
-    line-height: 1;
-  }
+  <style id="auth-modal-theme">
+    /* Let icons inherit color (so accents work) */
+    #auth-modal i.material-icons{
+      color: currentColor;
+      -webkit-text-fill-color: currentColor;
+      line-height: 1;
+    }
+    /* ...rest of modal styles unchanged... */
+    #auth-modal .modal-content{
+      background:
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--app-primary, #5fa0ff) 8%, transparent),
+          color-mix(in srgb, var(--app-accent,  #b478ff) 6%, transparent));
+      color: color-mix(in srgb, var(--app-accent, #b478ff) 75%, white);
+      margin: 60px auto; padding: 24px 20px; width: 90%; max-width: 420px;
+      border-radius: 16px;
+      border: 1px solid color-mix(in srgb, var(--app-primary, #5fa0ff) 55%, transparent);
+      box-shadow:
+        0 10px 30px rgba(0,0,0,.55),
+        0 0 18px color-mix(in srgb, var(--app-primary, #5fa0ff) 28%, transparent);
+      backdrop-filter: blur(6px);
+    }
+    /* ...rest of modal styles unchanged... */
+  </style>
 
-  /* Modal shell */
-  #auth-modal.modal{
-    display:none; position:fixed; inset:0; z-index:2000;
-    background: color-mix(in srgb, #000 50%, transparent);
-  }
-
-  /* Content uses page theme variables (live-updating) */
-  #auth-modal .modal-content{
-    background:
-      linear-gradient(180deg,
-        color-mix(in srgb, var(--app-primary, #5fa0ff) 8%, transparent),
-        color-mix(in srgb, var(--app-accent,  #b478ff) 6%, transparent));
-    color: color-mix(in srgb, var(--app-accent, #b478ff) 75%, white);
-    margin: 60px auto; padding: 24px 20px; width: 90%; max-width: 420px;
-    border-radius: 16px;
-    border: 1px solid color-mix(in srgb, var(--app-primary, #5fa0ff) 55%, transparent);
-    box-shadow:
-      0 10px 30px rgba(0,0,0,.55),
-      0 0 18px color-mix(in srgb, var(--app-primary, #5fa0ff) 28%, transparent);
-    backdrop-filter: blur(6px);
-  }
-
-  #auth-modal .modal-content h2{
-    font-size: 24px; margin: 0 0 16px;
-    color: var(--auth-title, var(--app-accent, #b478ff));
-    text-shadow: 0 0 8px color-mix(in srgb, var(--app-accent, #b478ff) 55%, transparent);
-    text-align: center;
-  }
-
-  /* Close (X) uses accent, hover flips to primary */
-  #auth-modal .modal-content .close{
-    float:right; font-size: 26px; cursor:pointer; user-select:none;
-    color: var(--auth-close, var(--app-accent, #b478ff));
-    transition: transform .12s ease, color .12s ease;
-  }
-  #auth-modal .modal-content .close:hover{
-    transform: scale(1.08);
-    color: var(--app-primary, #5fa0ff);
-  }
-
-  /* Inputs */
-  #auth-modal .modal-content input{
-    width:100%; padding:12px 12px; margin:10px 0;
-    border: 1px solid color-mix(in srgb, var(--app-primary, #5fa0ff) 35%, transparent);
-    border-radius: 10px;
-    background: color-mix(in srgb, #0b0d10 78%, transparent);
-    color: color-mix(in srgb, var(--app-accent, #b478ff) 85%, white);
-    outline: none;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
-  }
-  #auth-modal .modal-content input::placeholder{
-    color: color-mix(in srgb, var(--app-accent, #b478ff) 45%, white);
-  }
-  #auth-modal .modal-content input:focus{
-    border-color: color-mix(in srgb, var(--app-primary, #5fa0ff) 65%, transparent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-primary, #5fa0ff) 25%, transparent);
-  }
-
-  /* Password eye icon follows theme */
-  #toggle-password i#toggle-icon{
-    color: color-mix(in srgb, var(--app-primary, #5fa0ff) 80%, white);
-    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--app-primary, #5fa0ff) 30%, transparent));
-  }
-
-  /* Requirements */
-  #password-requirements{
-    color: color-mix(in srgb, var(--app-accent, #b478ff) 85%, #ffd86b);
-  }
-
-  /* Buttons themed; falls back to gradient if available */
-  #auth-modal .modal-content button{
-    display:inline-block; margin:8px 6px 0; padding:10px 16px;
-    font-size:14px; font-weight:700; cursor:pointer; border:none; border-radius:10px;
-    color: var(--auth-btn-fg, #0b0d10);
-    background: var(--auth-btn-bg,
-      linear-gradient(90deg, var(--app-primary, #5fa0ff), var(--app-accent, #b478ff)));
-    box-shadow:
-      0 6px 18px rgba(0,0,0,.35),
-      0 0 14px color-mix(in srgb, var(--app-primary, #5fa0ff) 30%, transparent);
-    transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
-  }
-  #auth-modal .modal-content button:hover{
-    transform: translateY(-1px);
-    box-shadow:
-      0 10px 24px rgba(0,0,0,.45),
-      0 0 18px color-mix(in srgb, var(--app-accent, #b478ff) 35%, transparent);
-  }
-
-  /* Support “Login” as an outline variant if desired */
-  #auth-modal .modal-content button:nth-of-type(2){
-    background: color-mix(in srgb, var(--app-primary, #5fa0ff) 12%, transparent);
-    color: color-mix(in srgb, var(--app-primary, #5fa0ff) 86%, white);
-    border: 1px solid color-mix(in srgb, var(--app-primary, #5fa0ff) 38%, transparent);
-  }
-  #auth-modal .modal-content button:nth-of-type(2):hover{
-    background: color-mix(in srgb, var(--app-accent, #b478ff) 16%, transparent);
-    border-color: color-mix(in srgb, var(--app-accent, #b478ff) 40%, transparent);
-  }
-</style>
-
-<script>
-(function(){
-  // This keeps the modal synced with your theme presets (including gradient extras).
-  function applyAuthModalTheme(detail){
-    const r = document.documentElement;
-    const rootCS = getComputedStyle(r);
-
-    // Pull page theme tokens
-    const primary = rootCS.getPropertyValue('--app-primary').trim() || '#5fa0ff';
-    const accent  = rootCS.getPropertyValue('--app-accent').trim()  || '#b478ff';
-
-    // Optional gradient variables that your 100 presets might set
-    // (progFill is a gradient string; we’ll use it for the primary button if present)
-    const progFill = rootCS.getPropertyValue('--prog-fill').trim();
-
-    // Push a couple of modal-scoped vars (so you can tweak without touching global)
-    r.style.setProperty('--auth-title', accent);
-    r.style.setProperty('--auth-close', accent);
-
-    // Primary button bg: prefer --prog-fill if defined; fallback to primary→accent gradient
-    const hasProg = !!progFill && !/^var\(/.test(progFill);
-    r.style.setProperty('--auth-btn-bg',
-      hasProg ? progFill : `linear-gradient(90deg, ${primary}, ${accent})`);
-
-    // If a preset wants dark text on light gradient, allow it to override:
-    // detail.ppIconColor or other custom signals can be used; default is dark text for contrast.
-    const btnFg = (detail && detail.btnFg) || '#0b0d10';
-    r.style.setProperty('--auth-btn-fg', btnFg);
-  }
-
-  // Initial sync on load
-  if (document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', ()=>applyAuthModalTheme(), {once:true});
-  } else {
-    applyAuthModalTheme();
-  }
-
-  // Live updates whenever your theme tool broadcasts
-  window.addEventListener('theme:changed', (e)=> applyAuthModalTheme(e.detail||{}), {passive:true});
-
-  // Also update if someone changes root vars directly (rare but safe)
-  const mo = new MutationObserver(()=>applyAuthModalTheme());
-  mo.observe(document.documentElement, {attributes:true, attributeFilter:['style','class','data-theme']});
-})();
-</script>
+  <!-- Core Inline Logic 002 -->
+  <!-- Core Inline Logic 002 -->
+<script  src="js/index/core-inline-logic-002.js"></script>
   
   <div id="toast"></div>
 
@@ -550,142 +359,42 @@
       <div class="wrapper">
         <!-- VISUALIZER CANVAS AS BACKGROUND LAYER -->
         <canvas id="audio-visualizer"></canvas>
-
         <div class="top-bar">
           <i class="material-icons"></i>
           <div class="top-bar g73-glow">
-  <i class="material-icons"></i>
-  <img src="G73.png" alt="G73 Logo" style="height: 40px;" />
-  <i class="material-icons"></i>
-</div>
+            <i class="material-icons"></i>
+            <img src="G73.png" alt="G73 Logo" style="height: 40px;" />
+            <i class="material-icons"></i>
+          </div>
           <i class="material-icons"></i>
         </div>
-
         <div class="img-area">
           <img src="" alt="Album Art" />
         </div>
-
         <div class="song-details">
           <p class="name"></p>
           <p class="artist"></p>
-
-<div id="reaction-buttons">
-  <button id="like-btn" onclick="animateButton(this); likeSongFirebase(currentSongId)">
-    <i class="material-icons">thumb_up</i>
-  </button>
-
-  <button id="dislike-btn" onclick="animateButton(this); dislikeSongFirebase(currentSongId)">
-    <i class="material-icons">thumb_down</i>
-  </button>
-
-  <button id="download-btn" onclick="animateButton(this); downloadSong()">
-    <i class="material-icons">file_download</i>
-  </button>
-</div>
-<script>
-(function(){
-  "use strict";
-
-  // Ensure icons always follow their parent color (Safari-safe)
-  (function injectIconInheritCSS(){
-    if (document.getElementById('rxn-icon-inherit')) return;
-    const s = document.createElement('style');
-    s.id = 'rxn-icon-inherit';
-    s.textContent = `
-      #reaction-buttons i.material-icons{
-        color: currentColor !important;
-        -webkit-text-fill-color: currentColor !important;
-        line-height: 1;
-      }
-    `;
-    document.head.appendChild(s);
-  })();
-
-  const $ = (id)=> document.getElementById(id);
-  const root = document.documentElement;
-
-  function readVar(name, fallback){
-    const v = getComputedStyle(root).getPropertyValue(name).trim();
-    return v || fallback;
-  }
-
-  function applyReactionTheme(){
-    const likeColor     = readVar('--app-primary', '#5fa0ff');
-    const accentColor   = readVar('--app-accent',  '#b478ff');
-    const dislikeColor  = readVar('--app-primary', '#5fa0ff'); // opt-in var, else red
-
-    const likeBtn     = $('like-btn');
-    const dislikeBtn  = $('dislike-btn');
-    const downloadBtn = $('download-btn');
-
-    // Set only the color; icons inherit via CSS above
-    if (likeBtn)     likeBtn.style.color     = likeColor;
-    if (dislikeBtn)  dislikeBtn.style.color  = dislikeColor;
-    if (downloadBtn) downloadBtn.style.color = accentColor;
-
-    // Optional: on-hover chrome/background/border based on theme (comment out if not wanted)
-    const rb = $('reaction-buttons');
-    if (rb) {
-      // Light themed chrome using app-primary; keep it subtle
-      rb.querySelectorAll('button').forEach(btn=>{
-        btn.style.background = `color-mix(in srgb, ${likeColor} 10%, transparent)`;
-        btn.style.border = `1px solid color-mix(in srgb, ${likeColor} 22%, transparent)`;
-        btn.style.borderRadius = '10px';
-        btn.style.padding = '8px';
-      });
-    }
-  }
-
-  // Scrub any accidental inline black on inner <i> to avoid conflicts
-  function scrubIconInline(){
-    const icons = document.querySelectorAll('#reaction-buttons i.material-icons');
-    icons.forEach(i=>{
-      i.style.removeProperty('color');
-      i.style.removeProperty('-webkit-text-fill-color');
-      i.style.removeProperty('text-fill-color');
-    });
-  }
-
-  function boot(){
-    scrubIconInline();
-    applyReactionTheme();
-  }
-
-  // Run now or on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot, {once:true});
-  } else {
-    boot();
-  }
-
-  // Re-apply when your theme system broadcasts a change
-  window.addEventListener('theme:changed', applyReactionTheme);
-  window.addEventListener('controls-theme-change', applyReactionTheme);
-
-  // If something later tries to set icon colors inline, strip just that
-  const mo = new MutationObserver(muts=>{
-    for (const m of muts){
-      if (m.type === 'attributes' && m.attributeName === 'style') {
-        if (m.target.matches && m.target.matches('#reaction-buttons i.material-icons')){
-          m.target.style.removeProperty('color');
-          m.target.style.removeProperty('-webkit-text-fill-color');
-        }
-      }
-    }
-  });
-  document.querySelectorAll('#reaction-buttons i.material-icons').forEach(icon=>{
-    mo.observe(icon, {attributes:true, attributeFilter:['style']});
-  });
-
-})();
-</script>
-<div id="song-stats">
-  <span id="stats-plays">Plays 0</span>
-  <span id="stats-likes">Likes 0</span>
-  <span id="stats-dislikes">Dislikes 0</span>
-  <span id="stats-downloads">Downloads 0</span>
-</div>
-
+          <div id="reaction-buttons">
+            <button id="like-btn" onclick="animateButton(this); likeSongFirebase(currentSongId)">
+              <i class="material-icons">thumb_up</i>
+            </button>
+            <button id="dislike-btn" onclick="animateButton(this); dislikeSongFirebase(currentSongId)">
+              <i class="material-icons">thumb_down</i>
+            </button>
+            <button id="download-btn" onclick="animateButton(this); downloadSong()">
+              <i class="material-icons">file_download</i>
+            </button>
+          </div>
+          <!-- Song Reaction Buttons & Stats -->
+          <!-- Song Reaction Buttons & Stats -->
+<script  src="js/index/song-reaction-buttons-and-stats.js"></script>
+          <div id="song-stats">
+            <span id="stats-plays">Plays 0</span>
+            <span id="stats-likes">Likes 0</span>
+            <span id="stats-dislikes">Dislikes 0</span>
+            <span id="stats-downloads">Downloads 0</span>
+          </div>
+        </div>
         <div class="progress-area">
           <div class="progress-bar"></div>
           <div class="song-timer">
@@ -694,7 +403,6 @@
           </div>
           <audio id="main-audio" src=""></audio>
         </div>
-
         <!-- Player Controls -->
         <div class="controls">
           <i id="repeat-plist" class="material-icons" title="Playlist looped">repeat</i>
@@ -703,7 +411,6 @@
           <i id="next" class="material-icons">skip_next</i>
           <i id="more-music" class="material-icons">queue_music</i>
         </div>
-
         <!-- Volume Knob + Visualizer Editor (LEFT aligned) -->
         <div class="vz-row">
           <!-- Volume Knob -->
@@ -715,97 +422,80 @@
                   <stop offset="100%" stop-color="#a97aff"/>
                 </linearGradient>
               </defs>
-              <!-- background ring -->
               <circle class="track" cx="50" cy="50" r="34"></circle>
-              <!-- active arc; d is set in JS -->
               <path class="arc" d="" />
-              <!-- handle dot; positioned in JS -->
               <circle class="handle" cx="50" cy="16" r="3.8"></circle>
             </svg>
             <span class="label" id="knob-label">100%</span>
           </button>
-
           <!-- Visualizer Editor Button -->
           <button id="vz-open-editor" class="vz-fab" aria-haspopup="dialog" aria-controls="vz-panel" title="Open Visualizer Editor" aria-label="Open Visualizer Editor"></button>
-
           <!-- NEW: Equalizer Button -->
           <button id="open-eq" class="eq-fab" title="Open Equalizer" aria-haspopup="dialog" aria-controls="eq-modal">
             <span class="material-icons" aria-hidden="true">equalizer</span>
           </button>
         </div>
-
-        <!-- Editor root (modal attaches here) -->
         <div id="vz-editor-root"></div>
-
-        <!-- Equalizer Modal -->
-        <div id="eq-modal" class="modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Audio Equalizer">
-          <div class="modal-content eq-content simple">
-            <!-- Header -->
-            <div class="eq-header" style="display:flex;align-items:center;gap:12px;justify-content:space-between;">
-              <div class="eq-title" style="display:flex;align-items:center;gap:8px;">
-                <span class="material-icons" aria-hidden="true">equalizer</span>
-                <h3 style="margin:0;">Equalizer</h3>
-              </div>
-
-              <div class="eq-toggle" style="display:flex;align-items:center;gap:10px;">
-                <label class="switch">
-                  <input type="checkbox" id="eq-enable" checked />
-                  <span class="slider"></span>
-                </label>
-                <span class="toggle-label">Enabled</span>
-              </div>
-
-              <button class="icon-btn ghost" type="button" data-eq-close aria-label="Close equalizer" title="Close">
-                <span class="material-icons" aria-hidden="true">close</span>
-              </button>
-            </div>
-
-            <!-- Controls row -->
-            <div class="eq-controls" style="display:grid;gap:12px;">
-              <div class="preset-row" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                <label for="eq-preset">Preset</label>
-                <select id="eq-preset"></select>
-
-                <!-- Save preset -->
-                <button class="icon-btn" id="eq-save-preset" type="button" aria-label="Save preset" title="Save preset">
-                  <span class="material-icons" aria-hidden="true">bookmark_add</span>
-                </button>
-                <!-- Delete preset -->
-                <button class="icon-btn danger" id="eq-delete-preset" type="button" aria-label="Delete preset" title="Delete preset">
-                  <span class="material-icons" aria-hidden="true">delete</span>
-                </button>
-              </div>
-
-              <div class="preamp-row" style="display:grid;grid-template-columns:1fr 170px 70px;gap:12px;align-items:center;">
-                <label for="eq-preamp">Preamp</label>
-                <input id="eq-preamp" type="range" min="-12" max="12" step="0.1" value="0" />
-                <output id="eq-preamp-out">0 dB</output>
-              </div>
-            </div>
-
-            <!-- Bands -->
-            <div class="eq-bands" id="eq-bands"><!-- JS fills sliders --></div>
-
-            <!-- Footer -->
-            <div class="eq-footer" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;">
-              <div class="mode-toggle" style="display:flex;align-items:center;gap:8px;">
-                <button class="icon-btn ghost" id="eq-mode" type="button" aria-pressed="true" aria-label="Toggle Simple/Pro" title="Toggle Simple/Pro">
-                  <span class="material-icons" aria-hidden="true">tune</span>
-                </button>
-                <span class="mode-hint">Tap to switch Simple/Pro (10-band)</span>
-              </div>
-              <div class="footer-actions" style="display:flex;align-items:center;gap:8px;">
-                <button class="icon-btn ghost" type="button" data-eq-close aria-label="Close" title="Close">
-                  <span class="material-icons" aria-hidden="true">close</span>
-                </button>
-                <button class="icon-btn" type="button" id="eq-reset" aria-label="Reset" title="Reset">
-                  <span class="material-icons" aria-hidden="true">restore</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        
+      <div id="eq-modal" class="modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Audio Equalizer">
+  <div class="modal-content eq-content simple">
+    <!-- Header -->
+    <div class="eq-header" ...>
+      <div class="eq-title" ...>
+        <span class="material-icons" aria-hidden="true">equalizer</span>
+        <h3 style="margin:0;">Equalizer</h3>
+      </div>
+      <div class="eq-toggle" ...>
+        <label class="switch">
+          <input type="checkbox" id="eq-enable" checked />
+          <span class="slider"></span>
+        </label>
+        <span class="toggle-label">Enabled</span>
+      </div>
+      <button class="icon-btn ghost" type="button" data-eq-close ...>
+        <span class="material-icons" aria-hidden="true">close</span>
+      </button>
+    </div>
+    <!-- Controls row -->
+    <div class="eq-controls" ...>
+      <div class="preset-row" ...>
+        <label for="eq-preset">Preset</label>
+        <select id="eq-preset"></select>
+        <button class="icon-btn" id="eq-save-preset" ...>
+          <span class="material-icons" aria-hidden="true">bookmark_add</span>
+        </button>
+        <button class="icon-btn danger" id="eq-delete-preset" ...>
+          <span class="material-icons" aria-hidden="true">delete</span>
+        </button>
+      </div>
+      <div class="preamp-row" ...>
+        <label for="eq-preamp">Preamp</label>
+        <input id="eq-preamp" type="range" min="-12" max="12" step="0.1" value="0" />
+        <output id="eq-preamp-out">0 dB</output>
+      </div>
+    </div>
+    <!-- Bands -->
+    <div class="eq-bands" id="eq-bands"><!-- JS fills sliders --></div>
+    <!-- Footer -->
+    <div class="eq-footer" ...>
+      <div class="mode-toggle" ...>
+        <button class="icon-btn ghost" id="eq-mode" ...>
+          <span class="material-icons" aria-hidden="true">tune</span>
+        </button>
+        <span class="mode-hint">Tap to switch Simple/Pro (10-band)</span>
+      </div>
+      <div class="footer-actions" ...>
+        <button class="icon-btn ghost" type="button" data-eq-close ...>
+          <span class="material-icons" aria-hidden="true">close</span>
+        </button>
+        <button class="icon-btn" type="button" id="eq-reset" ...>
+          <span class="material-icons" aria-hidden="true">restore</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>  
+        
         <!-- Music list -->
         <div class="music-list">
           <div class="header">
@@ -818,2199 +508,180 @@
           <ul></ul>
         </div>
       </div>
-       </header>
-
-<footer>
-  <div class="branding-footer">
-    <p>&copy; 2025 G Jordan | <span class="tm">G73&trade; LLC</span></p>
-    <p>You are the <strong><span class="tm" id="visitorOrdinal">—</span></strong> visitor</p>
-    <p>G73 total signed-up users: <strong><span class="tm" id="totalUsers">—</span></strong></p>
-    
-      <p style="font-size:0.9em; opacity:0.9; margin:0;">
-    Total song plays: <strong><span class="tm" id="totalPlays">—</span></strong>
-  </p>
-  <p style="font-size:0.9em; opacity:0.9; margin:0;">
-    Total song downloads: <strong><span class="tm" id="totalDownloads">—</span></strong>
-  </p>
-
-    <!-- Footer stats: total likes (Fans) + total dislikes (Haters) -->
-    <div class="footer-stats" id="footer-stats" style="
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:16px;
-      flex-wrap:wrap;
-      width:100%;
-      margin:10px auto 0;
-      padding:6px 0;
-    ">
-      <div class="stat-chip fans" aria-label="Total Likes" style="
-        position:relative;
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        padding:8px 14px;
-        background:var(--bg-overlay);
-        border-radius:8px;
-        border:1px solid var(--primary-color);
-        box-shadow:0 0 10px var(--primary-color);
-        transition:box-shadow 0.3s ease-in-out;
-      ">
-        <i class="material-icons stat-icon" aria-hidden="true" style="
-          font-size:20px;
-          color:var(--primary-color);
-          line-height:1;
-        ">thumb_up</i>
-        <span class="stat-label" style="
-          font-weight:700;
-          color:var(--accent-color);
-        ">Fans</span>
-        <span class="stat-value" id="fans-count" style="
-          font-weight:800;
-          color:var(--highlight-cyan);
-        ">0</span>
-      </div>
-
-      <div class="stat-chip haters" aria-label="Total Dislikes" style="
-        position:relative;
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        padding:8px 14px;
-        background:var(--bg-overlay);
-        border-radius:8px;
-        border:1px solid var(--primary-color);
-        box-shadow:0 0 10px var(--primary-color);
-        transition:box-shadow 0.3s ease-in-out;
-      ">
-        <i class="material-icons stat-icon" aria-hidden="true" style="
-          font-size:20px;
-          color:var(--primary-color);
-          line-height:1;
-        ">thumb_down</i>
-        <span class="stat-label" style="
-          font-weight:700;
-          color:var(--accent-color);
-        ">Haters</span>
-        <span class="stat-value" id="haters-count" style="
-          font-weight:800;
-          color:var(--highlight-cyan);
-        ">0</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="social-links site-footer">
-    <a href="https://www.facebook.com/share/15nmGGZQVH/" target="_blank"><img src="https://img.icons8.com/color/50/facebook.png" alt="Facebook" /></a>
-    <a href="https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu" target="_blank"><img src="https://img.icons8.com/color/50/instagram-new.png" alt="Instagram" /></a>
-    <a href="https://www.bandlab.com/g_jordan" target="_blank">
-      <img src="https://img.icons8.com/color/50/bandlab.png" alt="BandLab" />
-    </a>
-    <a href="https://www.tiktok.com/@g_jordan7?_t=ZP-8z2gOs0zTt1&_r=1" target="_blank"><img src="https://img.icons8.com/color/50/tiktok.png" alt="TikTok" /></a>
-  </div>
-</footer>
-
-<!-- Footer metrics loader (uses your existing window.db from firebase-init.js) -->
-<script type="module">
-  import {
-    collection, collectionGroup, getCountFromServer, query, where
-  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-  const db = window.db;
-
-  async function refreshFooterCounts(){
-    // ---- Total signed-up users (profiles only; anonymous not included by design) ----
-    try {
-      const snap = await getCountFromServer(collection(db, "profiles"));
-      const total = snap.data().count || 0;
-      const el = document.getElementById("totalUsers");
-      if (el) el.textContent = total.toLocaleString();
-    } catch (e) {
-      console.warn("[footer] profiles count failed", e);
-    }
-
-    // ---- Fans / Haters totals across all reactions subcollections (songs/videos) ----
-    try {
-      const likesQ    = query(collectionGroup(db, "reactions"), where("reaction", "==", "like"));
-      const dislikesQ = query(collectionGroup(db, "reactions"), where("reaction", "==", "dislike"));
-      const [likesSnap, dislikesSnap] = await Promise.all([
-        getCountFromServer(likesQ),
-        getCountFromServer(dislikesQ)
-      ]);
-      const fans   = likesSnap.data().count || 0;
-      const haters = dislikesSnap.data().count || 0;
-      const fansEl = document.getElementById("fans-count");
-      const hatEl  = document.getElementById("haters-count");
-      if (fansEl) fansEl.textContent = fans.toLocaleString();
-      if (hatEl)  hatEl.textContent  = haters.toLocaleString();
-    } catch (e) {
-      console.warn("[footer] reactions count failed", e);
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", refreshFooterCounts);
-  } else {
-    refreshFooterCounts();
-  }
-</script>
-  </div>
-
-  <script>window.__VZ_EMBEDDED = true;</script>
-
-  <!-- External Scripts (order matters) -->
-  <script src="js/music-list.js"></script>
-
-  <!-- Firebase (modules) -->
-  <script type="module" src="js/firebase/firebase-init.js"></script>
-  <script type="module" src="js/firebase/firebase-stats.js"></script>
-  <script type="module" src="js/firebase/firebase-auth.js"></script>
-
-  <!-- Theme (plain) -->
-  <script src="js/theme/theme-init.js"></script>
-  <script src="js/theme/theme-preview.js"></script>
-  <script src="js/theme/theme-save.js"></script>
-  <script src="js/theme/theme-sync.js"></script>
-
-  <!-- Player (plain) -->
-  <script src="js/player/player-core.js"></script>
-  <script src="js/player/ui-events.js"></script>
-  <script src="js/player/visualizer.js"></script>
-  <script src="js/player/visualizer-editor.js"></script>
-
-  <!-- NEW: Equalizer logic -->
-  <script src="js/player/equalizer.js"></script>
-<script>
-/* Simple/Pro toggle that layers on top of equalizer.js (no edits to your file) */
-(function(){
-  const modeBtn   = document.getElementById('eq-mode');
-  const bandsWrap = document.getElementById('eq-bands');
-  const preamp    = document.getElementById('eq-preamp');
-  if (!modeBtn || !bandsWrap || !window.equalizerAPI) return;
-
-  const STORE_KEY = 'eqMode.v1';
-
-  // Group the 10 pro bands into 5 "simple" bands
-  // Indices correspond to the freqs you used: [60,170,310,600,1000,3000,6000,12000,14000,16000]
-  const GROUPS = [
-    { name: 'Low',      idx: [0,1] },        // 60, 170
-    { name: 'Low-Mid',  idx: [2,3] },        // 310, 600
-    { name: 'Mid',      idx: [4,5] },        // 1k, 3k
-    { name: 'High-Mid', idx: [6,7] },        // 6k, 12k
-    { name: 'High',     idx: [8,9] },        // 14k, 16k
-  ];
-
-  // Build the 5 simple sliders once and keep them hidden when in Pro mode
-  const simpleWrap = document.createElement('div');
-  simpleWrap.className = 'eq-bands simple-bands';
-  simpleWrap.style.display = 'none';
-
-  const simpleSliders = []; // {input, out, group}
-  GROUPS.forEach(group => {
-    const wrap = document.createElement('div');
-    wrap.className = 'eq-band';
-
-    const label = document.createElement('label');
-    label.textContent = group.name;
-
-    const input = document.createElement('input');
-    input.type = 'range';
-    input.min = -12;
-    input.max =  12;
-    input.step = 0.1;
-    input.value = 0;
-
-    const out = document.createElement('output');
-    out.textContent = '0 dB';
-
-    input.addEventListener('input', () => {
-      const v = parseFloat(input.value);
-      // Push simple value to all pro bands in this group
-      group.idx.forEach(i => window.equalizerAPI.setBand(i, v));
-      out.textContent = (v>0?'+':'') + v.toFixed(1) + ' dB';
-      // Persist full EQ state (equalizerAPI already persists on setBand)
-      persistMode(currentMode);
-    });
-
-    wrap.appendChild(label);
-    wrap.appendChild(input);
-    wrap.appendChild(out);
-    simpleWrap.appendChild(wrap);
-
-    simpleSliders.push({ input, out, group });
-  });
-
-  // Insert the simple block right before the pro 10-band block
-  bandsWrap.parentNode.insertBefore(simpleWrap, bandsWrap);
-
-  function avg(arr){ return arr.reduce((a,b)=>a+b,0)/arr.length; }
-
-  function syncSimpleFromPro(){
-    // Read current pro values and set each simple slider to the average of its group
-    const st = window.equalizerAPI.getSettings();
-    if (!st || !Array.isArray(st.bands)) return;
-    simpleSliders.forEach(({input, out, group})=>{
-      const values = group.idx.map(i => st.bands[i] ?? 0);
-      const v = avg(values);
-      input.value = v;
-      out.textContent = (v>0?'+':'') + v.toFixed(1) + ' dB';
-    });
-  }
-
-  function syncProFromSimple(){
-    // Push each simple slider value to its grouped pro bands
-    simpleSliders.forEach(({input, group})=>{
-      const v = parseFloat(input.value);
-      group.idx.forEach(i => window.equalizerAPI.setBand(i, v));
-    });
-  }
-
-  function applyMode(mode){
-    // Visual toggle
-    if (mode === 'simple'){
-      simpleWrap.style.display = '';
-      bandsWrap.style.display  = 'none';
-      modeBtn.setAttribute('aria-pressed', 'true');
-      modeBtn.title = 'Switch to Pro';
-      // Initialize simple sliders from current pro values
-      syncSimpleFromPro();
-    }else{
-      simpleWrap.style.display = 'none';
-      bandsWrap.style.display  = '';
-      modeBtn.setAttribute('aria-pressed', 'false');
-      modeBtn.title = 'Switch to Simple';
-      // When leaving simple, push simple values to pro so it "sticks"
-      syncProFromSimple();
-    }
-  }
-
-  function persistMode(mode){
-    try{ localStorage.setItem(STORE_KEY, mode); }catch{}
-  }
-  function restoreMode(){
-    try{
-      const m = localStorage.getItem(STORE_KEY);
-      return (m === 'simple' || m === 'pro') ? m : 'simple'; // default to simple UI
-    }catch{ return 'simple'; }
-  }
-
-  let currentMode = restoreMode();
-  applyMode(currentMode);
-
-  modeBtn.addEventListener('click', ()=>{
-    currentMode = (currentMode === 'simple') ? 'pro' : 'simple';
-    applyMode(currentMode);
-    persistMode(currentMode);
-  });
-
-  // If user changes preset or resets EQ in Pro while Simple is active later,
-  // keep the simple UI in sync the next time it’s shown.
-  // Hook some common events:
-  document.getElementById('eq-preset')?.addEventListener('change', ()=>{
-    if (currentMode === 'simple') syncSimpleFromPro();
-  });
-  document.getElementById('eq-reset')?.addEventListener('click', ()=>{
-    setTimeout(()=>{ if (currentMode === 'simple') syncSimpleFromPro(); }, 0);
-  });
-  document.getElementById('eq-enable')?.addEventListener('change', ()=>{
-    if (currentMode === 'simple') syncSimpleFromPro();
-  });
-
-  // Also re-sync when the modal opens (in case values changed while closed)
-  (function watchModal(){
-    const modal = document.getElementById('eq-modal');
-    if (!modal) return;
-    const mo = new MutationObserver(()=>{
-      const open = modal.getAttribute('aria-hidden') === 'false';
-      if (open && currentMode === 'simple') syncSimpleFromPro();
-    });
-    mo.observe(modal, { attributes:true, attributeFilter:['aria-hidden'] });
-  })();
-})();
-</script>
-  <!-- UI (plain) -->
-  <script src="js/ui/navbar.js"></script>
-  <script src="js/ui/modals.js"></script>
-  <script src="js/ui/toast.js"></script>
-  <script src="js/ui/password-visibility.js"></script>
-  <script src="js/ui/password-check.js"></script>
-
-  <!-- Main boot (plain) -->
-  <script src="js/main.js"></script>
-
-  <!-- Safety boot in case main.js doesn't start it -->
-  <script>
-    if (typeof setupVisualizer === "function") { setupVisualizer(); }
-  </script>
-
-  <!-- Navbar height → CSS var (for container padding) -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const nav = document.querySelector('.navbar');
-      if (nav) {
-        const navHeight = nav.getBoundingClientRect().height;
-        document.documentElement.style.setProperty('--navbar-h', navHeight + 'px');
-      }
-    });
-  </script>
-
-  <!-- Build the animated orb inside #vz-open-editor -->
-  <script>
-  (function(){
-    const btn = document.getElementById('vz-open-editor');
-    if(!btn) return;
-
-    btn.innerHTML = `
-      <svg class="vz-orb" viewBox="0 0 48 48" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true">
-        <defs>
-          <linearGradient id="vz-g1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"  stop-color="#4ad6ff"/>
-            <stop offset="50%" stop-color="#7aa6ff"/>
-            <stop offset="100%" stop-color="#b07bff"/>
-            <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="14s" repeatCount="indefinite"/>
-          </linearGradient>
-          <linearGradient id="vz-g2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"  stop-color="#59ffc8"/>
-            <stop offset="50%" stop-color="#66b3ff"/>
-            <stop offset="100%" stop-color="#ff8af5"/>
-            <animateTransform attributeName="gradientTransform" type="rotate" from="360 0.5 0.5" to="0 0.5 0.5" dur="18s" repeatCount="indefinite"/>
-          </linearGradient>
-          <filter id="vz-softGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <g class="no-reduce" style="transform-origin:24px 24px; animation: orb-spin 7.5s linear infinite, orb-breathe 5.6s ease-in-out infinite;">
-          <g filter="url(#vz-softGlow)">
-            <circle cx="24" cy="24" r="13.2" fill="none" stroke="url(#vz-g1)"
-              stroke-width="2.6" stroke-linecap="round" stroke-dasharray="12 10" pathLength="100"
-              class="no-reduce" style="animation: dash-flow 3.2s linear infinite;" />
-          </g>
-          <g style="transform-origin:24px 24px; animation: orb-spin 11s linear reverse infinite;">
-            <circle cx="24" cy="24" r="9.4" fill="none" stroke="url(#vz-g2)"
-              stroke-width="2.2" stroke-linecap="round" pathLength="100"
-              class="no-reduce" style="animation: dash-flow 4.1s linear infinite;" />
-          </g>
-          <circle cx="24" cy="24" r="2.4" fill="#a7d8ff" fill-opacity=".6"/>
-        </g>
-      </svg>
-    `;
-
-    btn.setAttribute('role', 'button');
-    btn.tabIndex = 0;
-    btn.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        btn.click();
-      }
-    }, {passive:true});
-  })();
-  </script>
-
-  <!-- Volume Knob logic -->
-  <script>
-  (function(){
-    const knob = document.getElementById('volume-knob');
-    const label = document.getElementById('knob-label');
-    const audio = document.getElementById('main-audio');
-    if (!knob || !label || !audio) return;
-
-    const svg   = knob.querySelector('svg');
-    const arc   = knob.querySelector('.arc');
-    const handle= knob.querySelector('.handle');
-
-    const R = 34;
-    const CX = 50, CY = 50;
-    const MIN_ANG = -135;
-    const MAX_ANG =  135;
-
-    const VOL_KEY = 'playerVolume';
-
-    const clamp = (n, a, b)=> Math.max(a, Math.min(b, n));
-
-    function setArcPath(fromDeg, toDeg){
-      const p2c = (cx, cy, r, deg)=>{
-        const rad = (deg-90) * Math.PI/180;
-        return {x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad)};
-      };
-      const start = p2c(CX, CY, R, fromDeg);
-      const end   = p2c(CX, CY, R, toDeg);
-      let sweep = toDeg - fromDeg;
-      if (sweep < 0) sweep += 360;
-      const largeArc = sweep >= 180 ? 1 : 0;
-      const d = `M ${start.x} ${start.y} A ${R} ${R} 0 ${largeArc} 1 ${end.x} ${end.y}`;
-      arc.setAttribute('d', d);
-    }
-
-    function angleForVolume(v){ return MIN_ANG + (MAX_ANG - MIN_ANG) * v; }
-    function volumeForAngle(deg){ return clamp((deg - MIN_ANG) / (MAX_ANG - MIN_ANG), 0, 1); }
-
-    function updateVisual(v){
-      const vol = clamp(v, 0, 1);
-      const deg = angleForVolume(vol);
-
-      setArcPath(MIN_ANG, deg);
-
-      const rad = (deg-90) * Math.PI/180;
-      const hx = CX + R * Math.cos(rad);
-      const hy = CY + R * Math.sin(rad);
-      handle.setAttribute('cx', hx);
-      handle.setAttribute('cy', hy);
-
-      const pct = Math.round(vol*100);
-      label.textContent = pct + '%';
-      knob.setAttribute('aria-valuenow', pct);
-      knob.setAttribute('aria-valuetext', pct + '%');
-    }
-
-    function setVolume(v, fromUser=false){
-      v = clamp(v, 0, 1);
-      audio.volume = v;
-      updateVisual(v);
-      if (fromUser) {
-        try { localStorage.setItem(VOL_KEY, String(v)); } catch {}
-      }
-    }
-
-    let initial = 1;
-    try {
-      const saved = localStorage.getItem(VOL_KEY);
-      if (saved != null && !isNaN(saved)) initial = clamp(parseFloat(saved), 0, 1);
-    } catch{}
-    setVolume(initial, false);
-
-    audio.addEventListener('volumechange', ()=> updateVisual(audio.volume), {passive:true});
-
-    let dragging = false;
-    function getAngleFromEvent(e){
-      const rect = svg.getBoundingClientRect();
-      const cx = rect.left + rect.width/2;
-      const cy = rect.top  + rect.height/2;
-      const x = (e.clientX != null) ? e.clientX : (e.touches?.[0]?.clientX || 0);
-      const y = (e.clientY != null) ? e.clientY : (e.touches?.[0]?.clientY || 0);
-      const dx = x - cx;
-      const dy = y - cy;
-      let deg = Math.atan2(dy, dx) * 180/Math.PI + 90; // 0° at top
-      if (deg > 180) deg -= 360;                        // normalize
-      deg = clamp(deg, MIN_ANG, MAX_ANG);               // clamp to arc
-      return deg;
-    }
-
-    const onDown = (e)=>{ dragging = true; knob.focus(); e.preventDefault(); };
-    const onMove = (e)=>{
-      if (!dragging) return;
-      const deg = getAngleFromEvent(e);
-      setVolume(volumeForAngle(deg), true);
-      e.preventDefault();
-    };
-    const onUp = ()=>{ dragging = false; };
-
-    knob.addEventListener('pointerdown', onDown, {passive:false});
-    window.addEventListener('pointermove', onMove, {passive:false});
-    window.addEventListener('pointerup', onUp, {passive:true});
-
-    knob.addEventListener('touchstart', onDown, {passive:false});
-    window.addEventListener('touchmove', onMove, {passive:false});
-    window.addEventListener('touchend', onUp, {passive:true});
-
-    knob.addEventListener('wheel', (e)=>{
-      e.preventDefault();
-      const step = (e.deltaY < 0 ? 0.04 : -0.04);
-      setVolume(audio.volume + step, true);
-    }, {passive:false});
-
-    knob.addEventListener('keydown', (e)=>{
-      let v = audio.volume;
-      const fine = 0.02, coarse = 0.1;
-      switch(e.key){
-        case 'ArrowRight':
-        case 'ArrowUp':   setVolume(v + fine, true); e.preventDefault(); break;
-        case 'ArrowLeft':
-        case 'ArrowDown': setVolume(v - fine, true); e.preventDefault(); break;
-        case 'PageUp':    setVolume(v + coarse, true); e.preventDefault(); break;
-        case 'PageDown':  setVolume(v - coarse, true); e.preventDefault(); break;
-        case 'Home':      setVolume(0, true); e.preventDefault(); break;
-        case 'End':       setVolume(1, true); e.preventDefault(); break;
-        case 'm':
-        case 'M':
-          if (audio.volume > 0){ knob._lastVol = audio.volume; setVolume(0, true); }
-          else setVolume(Math.max(0, Math.min(knob._lastVol || 0.6, 1)), true);
-          e.preventDefault();
-          break;
-      }
-    });
-
-  })();
-  </script>
-
-  <script>
-  (function(){
-    const btn = document.getElementById('vz-open-editor');
-    if(!btn) return;
-
-    btn.innerHTML = `
-      <svg class="vz-orb" viewBox="0 0 48 48" role="img" aria-hidden="true">
-        <defs>
-          <linearGradient id="vz-g1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"  stop-color="#4ad6ff"/>
-            <stop offset="100%" stop-color="#b07bff"/>
-          </linearGradient>
-          <linearGradient id="vz-g2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"  stop-color="#59ffc8"/>
-            <stop offset="100%" stop-color="#ff8af5"/>
-          </linearGradient>
-          <filter id="vz-softGlow" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- Stationary group; only dash properties animate for “wavy” feel -->
-        <g class="no-reduce">
-          <!-- Outer ring (gentle wave) -->
-          <g filter="url(#vz-softGlow)">
-            <circle cx="24" cy="24" r="13.2" fill="none" stroke="url(#vz-g1)"
-              stroke-width="2.6" stroke-linecap="round" pathLength="100"
-              style="animation: dash-wave 2.8s ease-in-out infinite;" />
-          </g>
-          <!-- Inner ring (counter-phase wave) -->
-          <g>
-            <circle cx="24" cy="24" r="9.4" fill="none" stroke="url(#vz-g2)"
-              stroke-width="2.2" stroke-linecap="round" pathLength="100"
-              style="animation: dash-wave-2 3.4s ease-in-out infinite;" />
-          </g>
-          <!-- Soft center dot -->
-          <circle cx="24" cy="24" r="2.6" fill="#a7d8ff" fill-opacity=".65"/>
-        </g>
-      </svg>
-    `;
-
-    // Keep it keyboard-accessible
-    btn.setAttribute('role', 'button');
-    btn.tabIndex = 0;
-    btn.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        btn.click();
-      }
-    }, {passive:true});
-  })();
-  </script>
-
-  <!-- EQ modal opener/closer -->
-  <script>
-  (function () {
-    const openBtn = document.getElementById('open-eq');
-    const modal   = document.getElementById('eq-modal');
-
-    if (!openBtn || !modal) {
-      console.warn('[EQ] Missing #open-eq or #eq-modal in DOM.');
-      return;
-    }
-
-    function showEQ() {
-      modal.removeAttribute('hidden');
-      modal.setAttribute('aria-hidden', 'false');
-
-      const ctx = window.audioCtx || window.AudioContextInstance;
-      if (ctx && ctx.state === 'suspended') {
-        ctx.resume?.();
-      }
-    }
-
-    function hideEQ() {
-      modal.setAttribute('hidden', '');
-      modal.setAttribute('aria-hidden', 'true');
-    }
-
-    openBtn.addEventListener('click', (e) => { e.preventDefault(); showEQ(); });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !modal.hasAttribute('hidden')) hideEQ();
-    });
-
-    // backdrop close (click outside content)
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) hideEQ();
-    });
-
-    modal.querySelectorAll('[data-eq-close]').forEach(btn => {
-      btn.addEventListener('click', hideEQ);
-    });
-
-    window.__EQModal = { showEQ, hideEQ };
-  })();
-  </script>
-
-  <!-- Theme → EQ hook (update these when your site theme changes) -->
-  <script>
-    // Call this whenever your site theme changes.
-    // Example: updateEQTheme('#ff3366', '#ffd300')
-    function updateEQTheme(primary, accent){
-      if (primary) document.documentElement.style.setProperty('--app-primary', primary);
-      if (accent)  document.documentElement.style.setProperty('--app-accent',  accent);
-      // eq.css derives --eq-accent1/2 from these instantly.
-    }
-
-    // Optional: listen for a custom event your app fires
-    window.addEventListener('theme:changed', (e)=>{
-      const { primary, accent } = e.detail || {};
-      updateEQTheme(primary, accent);
-    });
-  </script>
-  <script>
-/*!
- * G73 Controls Theme Plugin v2.4 (stable on your v2.0)
- * - Keeps all v2.3 features (progress + timers + gradient icons + portal menu)
- * - Solid play/pause glyph (no more invisible over gradients)
- * - Menu centered under the palette button (viewport-clamped)
- * - EXACTLY 73 themes
- */
-(function(){
-  const STORE_KEY = 'playerControlsTheme.v2.4';
-
-  // ---- Targets ----
-  const controls = document.querySelector('.controls');
-  const progress = document.querySelector('.progress-area');
-  const bar      = progress?.querySelector('.progress-bar');
-  const tCur     = progress?.querySelector('.current-time');
-  const tMax     = progress?.querySelector('.max-duration');
-  if (!controls) { console.warn('[ControlsThemePlugin] No .controls found.'); return; }
-  controls.setAttribute('data-ctl-theme','');
-  if (progress) progress.setAttribute('data-ctl-theme','');
-
-  // ---- CSS (scoped; beats main.css) ----
-  const css = `
-  .controls[data-ctl-theme]{
-    display:inline-flex; align-items:center; gap:12px; padding:10px;
-    border-radius:16px;
-    border:1px solid var(--ctl-border, rgba(255,255,255,.10)) !important;
-    background: var(--ctl-bg, rgba(13,17,23,.72)) !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,.45) !important;
-  }
-
-  /* Gradient icons (all standard control glyphs)… */
-  .controls[data-ctl-theme] .material-icons{
-    background-image: var(--ctl-icon-gradient, linear-gradient(90deg,#ffffff,#ffffff)) !important;
-    -webkit-background-clip: text !important; background-clip: text !important;
-    -webkit-text-fill-color: transparent !important; color: transparent !important;
-    transition: filter .12s, transform .12s; user-select: none;
-  }
-  .controls[data-ctl-theme] i:hover{
-    filter: drop-shadow(0 0 6px var(--ctl-ring, rgba(120,200,255,.4))) !important;
-    transform: translateY(-1px);
-  }
-
-  /* …EXCEPT play/pause GLYPH: force solid high-contrast color so it's always visible */
-  .controls[data-ctl-theme] .play-pause .material-icons{
-    -webkit-text-fill-color: var(--pp-icon-color, #ffffff) !important;
-            color: var(--pp-icon-color, #ffffff) !important;
-    background-image: none !important;
-  }
-
-  /* Play/Pause chip */
-  .controls[data-ctl-theme] .play-pause{
-    position: relative !important;
-    display:flex; align-items:center; justify-content:center;
-    width:54px; height:54px; border-radius:50% !important;
-    background: var(--pp-outer, linear-gradient(135deg,#1d2230,#151820)) !important;
-    box-shadow: 0 0 5px var(--pp-glow, rgba(95,160,255,.45)) !important;
-    border: none !important; overflow: visible;
-  }
-  .controls[data-ctl-theme] .play-pause::before{
-    content:"";
-    position:absolute; inset:0; width:43px; height:43px; margin:auto; border-radius:50%;
-    background: var(--pp-inner, var(--ctl-icon-gradient, linear-gradient(90deg,#ffffff,#ffffff))) !important;
-    z-index: 0;
-  }
-  .controls[data-ctl-theme] .play-pause .material-icons{
-    position:absolute; width:43px; height:43px; line-height:43px; text-align:center; z-index: 1;
-  }
-
-  /* Progress area colorization (behavior untouched) */
-  .progress-area[data-ctl-theme]{ position:relative; background: var(--prog-bg, rgba(255,255,255,.10)) !important; border-radius: 50px !important; }
-  .progress-area[data-ctl-theme] .progress-bar{ background: var(--prog-fill, linear-gradient(90deg,#5ad1ff,#a97aff)) !important; }
-  .progress-area[data-ctl-theme] .song-timer{ display:flex; justify-content:space-between; margin-top:2px; color: var(--timer-color, #d5e6ff) !important; font-size:13px; }
-
-  /* Palette button */
-  .ctl-theme-btn{
-    width:40px; height:40px; border-radius: 14px !important;
-    border:1px solid var(--ctl-border, rgba(255,255,255,.1)) !important;
-    background: transparent !important; cursor:pointer; display:grid; place-items:center;
-  }
-  .ctl-theme-btn .material-icons{
-    background-image: var(--ctl-icon-gradient, linear-gradient(90deg,#ffffff,#ffffff)) !important;
-    -webkit-background-clip: text !important; background-clip: text !important;
-    -webkit-text-fill-color: transparent !important; color: transparent !important;
-  }
-  .ctl-theme-btn:hover{
-    background: color-mix(in srgb, var(--app-accent, #b478ff) 16%, transparent) !important;
-    box-shadow: 0 8px 18px rgba(0,0,0,.45) !important;
-  }
-
-  /* PORTAL MENU (centered under button; never affects layout) */
-  .ctl-theme-menu{
-    position: fixed;
-    min-width:260px; max-width:320px; max-height: 280px;
-    overflow:auto; overscroll-behavior: contain;
-    display:grid; gap:8px; padding:10px; border-radius:14px;
-    border:1px solid var(--ctl-border, rgba(255,255,255,.1)) !important;
-    background: color-mix(in srgb, #0b0f14 88%, transparent) !important;
-    box-shadow: 0 16px 44px rgba(0,0,0,.55) !important;
-    z-index: 2147483000; /* TOPMOST */
-  }
-  .ctl-theme-menu[hidden]{ display:none !important; }
-  .theme-chip{
-    display:flex; align-items:center; gap:10px; padding:10px 12px;
-    width:100%; border-radius:12px; cursor:pointer;
-    border:1px solid var(--ctl-border, rgba(255,255,255,.1)) !important;
-    background: rgba(255,255,255,.04) !important;
-    transition: transform .12s, border-color .12s;
-  }
-  .theme-chip:hover{ transform: translateY(-1px); border-color: var(--ctl-ring, rgba(100,200,255,.35)) !important; }
-  .theme-chip .swatch{
-    width:26px; height:26px; border-radius:50%;
-    border:1px solid rgba(255,255,255,.35);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.15);
-    background-image: var(--chip-gradient, linear-gradient(90deg,#999,#bbb));
-  }
-  .theme-chip .text{ display:grid; gap:2px; }
-  .theme-chip .title{ color:#e8eef7; font-size:13px; }
-  .theme-chip .note{ color:#9fb2c7; font-size:11px; }
-  `;
-  const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
-
-  // ---- EXACTLY 73 Presets ----
-  const T = [
-  {id:'neonGlass',      name:'Neon Glass',      note:'cyan ↔ violet',   v:{'--ctl-bg':'color-mix(in srgb,#0a1220 68%,transparent)','--ctl-icon-gradient':'linear-gradient(90deg,#54e0ff,#b37aff)','--ctl-ring':'rgba(120,220,255,.55)','--prog-fill':'linear-gradient(90deg,#54e0ff,#b37aff)','--prog-bg':'rgba(255,255,255,.10)','--timer-color':'#cfe7ff'}},
-  {id:'midnightMinimal',name:'Midnight Minimal',note:'cool steel',      v:{'--ctl-bg':'rgba(14,18,24,.72)','--ctl-icon-gradient':'linear-gradient(90deg,#a8bed3,#e8eef7)','--ctl-ring':'rgba(120,180,255,.35)','--prog-fill':'linear-gradient(90deg,#87b4ff,#bcd4ff)','--prog-bg':'rgba(255,255,255,.08)','--timer-color':'#a8bed3'}},
-  {id:'goldOnyx',       name:'Gold Onyx',       note:'lux glow',        v:{'--ctl-bg':'linear-gradient(180deg,#0b0c0f,#0f1116)','--ctl-icon-gradient':'linear-gradient(90deg,#c79c46,#ffde87)','--ctl-ring':'rgba(255,205,95,.42)','--prog-fill':'linear-gradient(90deg,#c79c46,#ffde87)','--prog-bg':'rgba(255,216,128,.12)','--timer-color':'#ffe5a8','--pp-icon-color':'#1d1406'}},
-  {id:'retroTape',      name:'Retro Tape',      note:'warm earth',      v:{'--ctl-bg':'linear-gradient(180deg,#191512,#241f1b)','--ctl-icon-gradient':'linear-gradient(90deg,#d38b5d,#ffe0a1)','--ctl-ring':'rgba(255,178,102,.35)','--prog-fill':'linear-gradient(90deg,#d38b5d,#ffe0a1)','--prog-bg':'rgba(255,231,191,.12)','--timer-color':'#ffe8c7'}},
-  {id:'warmSunset',     name:'Warm Sunset',     note:'coral → gold',    v:{'--ctl-bg':'linear-gradient(180deg,#1a1010,#10131e)','--ctl-icon-gradient':'linear-gradient(90deg,#ff8a66,#ffd36e)','--ctl-ring':'rgba(255,140,120,.45)','--prog-fill':'linear-gradient(90deg,#ff8a66,#ffd36e)','--prog-bg':'rgba(255,160,120,.12)','--timer-color':'#ffcaa8'}},
-  {id:'terminalMono',   name:'Terminal Mono',   note:'green beam',      v:{'--ctl-bg':'rgba(4,12,6,.85)','--ctl-icon-gradient':'linear-gradient(90deg,#38ff80,#b8ffc8)','--ctl-ring':'rgba(100,255,160,.35)','--prog-fill':'linear-gradient(90deg,#38ff80,#b8ffc8)','--prog-bg':'rgba(170,255,200,.08)','--timer-color':'#c8ffd6'}},
-  {id:'oceanic',        name:'Oceanic',         note:'sky fade',        v:{'--ctl-bg':'linear-gradient(180deg,#0a1420,#0e1d2b)','--ctl-icon-gradient':'linear-gradient(90deg,#78c7ff,#9be7ff)','--ctl-ring':'rgba(100,200,255,.42)','--prog-fill':'linear-gradient(90deg,#78c7ff,#9be7ff)','--prog-bg':'rgba(200,235,255,.12)','--timer-color':'#cfeaff'}},
-  {id:'cyberLime',      name:'Cyber Lime',      note:'neon lime',       v:{'--ctl-bg':'linear-gradient(180deg,#0b0f0b,#0f1710)','--ctl-icon-gradient':'linear-gradient(90deg,#9dff6a,#d6ff8a)','--ctl-ring':'rgba(170,255,120,.45)','--prog-fill':'linear-gradient(90deg,#9dff6a,#d6ff8a)','--prog-bg':'rgba(180,255,160,.10)','--timer-color':'#e2ffd1'}},
-  {id:'lavenderIce',    name:'Lavender Ice',    note:'lavender → ice',  v:{'--ctl-bg':'linear-gradient(180deg,#1b1620,#121724)','--ctl-icon-gradient':'linear-gradient(90deg,#c9a8ff,#a8e3ff)','--ctl-ring':'rgba(160,140,255,.42)','--prog-fill':'linear-gradient(90deg,#c9a8ff,#a8e3ff)','--prog-bg':'rgba(210,200,255,.10)','--timer-color':'#dee6ff'}},
-  {id:'ember',          name:'Ember',           note:'amber heat',      v:{'--ctl-bg':'linear-gradient(180deg,#1a0e08,#1e1410)','--ctl-icon-gradient':'linear-gradient(90deg,#ff914d,#ffc46b)','--ctl-ring':'rgba(255,170,100,.45)','--prog-fill':'linear-gradient(90deg,#ff914d,#ffc46b)','--prog-bg':'rgba(255,190,140,.12)','--timer-color':'#ffdcb3'}},
-  {id:'roseQuartz',     name:'Rose Quartz',     note:'rose crystal',    v:{'--ctl-bg':'linear-gradient(180deg,#1a1014,#15121a)','--ctl-icon-gradient':'linear-gradient(90deg,#ff9ec7,#ffd1e6)','--ctl-ring':'rgba(255,150,200,.45)','--prog-fill':'linear-gradient(90deg,#ff9ec7,#ffd1e6)','--prog-bg':'rgba(255,190,220,.12)','--timer-color':'#ffe6f3'}},
-  {id:'aurora',         name:'Aurora',          note:'polar glow',      v:{'--ctl-bg':'linear-gradient(180deg,#071218,#0a1522)','--ctl-icon-gradient':'linear-gradient(90deg,#57ffa6,#69c8ff)','--ctl-ring':'rgba(110,230,200,.45)','--prog-fill':'linear-gradient(90deg,#57ffa6,#69c8ff)','--prog-bg':'rgba(160,230,230,.10)','--timer-color':'#d6fbff'}},
-  {id:'grapeSoda',      name:'Grape Soda',      note:'purple pop',      v:{'--ctl-bg':'linear-gradient(180deg,#171129,#190f2a)','--ctl-icon-gradient':'linear-gradient(90deg,#a78bfa,#f0abfc)','--ctl-ring':'rgba(190,140,255,.45)','--prog-fill':'linear-gradient(90deg,#a78bfa,#f0abfc)','--prog-bg':'rgba(200,170,255,.12)','--timer-color':'#efe1ff'}},
-  {id:'ultramarine',    name:'Ultramarine',     note:'deep blue',       v:{'--ctl-bg':'linear-gradient(180deg,#0a0f26,#0b1431)','--ctl-icon-gradient':'linear-gradient(90deg,#3b82f6,#60a5fa)','--ctl-ring':'rgba(80,150,255,.45)','--prog-fill':'linear-gradient(90deg,#3b82f6,#60a5fa)','--prog-bg':'rgba(120,170,255,.12)','--timer-color':'#d7e6ff'}},
-  {id:'electricMango',  name:'Electric Mango',  note:'mango zest',      v:{'--ctl-bg':'linear-gradient(180deg,#160f07,#12110a)','--ctl-icon-gradient':'linear-gradient(90deg,#ffb703,#ffd166)','--ctl-ring':'rgba(255,200,90,.45)','--prog-fill':'linear-gradient(90deg,#ffb703,#ffd166)','--prog-bg':'rgba(255,220,140,.12)','--timer-color':'#ffeab3'}},
-  {id:'pinkLemonade',   name:'Pink Lemonade',   note:'sweet + tart',    v:{'--ctl-bg':'linear-gradient(180deg,#1b1012,#151318)','--ctl-icon-gradient':'linear-gradient(90deg,#ff7aa2,#ffd166)','--ctl-ring':'rgba(255,160,160,.45)','--prog-fill':'linear-gradient(90deg,#ff7aa2,#ffd166)','--prog-bg':'rgba(255,190,200,.12)','--timer-color':'#ffe6f0'}},
-  {id:'blurple',        name:'Blurple',         note:'brandish blue',   v:{'--ctl-bg':'linear-gradient(180deg,#14122a,#16143a)','--ctl-icon-gradient':'linear-gradient(90deg,#5865f2,#9aa4ff)','--ctl-ring':'rgba(120,130,255,.45)','--prog-fill':'linear-gradient(90deg,#5865f2,#9aa4ff)','--prog-bg':'rgba(160,170,255,.12)','--timer-color':'#e0e5ff'}},
-  {id:'tealPunch',      name:'Teal Punch',      note:'teal snap',       v:{'--ctl-bg':'linear-gradient(180deg,#0b1412,#0c1b1a)','--ctl-icon-gradient':'linear-gradient(90deg,#21d4a3,#66ffe3)','--ctl-ring':'rgba(80,240,200,.45)','--prog-fill':'linear-gradient(90deg,#21d4a3,#66ffe3)','--prog-bg':'rgba(160,255,230,.10)','--timer-color':'#d8fff5'}},
-  {id:'crimsonEdge',    name:'Crimson Edge',    note:'red radar',       v:{'--ctl-bg':'linear-gradient(180deg,#190a0a,#1a0e11)','--ctl-icon-gradient':'linear-gradient(90deg,#ff4d6d,#ffa3a3)','--ctl-ring':'rgba(255,120,140,.45)','--prog-fill':'linear-gradient(90deg,#ff4d6d,#ffa3a3)','--prog-bg':'rgba(255,150,170,.10)','--timer-color':'#ffd7de'}},
-  {id:'mintByte',       name:'Mint Byte',       note:'minty fresh',     v:{'--ctl-bg':'linear-gradient(180deg,#0c1410,#0e1913)','--ctl-icon-gradient':'linear-gradient(90deg,#7efac8,#baffde)','--ctl-ring':'rgba(160,255,220,.45)','--prog-fill':'linear-gradient(90deg,#7efac8,#baffde)','--prog-bg':'rgba(180,255,230,.10)','--timer-color':'#eafff7'}},
-  {id:'royalSun',       name:'Royal Sun',       note:'royal → sun',     v:{'--ctl-bg':'linear-gradient(180deg,#121018,#1a1310)','--ctl-icon-gradient':'linear-gradient(90deg,#8ab4ff,#ffd166)','--ctl-ring':'rgba(200,200,80,.45)','--prog-fill':'linear-gradient(90deg,#8ab4ff,#ffd166)','--prog-bg':'rgba(200,210,255,.10)','--timer-color':'#fff0c8'}},
-  {id:'violetStorm',    name:'Violet Storm',    note:'electric violet', v:{'--ctl-bg':'linear-gradient(180deg,#1a0f1f,#110f21)','--ctl-icon-gradient':'linear-gradient(90deg,#b37aff,#7aa6ff)','--ctl-ring':'rgba(150,140,255,.45)','--prog-fill':'linear-gradient(90deg,#b37aff,#7aa6ff)','--prog-bg':'rgba(200,180,255,.12)','--timer-color':'#e8ddff'}},
-  {id:'desertDusk',     name:'Desert Dusk',     note:'sand dusk',       v:{'--ctl-bg':'linear-gradient(180deg,#161210,#1a1510)','--ctl-icon-gradient':'linear-gradient(90deg,#e0b084,#ffe0a1)','--ctl-ring':'rgba(255,200,140,.42)','--prog-fill':'linear-gradient(90deg,#e0b084,#ffe0a1)','--prog-bg':'rgba(255,220,180,.10)','--timer-color':'#ffe9cc'}},
-  {id:'iceMint',        name:'Ice Mint',        note:'icy mint',        v:{'--ctl-bg':'linear-gradient(180deg,#0e1316,#0e1714)','--ctl-icon-gradient':'linear-gradient(90deg,#9ae6ff,#baffde)','--ctl-ring':'rgba(130,230,230,.42)','--prog-fill':'linear-gradient(90deg,#9ae6ff,#baffde)','--prog-bg':'rgba(190,240,255,.10)','--timer-color':'#e6fbff'}},
-  {id:'rubyGold',       name:'Ruby Gold',       note:'ruby → gold',     v:{'--ctl-bg':'linear-gradient(180deg,#1a0e12,#1a1210)','--ctl-icon-gradient':'linear-gradient(90deg,#ff5a8a,#ffde87)','--ctl-ring':'rgba(255,160,150,.45)','--prog-fill':'linear-gradient(90deg,#ff5a8a,#ffde87)','--prog-bg':'rgba(255,200,190,.12)','--timer-color':'#ffe0e9'}},
-  {id:'cobaltLime',     name:'Cobalt Lime',     note:'blue → lime',     v:{'--ctl-bg':'linear-gradient(180deg,#0a1020,#0d1514)','--ctl-icon-gradient':'linear-gradient(90deg,#54a0ff,#b6ff6a)','--ctl-ring':'rgba(140,210,140,.45)','--prog-fill':'linear-gradient(90deg,#54a0ff,#b6ff6a)','--prog-bg':'rgba(160,210,255,.12)','--timer-color':'#d8f6e0'}},
-  {id:'goldenHour',     name:'Golden Hour',     note:'soft gold',       v:{'--ctl-bg':'linear-gradient(180deg,#14100c,#15120e)','--ctl-icon-gradient':'linear-gradient(90deg,#ffc76b,#fff0a3)','--ctl-ring':'rgba(255,215,140,.42)','--prog-fill':'linear-gradient(90deg,#ffc76b,#fff0a3)','--prog-bg':'rgba(255,235,190,.12)','--timer-color':'#fff3c9'}},
-  {id:'aquaPurple',     name:'Aqua Purple',     note:'aqua ↔ purple',   v:{'--ctl-bg':'linear-gradient(180deg,#0d1120,#111125)','--ctl-icon-gradient':'linear-gradient(90deg,#5ad1ff,#b478ff)','--ctl-ring':'rgba(150,180,255,.42)','--prog-fill':'linear-gradient(90deg,#5ad1ff,#b478ff)','--prog-bg':'rgba(190,210,255,.10)','--timer-color':'#e4ebff'}},
-  {id:'plasma',         name:'Plasma',          note:'hot magenta',     v:{'--ctl-bg':'linear-gradient(180deg,#170b16,#180b14)','--ctl-icon-gradient':'linear-gradient(90deg,#ff49c6,#ff8af5)','--ctl-ring':'rgba(255,120,210,.45)','--prog-fill':'linear-gradient(90deg,#ff49c6,#ff8af5)','--prog-bg':'rgba(255,170,230,.12)','--timer-color':'#ffd8f5'}},
-  {id:'skyPeach',       name:'Sky Peach',       note:'sky → peach',     v:{'--ctl-bg':'linear-gradient(180deg,#0f1220,#121216)','--ctl-icon-gradient':'linear-gradient(90deg,#80cfff,#ffbdaa)','--ctl-ring':'rgba(180,190,255,.38)','--prog-fill':'linear-gradient(90deg,#80cfff,#ffbdaa)','--prog-bg':'rgba(200,220,255,.10)','--timer-color':'#ffe6de'}},
-  {id:'limeBerry',      name:'Lime Berry',      note:'lime → berry',    v:{'--ctl-bg':'linear-gradient(180deg,#0e130e,#120e14)','--ctl-icon-gradient':'linear-gradient(90deg,#a6ff69,#b07bff)','--ctl-ring':'rgba(180,255,160,.40)','--prog-fill':'linear-gradient(90deg,#a6ff69,#b07bff)','--prog-bg':'rgba(200,255,200,.10)','--timer-color':'#ece3ff'}},
-  {id:'steelRose',      name:'Steel Rose',      note:'cool rose',       v:{'--ctl-bg':'linear-gradient(180deg,#121620,#161218)','--ctl-icon-gradient':'linear-gradient(90deg,#a8b9d1,#ff9ec7)','--ctl-ring':'rgba(170,190,230,.40)','--prog-fill':'linear-gradient(90deg,#a8b9d1,#ff9ec7)','--prog-bg':'rgba(200,210,230,.10)','--timer-color':'#ffe6f1'}},
-  {id:'cyanTangerine',  name:'Cyan Tangerine',  note:'cyan → tang',     v:{'--ctl-bg':'linear-gradient(180deg,#0b1216,#16110b)','--ctl-icon-gradient':'linear-gradient(90deg,#6be4ff,#ff9e4d)','--ctl-ring':'rgba(140,200,255,.40)','--prog-fill':'linear-gradient(90deg,#6be4ff,#ff9e4d)','--prog-bg':'rgba(190,230,255,.10)','--timer-color':'#ffe5cf'}},
-  {id:'marina',         name:'Marina',          note:'sea blue',        v:{'--ctl-bg':'linear-gradient(180deg,#0a1320,#0d1c2e)','--ctl-icon-gradient':'linear-gradient(90deg,#52a8ff,#7cd4ff)','--ctl-ring':'rgba(115,190,255,.40)','--prog-fill':'linear-gradient(90deg,#52a8ff,#7cd4ff)','--prog-bg':'rgba(180,220,255,.10)','--timer-color':'#d8ecff'}},
-  {id:'pearl',          name:'Pearl',           note:'soft pearl',      v:{'--ctl-bg':'linear-gradient(180deg,#131416,#101214)','--ctl-icon-gradient':'linear-gradient(90deg,#eaeaea,#ffffff)','--ctl-ring':'rgba(220,220,220,.35)','--prog-fill':'linear-gradient(90deg,#eaeaea,#ffffff)','--prog-bg':'rgba(240,240,240,.10)','--timer-color':'#f6f6f6','--pp-icon-color':'#111'}},
-  {id:'candy',          name:'Candy',           note:'candy stripe',    v:{'--ctl-bg':'linear-gradient(180deg,#180f12,#140f18)','--ctl-icon-gradient':'linear-gradient(90deg,#ff8ab3,#9aa4ff)','--ctl-ring':'rgba(200,150,255,.45)','--prog-fill':'linear-gradient(90deg,#ff8ab3,#9aa4ff)','--prog-bg':'rgba(210,170,255,.12)','--timer-color':'#ffe2f0'}},
-  {id:'forest',         name:'Forest',          note:'deep green',      v:{'--ctl-bg':'linear-gradient(180deg,#0b120e,#0d1a14)','--ctl-icon-gradient':'linear-gradient(90deg,#57cc99,#a8ffcf)','--ctl-ring':'rgba(110,230,170,.40)','--prog-fill':'linear-gradient(90deg,#57cc99,#a8ffcf)','--prog-bg':'rgba(170,255,210,.10)','--timer-color':'#ddffe9'}},
-
-  /* ----- New additions (to reach 73) ----- */
-  {id:'scarletBlaze',   name:'Scarlet Blaze',   note:'red inferno',     v:{'--ctl-bg':'linear-gradient(180deg,#160808,#1b0b0b)','--ctl-icon-gradient':'linear-gradient(90deg,#ff2d55,#ff8a80)','--ctl-ring':'rgba(255,90,110,.48)','--prog-fill':'linear-gradient(90deg,#ff2d55,#ff8a80)','--prog-bg':'rgba(255,120,140,.12)','--timer-color':'#ffd0d6'}},
-  {id:'candyCorn',      name:'Candy Corn',      note:'pumpkin pop',     v:{'--ctl-bg':'linear-gradient(180deg,#170f08,#1b1308)','--ctl-icon-gradient':'linear-gradient(90deg,#ff9f1a,#ffe066)','--ctl-ring':'rgba(255,190,90,.45)','--prog-fill':'linear-gradient(90deg,#ff9f1a,#ffe066)','--prog-bg':'rgba(255,220,140,.12)','--timer-color':'#fff2c2'}},
-  {id:'arcticFox',      name:'Arctic Fox',      note:'iced silver',     v:{'--ctl-bg':'linear-gradient(180deg,#0c1013,#0f1114)','--ctl-icon-gradient':'linear-gradient(90deg,#b8d8ff,#ffffff)','--ctl-ring':'rgba(200,220,255,.35)','--prog-fill':'linear-gradient(90deg,#b8d8ff,#ffffff)','--prog-bg':'rgba(230,240,255,.10)','--timer-color':'#eef5ff','--pp-icon-color':'#0f141a'}},
-  {id:'blackCherry',    name:'Black Cherry',    note:'ink + cherry',    v:{'--ctl-bg':'linear-gradient(180deg,#0b0910,#110810)','--ctl-icon-gradient':'linear-gradient(90deg,#b5179e,#ff0a54)','--ctl-ring':'rgba(220,60,170,.45)','--prog-fill':'linear-gradient(90deg,#b5179e,#ff0a54)','--prog-bg':'rgba(240,120,200,.12)','--timer-color':'#ffd1ec'}},
-  {id:'aquaSun',        name:'Aqua Sun',        note:'sea → sun',       v:{'--ctl-bg':'linear-gradient(180deg,#09131a,#10130a)','--ctl-icon-gradient':'linear-gradient(90deg,#3ddcff,#ffd166)','--ctl-ring':'rgba(150,210,255,.42)','--prog-fill':'linear-gradient(90deg,#3ddcff,#ffd166)','--prog-bg':'rgba(170,220,255,.12)','--timer-color':'#fff2c9'}},
-  {id:'hackerGreen',    name:'Hacker Green',    note:'CRT neon',        v:{'--ctl-bg':'linear-gradient(180deg,#081109,#0a130c)','--ctl-icon-gradient':'linear-gradient(90deg,#00ff87,#00ffa3)','--ctl-ring':'rgba(0,255,160,.45)','--prog-fill':'linear-gradient(90deg,#00ff87,#00ffa3)','--prog-bg':'rgba(0,255,180,.12)','--timer-color':'#c8ffe9'}},
-  {id:'infraPink',      name:'Infra Pink',      note:'infrared magenta',v:{'--ctl-bg':'linear-gradient(180deg,#130713,#150815)','--ctl-icon-gradient':'linear-gradient(90deg,#ff3cac,#784ba0)','--ctl-ring':'rgba(255,120,210,.45)','--prog-fill':'linear-gradient(90deg,#ff3cac,#784ba0)','--prog-bg':'rgba(255,160,220,.12)','--timer-color':'#ffd6f1'}},
-  {id:'acidLemon',      name:'Acid Lemon',      note:'radioactive zest',v:{'--ctl-bg':'linear-gradient(180deg,#101206,#11140a)','--ctl-icon-gradient':'linear-gradient(90deg,#faff00,#8cff00)','--ctl-ring':'rgba(200,255,80,.45)','--prog-fill':'linear-gradient(90deg,#faff00,#8cff00)','--prog-bg':'rgba(220,255,120,.10)','--timer-color':'#f3ffd1'}},
-  {id:'midoriWave',     name:'Midori Wave',     note:'tea foam',        v:{'--ctl-bg':'linear-gradient(180deg,#0b1310,#0d1712)','--ctl-icon-gradient':'linear-gradient(90deg,#4ade80,#a7f3d0)','--ctl-ring':'rgba(90,230,170,.42)','--prog-fill':'linear-gradient(90deg,#4ade80,#a7f3d0)','--prog-bg':'rgba(170,255,220,.10)','--timer-color':'#e6fff2'}},
-  {id:'emberBlue',      name:'Ember Blue',      note:'orange vs azure', v:{'--ctl-bg':'linear-gradient(180deg,#130c0a,#0a0f13)','--ctl-icon-gradient':'linear-gradient(90deg,#ffa260,#4cc9f0)','--ctl-ring':'rgba(255,170,120,.40)','--prog-fill':'linear-gradient(90deg,#ffa260,#4cc9f0)','--prog-bg':'rgba(200,220,255,.10)','--timer-color':'#daeaff'}},
-  {id:'royalPlum',      name:'Royal Plum',      note:'plum silk',       v:{'--ctl-bg':'linear-gradient(180deg,#120e17,#140e1a)','--ctl-icon-gradient':'linear-gradient(90deg,#7b2cbf,#c77dff)','--ctl-ring':'rgba(170,120,255,.42)','--prog-fill':'linear-gradient(90deg,#7b2cbf,#c77dff)','--prog-bg':'rgba(200,170,255,.12)','--timer-color':'#efe0ff'}},
-  {id:'amberGlass',     name:'Amber Glass',     note:'glass gold',      v:{'--ctl-bg':'linear-gradient(180deg,#130f0a,#17130d)','--ctl-icon-gradient':'linear-gradient(90deg,#ffca3a,#ffd166)','--ctl-ring':'rgba(255,210,120,.42)','--prog-fill':'linear-gradient(90deg,#ffca3a,#ffd166)','--prog-bg':'rgba(255,220,160,.12)','--timer-color':'#fff0c2'}},
-  {id:'ultraCyan',      name:'Ultra Cyan',      note:'laser aqua',      v:{'--ctl-bg':'linear-gradient(180deg,#081116,#0a141a)','--ctl-icon-gradient':'linear-gradient(90deg,#00e5ff,#80ffea)','--ctl-ring':'rgba(120,230,255,.45)','--prog-fill':'linear-gradient(90deg,#00e5ff,#80ffea)','--prog-bg':'rgba(170,230,255,.10)','--timer-color':'#d7f7ff'}},
-  {id:'sakuraDream',    name:'Sakura Dream',    note:'petal haze',      v:{'--ctl-bg':'linear-gradient(180deg,#170f12,#140f14)','--ctl-icon-gradient':'linear-gradient(90deg,#ffb7c5,#ffcfe3)','--ctl-ring':'rgba(255,180,210,.40)','--prog-fill':'linear-gradient(90deg,#ffb7c5,#ffcfe3)','--prog-bg':'rgba(255,210,230,.12)','--timer-color':'#ffe9f3'}},
-  {id:'laserGrape',     name:'Laser Grape',     note:'violet beam',     v:{'--ctl-bg':'linear-gradient(180deg,#0e0b14,#110a18)','--ctl-icon-gradient':'linear-gradient(90deg,#9d4edd,#7b2cbf)','--ctl-ring':'rgba(160,120,255,.45)','--prog-fill':'linear-gradient(90deg,#9d4edd,#7b2cbf)','--prog-bg':'rgba(190,160,255,.12)','--timer-color':'#ecd8ff'}},
-  {id:'metalRose',      name:'Metal Rose',      note:'steel + blush',   v:{'--ctl-bg':'linear-gradient(180deg,#121418,#171318)','--ctl-icon-gradient':'linear-gradient(90deg,#9aa7b2,#ff7aa2)','--ctl-ring':'rgba(170,190,210,.38)','--prog-fill':'linear-gradient(90deg,#9aa7b2,#ff7aa2)','--prog-bg':'rgba(210,220,230,.10)','--timer-color':'#ffe4ef'}},
-  {id:'toxicSlime',     name:'Toxic Slime',     note:'neon ooze',       v:{'--ctl-bg':'linear-gradient(180deg,#0b1108,#0f1509)','--ctl-icon-gradient':'linear-gradient(90deg,#a3ff12,#12ff80)','--ctl-ring':'rgba(160,255,100,.48)','--prog-fill':'linear-gradient(90deg,#a3ff12,#12ff80)','--prog-bg':'rgba(180,255,140,.12)','--timer-color':'#e9ffd2'}},
-  {id:'horizon',        name:'Horizon',         note:'dawn band',       v:{'--ctl-bg':'linear-gradient(180deg,#0a0f16,#12120f)','--ctl-icon-gradient':'linear-gradient(90deg,#ff7e5f,#feb47b)','--ctl-ring':'rgba(255,160,120,.42)','--prog-fill':'linear-gradient(90deg,#ff7e5f,#feb47b)','--prog-bg':'rgba(255,200,160,.12)','--timer-color':'#ffe3d2'}},
-  {id:'iceberg',        name:'Iceberg',         note:'blue glacier',    v:{'--ctl-bg':'linear-gradient(180deg,#0a1116,#0b141a)','--ctl-icon-gradient':'linear-gradient(90deg,#7dd3fc,#bae6fd)','--ctl-ring':'rgba(170,210,255,.40)','--prog-fill':'linear-gradient(90deg,#7dd3fc,#bae6fd)','--prog-bg':'rgba(200,230,255,.10)','--timer-color':'#e8f5ff'}},
-  {id:'sunsetSoda',     name:'Sunset Soda',     note:'fizzy dusk',      v:{'--ctl-bg':'linear-gradient(180deg,#140e10,#101216)','--ctl-icon-gradient':'linear-gradient(90deg,#ff6f91,#ffc75f)','--ctl-ring':'rgba(255,170,140,.45)','--prog-fill':'linear-gradient(90deg,#ff6f91,#ffc75f)','--prog-bg':'rgba(255,200,170,.12)','--timer-color':'#ffe6cc'}},
-  {id:'noirNeon',       name:'Noir Neon',       note:'noir cyan',       v:{'--ctl-bg':'linear-gradient(180deg,#0c0f12,#0c1013)','--ctl-icon-gradient':'linear-gradient(90deg,#00f5d4,#00bbf9)','--ctl-ring':'rgba(0,210,230,.45)','--prog-fill':'linear-gradient(90deg,#00f5d4,#00bbf9)','--prog-bg':'rgba(120,230,230,.10)','--timer-color':'#d6fcff'}},
-  {id:'firefly',        name:'Firefly',         note:'forest sparks',   v:{'--ctl-bg':'linear-gradient(180deg,#0a110c,#0f160e)','--ctl-icon-gradient':'linear-gradient(90deg,#ffd166,#80ff72)','--ctl-ring':'rgba(220,255,150,.40)','--prog-fill':'linear-gradient(90deg,#ffd166,#80ff72)','--prog-bg':'rgba(220,255,150,.12)','--timer-color':'#f4ffd7'}},
-  {id:'tango',          name:'Tango',           note:'spicy duo',       v:{'--ctl-bg':'linear-gradient(180deg,#1a0f0f,#120f0a)','--ctl-icon-gradient':'linear-gradient(90deg,#ff6b6b,#feca57)','--ctl-ring':'rgba(255,150,120,.45)','--prog-fill':'linear-gradient(90deg,#ff6b6b,#feca57)','--prog-bg':'rgba(255,190,160,.12)','--timer-color':'#ffe3c7'}},
-  {id:'berryIce',       name:'Berry Ice',       note:'blueberry frost', v:{'--ctl-bg':'linear-gradient(180deg,#0b0f19,#0c1420)','--ctl-icon-gradient':'linear-gradient(90deg,#6a8dff,#9ad0ff)','--ctl-ring':'rgba(130,170,255,.42)','--prog-fill':'linear-gradient(90deg,#6a8dff,#9ad0ff)','--prog-bg':'rgba(170,200,255,.10)','--timer-color':'#e0ebff'}},
-  {id:'sunburn',        name:'Sunburn',         note:'red-orange',      v:{'--ctl-bg':'linear-gradient(180deg,#190a0a,#1a0f0b)','--ctl-icon-gradient':'linear-gradient(90deg,#ff4e00,#ec9f05)','--ctl-ring':'rgba(255,140,80,.46)','--prog-fill':'linear-gradient(90deg,#ff4e00,#ec9f05)','--prog-bg':'rgba(255,170,120,.12)','--timer-color':'#ffe0c4'}},
-  {id:'deepSea',        name:'Deep Sea',        note:'abyss teal',      v:{'--ctl-bg':'linear-gradient(180deg,#071012,#08161a)','--ctl-icon-gradient':'linear-gradient(90deg,#2dd4bf,#38bdf8)','--ctl-ring':'rgba(100,220,230,.42)','--prog-fill':'linear-gradient(90deg,#2dd4bf,#38bdf8)','--prog-bg':'rgba(160,240,240,.10)','--timer-color':'#d9fbff'}},
-  {id:'lilacMist',      name:'Lilac Mist',      note:'soft violet',     v:{'--ctl-bg':'linear-gradient(180deg,#130f16,#12131a)','--ctl-icon-gradient':'linear-gradient(90deg,#d0a2f7,#c7f0ff)','--ctl-ring':'rgba(190,160,255,.38)','--prog-fill':'linear-gradient(90deg,#d0a2f7,#c7f0ff)','--prog-bg':'rgba(210,200,255,.10)','--timer-color':'#f0ecff'}},
-  {id:'auricIce',       name:'Auric Ice',       note:'gold on ice',     v:{'--ctl-bg':'linear-gradient(180deg,#0e1116,#12120f)','--ctl-icon-gradient':'linear-gradient(90deg,#ffe29a,#a1c4fd)','--ctl-ring':'rgba(240,210,150,.38)','--prog-fill':'linear-gradient(90deg,#ffe29a,#a1c4fd)','--prog-bg':'rgba(230,230,255,.10)','--timer-color':'#f5f8ff'}},
-  {id:'punchBerry',     name:'Punch Berry',     note:'fruit punch',     v:{'--ctl-bg':'linear-gradient(180deg,#140b10,#1a0f12)','--ctl-icon-gradient':'linear-gradient(90deg,#ff006e,#ffbe0b)','--ctl-ring':'rgba(255,120,150,.44)','--prog-fill':'linear-gradient(90deg,#ff006e,#ffbe0b)','--prog-bg':'rgba(255,190,160,.12)','--timer-color':'#ffe6d3'}},
-  {id:'iceLime',        name:'Ice Lime',        note:'cool lime',       v:{'--ctl-bg':'linear-gradient(180deg,#0d1312,#0e1410)','--ctl-icon-gradient':'linear-gradient(90deg,#baffc9,#a7f3d0)','--ctl-ring':'rgba(180,255,210,.40)','--prog-fill':'linear-gradient(90deg,#baffc9,#a7f3d0)','--prog-bg':'rgba(210,255,230,.10)','--timer-color':'#ecfff5'}},
-  {id:'galaxyLab',      name:'Galaxy Lab',      note:'astro mix',       v:{'--ctl-bg':'linear-gradient(180deg,#0b0f1a,#0e1020)','--ctl-icon-gradient':'linear-gradient(90deg,#00d4ff,#7b2cbf)','--ctl-ring':'rgba(130,160,255,.42)','--prog-fill':'linear-gradient(90deg,#00d4ff,#7b2cbf)','--prog-bg':'rgba(170,200,255,.12)','--timer-color':'#e9e8ff'}},
-  {id:'voltage',        name:'Voltage',         note:'electric lime',   v:{'--ctl-bg':'linear-gradient(180deg,#0b0e0a,#0f130a)','--ctl-icon-gradient':'linear-gradient(90deg,#c6ff00,#00e676)','--ctl-ring':'rgba(160,255,100,.46)','--prog-fill':'linear-gradient(90deg,#c6ff00,#00e676)','--prog-bg':'rgba(200,255,150,.10)','--timer-color':'#e9ffd8'}},
-  {id:'embersky',       name:'Ember Sky',       note:'fire + sky',      v:{'--ctl-bg':'linear-gradient(180deg,#180e0b,#0b0f18)','--ctl-icon-gradient':'linear-gradient(90deg,#ff6a00,#00c6ff)','--ctl-ring':'rgba(255,160,120,.42)','--prog-fill':'linear-gradient(90deg,#ff6a00,#00c6ff)','--prog-bg':'rgba(190,220,255,.10)','--timer-color':'#e6f5ff'}},
-  {id:'bubblegum',      name:'Bubblegum',       note:'pop pink',        v:{'--ctl-bg':'linear-gradient(180deg,#150d12,#160d14)','--ctl-icon-gradient':'linear-gradient(90deg,#ff80bf,#ffc0cb)','--ctl-ring':'rgba(255,170,200,.42)','--prog-fill':'linear-gradient(90deg,#ff80bf,#ffc0cb)','--prog-bg':'rgba(255,200,220,.12)','--timer-color':'#ffe6ee'}},
-  {id:'jetstream',      name:'Jetstream',       note:'blue thrust',     v:{'--ctl-bg':'linear-gradient(180deg,#0a1016,#0a1420)','--ctl-icon-gradient':'linear-gradient(90deg,#00c6ff,#0072ff)','--ctl-ring':'rgba(100,190,255,.45)','--prog-fill':'linear-gradient(90deg,#00c6ff,#0072ff)','--prog-bg':'rgba(160,210,255,.12)','--timer-color':'#d9ebff'}},
-  {id:'emberMint',      name:'Ember Mint',      note:'spice + mint',    v:{'--ctl-bg':'linear-gradient(180deg,#140e0c,#0b120f)','--ctl-icon-gradient':'linear-gradient(90deg,#ff9a8b,#a1ffce)','--ctl-ring':'rgba(200,220,180,.40)','--prog-fill':'linear-gradient(90deg,#ff9a8b,#a1ffce)','--prog-bg':'rgba(210,255,230,.10)','--timer-color':'#eafff5'}},
-  {id:'spaceCandy',     name:'Space Candy',     note:'cosmic sweet',    v:{'--ctl-bg':'linear-gradient(180deg,#0e0b16,#120a1a)','--ctl-icon-gradient':'linear-gradient(90deg,#f72585,#7209b7)','--ctl-ring':'rgba(220,120,230,.45)','--prog-fill':'linear-gradient(90deg,#f72585,#7209b7)','--prog-bg':'rgba(210,160,240,.12)','--timer-color':'#f4d9ff'}},
-  {id:'deepAmber',      name:'Deep Amber',      note:'smoked honey',    v:{'--ctl-bg':'linear-gradient(180deg,#120d08,#151008)','--ctl-icon-gradient':'linear-gradient(90deg,#ffb347,#ffd56b)','--ctl-ring':'rgba(255,210,140,.42)','--prog-fill':'linear-gradient(90deg,#ffb347,#ffd56b)','--prog-bg':'rgba(255,220,170,.12)','--timer-color':'#fff0cf'}},
-  {id:'electricBerry',  name:'Electric Berry',  note:'berry zap',       v:{'--ctl-bg':'linear-gradient(180deg,#0f0a12,#150a14)','--ctl-icon-gradient':'linear-gradient(90deg,#8a2be2,#ff00ff)','--ctl-ring':'rgba(180,120,255,.45)','--prog-fill':'linear-gradient(90deg,#8a2be2,#ff00ff)','--prog-bg':'rgba(210,170,255,.12)','--timer-color':'#f2d6ff'}},
-  {id:'frostGrove',     name:'Frost Grove',     note:'mint pine',       v:{'--ctl-bg':'linear-gradient(180deg,#0b1210,#0d1714)','--ctl-icon-gradient':'linear-gradient(90deg,#b8f2e6,#aed9e0)','--ctl-ring':'rgba(170,240,220,.38)','--prog-fill':'linear-gradient(90deg,#b8f2e6,#aed9e0)','--prog-bg':'rgba(210,255,240,.10)','--timer-color':'#effffc'}},
-  {id:'neonTaffy',      name:'Neon Taffy',      note:'candy neon',      v:{'--ctl-bg':'linear-gradient(180deg,#130d15,#140e18)','--ctl-icon-gradient':'linear-gradient(90deg,#ff6ec7,#ff9a8b)','--ctl-ring':'rgba(255,160,210,.44)','--prog-fill':'linear-gradient(90deg,#ff6ec7,#ff9a8b)','--prog-bg':'rgba(255,190,220,.12)','--timer-color':'#ffe0ee'}},
-  {id:'citrusTwist',    name:'Citrus Twist',    note:'lime + tangerine',v:{'--ctl-bg':'linear-gradient(180deg,#0e130d,#11130a)','--ctl-icon-gradient':'linear-gradient(90deg,#a8e063,#fcd36a)','--ctl-ring':'rgba(200,230,120,.40)','--prog-fill':'linear-gradient(90deg,#a8e063,#fcd36a)','--prog-bg':'rgba(230,250,170,.10)','--timer-color':'#f7ffde'}},
-  {id:'inkwave',        name:'Inkwave',         note:'blue ink',        v:{'--ctl-bg':'linear-gradient(180deg,#0a0d14,#0a1019)','--ctl-icon-gradient':'linear-gradient(90deg,#153677,#4e9af1)','--ctl-ring':'rgba(90,140,240,.42)','--prog-fill':'linear-gradient(90deg,#153677,#4e9af1)','--prog-bg':'rgba(140,180,255,.10)','--timer-color':'#dfeaff'}},
-  {id:'mojito',         name:'Mojito',          note:'mint + lime',     v:{'--ctl-bg':'linear-gradient(180deg,#0a120d,#0e1712)','--ctl-icon-gradient':'linear-gradient(90deg,#3ddc97,#a1f7c4)','--ctl-ring':'rgba(140,240,190,.40)','--prog-fill':'linear-gradient(90deg,#3ddc97,#a1f7c4)','--prog-bg':'rgba(190,255,220,.10)','--timer-color':'#eafff4'}},
-  {id:'emberViolet',    name:'Ember Violet',    note:'heat + amethyst', v:{'--ctl-bg':'linear-gradient(180deg,#170e0b,#120f17)','--ctl-icon-gradient':'linear-gradient(90deg,#ff8e53,#a18cd1)','--ctl-ring':'rgba(220,160,200,.42)','--prog-fill':'linear-gradient(90deg,#ff8e53,#a18cd1)','--prog-bg':'rgba(230,200,230,.12)','--timer-color':'#f2e6ff'}},
-  {id:'skyLava',        name:'Sky Lava',        note:'cool vs hot',     v:{'--ctl-bg':'linear-gradient(180deg,#0a121a,#170d0b)','--ctl-icon-gradient':'linear-gradient(90deg,#00c9ff,#ff3d00)','--ctl-ring':'rgba(200,120,120,.45)','--prog-fill':'linear-gradient(90deg,#00c9ff,#ff3d00)','--prog-bg':'rgba(210,230,255,.10)','--timer-color':'#fbe3da'}},
-  {id:'opal',           name:'Opal',            note:'pearl teal',      v:{'--ctl-bg':'linear-gradient(180deg,#0d1114,#0e1316)','--ctl-icon-gradient':'linear-gradient(90deg,#aee1e1,#f8f9fa)','--ctl-ring':'rgba(210,230,235,.36)','--prog-fill':'linear-gradient(90deg,#aee1e1,#f8f9fa)','--prog-bg':'rgba(230,245,245,.10)','--timer-color':'#f3fbff','--pp-icon-color':'#111'}},
-  {id:'rubyNight',      name:'Ruby Night',      note:'ruby noir',       v:{'--ctl-bg':'linear-gradient(180deg,#12080a,#16090c)','--ctl-icon-gradient':'linear-gradient(90deg,#ff2a68,#ff758c)','--ctl-ring':'rgba(255,120,160,.44)','--prog-fill':'linear-gradient(90deg,#ff2a68,#ff758c)','--prog-bg':'rgba(255,170,190,.12)','--timer-color':'#ffd9e3'}},
-  {id:'tealFlame',      name:'Teal Flame',      note:'teal fire',       v:{'--ctl-bg':'linear-gradient(180deg,#0a1312,#0d1816)','--ctl-icon-gradient':'linear-gradient(90deg,#00f5a0,#00d9f5)','--ctl-ring':'rgba(0,230,210,.45)','--prog-fill':'linear-gradient(90deg,#00f5a0,#00d9f5)','--prog-bg':'rgba(120,240,230,.10)','--timer-color':'#d6feff'}},
-  {id:'bronzeMint',     name:'Bronze Mint',     note:'bronze + mint',   v:{'--ctl-bg':'linear-gradient(180deg,#13100c,#0f1412)','--ctl-icon-gradient':'linear-gradient(90deg,#cd7f32,#a8ffcf)','--ctl-ring':'rgba(220,170,120,.38)','--prog-fill':'linear-gradient(90deg,#cd7f32,#a8ffcf)','--prog-bg':'rgba(230,200,170,.10)','--timer-color':'#fff1dc'}},
-  {id:'nordic',         name:'Nordic',          note:'fir + frost',     v:{'--ctl-bg':'linear-gradient(180deg,#0a1210,#0b1416)','--ctl-icon-gradient':'linear-gradient(90deg,#5eead4,#93c5fd)','--ctl-ring':'rgba(150,220,230,.40)','--prog-fill':'linear-gradient(90deg,#5eead4,#93c5fd)','--prog-bg':'rgba(180,230,240,.10)','--timer-color':'#e7faff'}},
-  {id:'poppyGold',      name:'Poppy Gold',      note:'red pop + gold',  v:{'--ctl-bg':'linear-gradient(180deg,#150c0c,#15130c)','--ctl-icon-gradient':'linear-gradient(90deg,#ff6f61,#ffd166)','--ctl-ring':'rgba(255,170,120,.42)','--prog-fill':'linear-gradient(90deg,#ff6f61,#ffd166)','--prog-bg':'rgba(255,200,160,.12)','--timer-color':'#ffe6c9'}},
-  {id:'ultraVapor',     name:'Ultra Vapor',     note:'synth mist',      v:{'--ctl-bg':'linear-gradient(180deg,#0c0e14,#0f0d16)','--ctl-icon-gradient':'linear-gradient(90deg,#00f0ff,#ff00f0)','--ctl-ring':'rgba(210,120,230,.45)','--prog-fill':'linear-gradient(90deg,#00f0ff,#ff00f0)','--prog-bg':'rgba(200,170,255,.12)','--timer-color':'#f1dcff'}},
-  {id:'charcoalMint',   name:'Charcoal Mint',   note:'smoke + mint',    v:{'--ctl-bg':'linear-gradient(180deg,#0e0f10,#0f1312)','--ctl-icon-gradient':'linear-gradient(90deg,#9be7c7,#d4ffea)','--ctl-ring':'rgba(170,240,210,.36)','--prog-fill':'linear-gradient(90deg,#9be7c7,#d4ffea)','--prog-bg':'rgba(200,245,230,.10)','--timer-color':'#eafff7'}},
-  {id:'glitch',         name:'Glitch',          note:'RGB shred',       v:{'--ctl-bg':'linear-gradient(180deg,#0b0b0f,#0d1011)','--ctl-icon-gradient':'linear-gradient(90deg,#ff0054,#00f5d4)','--ctl-ring':'rgba(200,210,210,.44)','--prog-fill':'linear-gradient(90deg,#ff0054,#00f5d4)','--prog-bg':'rgba(220,240,240,.10)','--timer-color':'#dffef6'}},
-  {id:'twilightRose',   name:'Twilight Rose',   note:'dusk rose',       v:{'--ctl-bg':'linear-gradient(180deg,#120f14,#110f15)','--ctl-icon-gradient':'linear-gradient(90deg,#ff7aa2,#b892ff)','--ctl-ring':'rgba(220,170,230,.42)','--prog-fill':'linear-gradient(90deg,#ff7aa2,#b892ff)','--prog-bg':'rgba(230,200,240,.12)','--timer-color':'#f7e6ff'}},
-  {id:'lavaLamp',       name:'Lava Lamp',       note:'retro goo',       v:{'--ctl-bg':'linear-gradient(180deg,#130c09,#160b10)','--ctl-icon-gradient':'linear-gradient(90deg,#ff3d00,#ff9a8b)','--ctl-ring':'rgba(255,140,100,.44)','--prog-fill':'linear-gradient(90deg,#ff3d00,#ff9a8b)','--prog-bg':'rgba(255,180,150,.12)','--timer-color':'#ffdcd1'}},
-  {id:'honeydew',       name:'Honeydew',        note:'dew mint',        v:{'--ctl-bg':'linear-gradient(180deg,#0e1411,#0f1513)','--ctl-icon-gradient':'linear-gradient(90deg,#eaffd0,#b8f2e6)','--ctl-ring':'rgba(220,255,230,.34)','--prog-fill':'linear-gradient(90deg,#eaffd0,#b8f2e6)','--prog-bg':'rgba(230,255,240,.10)','--timer-color':'#f7ffef'}},
-  {id:'rubyCyan',       name:'Ruby Cyan',       note:'clash bright',    v:{'--ctl-bg':'linear-gradient(180deg,#160b0e,#0a1013)','--ctl-icon-gradient':'linear-gradient(90deg,#ff006e,#00f5d4)','--ctl-ring':'rgba(230,130,200,.44)','--prog-fill':'linear-gradient(90deg,#ff006e,#00f5d4)','--prog-bg':'rgba(220,200,240,.10)','--timer-color':'#efe3ff'}},
-  {id:'mintChip',       name:'Mint Chip',       note:'ice cream',       v:{'--ctl-bg':'linear-gradient(180deg,#0e1413,#0f1512)','--ctl-icon-gradient':'linear-gradient(90deg,#98ff98,#a8e6cf)','--ctl-ring':'rgba(180,255,200,.36)','--prog-fill':'linear-gradient(90deg,#98ff98,#a8e6cf)','--prog-bg':'rgba(210,255,230,.10)','--timer-color':'#ecfff2'}},
-  {id:'dusklight',      name:'Dusklight',       note:'late lavender',   v:{'--ctl-bg':'linear-gradient(180deg,#11121a,#12141e)','--ctl-icon-gradient':'linear-gradient(90deg,#a18cd1,#fbc2eb)','--ctl-ring':'rgba(200,170,230,.40)','--prog-fill':'linear-gradient(90deg,#a18cd1,#fbc2eb)','--prog-bg':'rgba(230,210,245,.10)','--timer-color':'#f6ecff'}},
-  {id:'jetLime',        name:'Jet Lime',        note:'lime turbine',    v:{'--ctl-bg':'linear-gradient(180deg,#0a0f12,#0c120e)','--ctl-icon-gradient':'linear-gradient(90deg,#9ef01a,#70e000)','--ctl-ring':'rgba(170,240,80,.46)','--prog-fill':'linear-gradient(90deg,#9ef01a,#70e000)','--prog-bg':'rgba(200,240,120,.10)','--timer-color':'#eaffd6'}},
-  {id:'amberTeal',      name:'Amber Teal',      note:'honey sea',       v:{'--ctl-bg':'linear-gradient(180deg,#14100c,#0d1212)','--ctl-icon-gradient':'linear-gradient(90deg,#ffb703,#00c2a8)','--ctl-ring':'rgba(220,200,160,.40)','--prog-fill':'linear-gradient(90deg,#ffb703,#00c2a8)','--prog-bg':'rgba(230,220,200,.10)','--timer-color':'#f3fff6'}},
-  {id:'pixelPop',       name:'Pixel Pop',       note:'arcade',          v:{'--ctl-bg':'linear-gradient(180deg,#0f0f12,#101014)','--ctl-icon-gradient':'linear-gradient(90deg,#ff206e,#33f3ff)','--ctl-ring':'rgba(200,160,230,.44)','--prog-fill':'linear-gradient(90deg,#ff206e,#33f3ff)','--prog-bg':'rgba(220,200,240,.10)','--timer-color':'#f0e8ff'}},
-  {id:'steeldawn',      name:'Steel Dawn',      note:'blue steel',      v:{'--ctl-bg':'linear-gradient(180deg,#0f1216,#0e1419)','--ctl-icon-gradient':'linear-gradient(90deg,#b0c4de,#dce5f5)','--ctl-ring':'rgba(190,210,235,.34)','--prog-fill':'linear-gradient(90deg,#b0c4de,#dce5f5)','--prog-bg':'rgba(220,235,250,.10)','--timer-color':'#f5f9ff','--pp-icon-color':'#10141a'}},
-  {id:'mochaGlow',      name:'Mocha Glow',      note:'coffee cherry',   v:{'--ctl-bg':'linear-gradient(180deg,#160f0b,#1a1310)','--ctl-icon-gradient':'linear-gradient(90deg,#c79081,#dfa579)','--ctl-ring':'rgba(220,170,140,.36)','--prog-fill':'linear-gradient(90deg,#c79081,#dfa579)','--prog-bg':'rgba(240,210,190,.10)','--timer-color':'#fde7d9'}},
-  {id:'crystalMint',    name:'Crystal Mint',    note:'clean chill',     v:{'--ctl-bg':'linear-gradient(180deg,#0f1314,#101617)','--ctl-icon-gradient':'linear-gradient(90deg,#aaffec,#e4fff8)','--ctl-ring':'rgba(210,255,240,.34)','--prog-fill':'linear-gradient(90deg,#aaffec,#e4fff8)','--prog-bg':'rgba(225,255,245,.10)','--timer-color':'#f3fffd'}},
-  {id:'ultraRose',      name:'Ultra Rose',      note:'neon bloom',      v:{'--ctl-bg':'linear-gradient(180deg,#120c10,#140c12)','--ctl-icon-gradient':'linear-gradient(90deg,#ff4d97,#ff85b3)','--ctl-ring':'rgba(255,140,190,.44)','--prog-fill':'linear-gradient(90deg,#ff4d97,#ff85b3)','--prog-bg':'rgba(255,190,220,.12)','--timer-color':'#ffd9e8'}},
-  {id:'azureFire',      name:'Azure Fire',      note:'blue flame',      v:{'--ctl-bg':'linear-gradient(180deg,#0a1116,#0a141c)','--ctl-icon-gradient':'linear-gradient(90deg,#00b4d8,#90e0ef)','--ctl-ring':'rgba(120,200,230,.42)','--prog-fill':'linear-gradient(90deg,#00b4d8,#90e0ef)','--prog-bg':'rgba(170,220,240,.10)','--timer-color':'#e6f8ff'}},
-  {id:'hazelGold',      name:'Hazel Gold',      note:'wood + glint',    v:{'--ctl-bg':'linear-gradient(180deg,#120f0b,#15120d)','--ctl-icon-gradient':'linear-gradient(90deg,#c19a6b,#ffd88e)','--ctl-ring':'rgba(220,190,140,.36)','--prog-fill':'linear-gradient(90deg,#c19a6b,#ffd88e)','--prog-bg':'rgba(235,210,180,.10)','--timer-color':'#fff2dc'}},
-  {id:'vaporMint',      name:'Vapor Mint',      note:'pastel mint',     v:{'--ctl-bg':'linear-gradient(180deg,#121417,#111615)','--ctl-icon-gradient':'linear-gradient(90deg,#b8fff1,#d1fff8)','--ctl-ring':'rgba(190,255,240,.30)','--prog-fill':'linear-gradient(90deg,#b8fff1,#d1fff8)','--prog-bg':'rgba(210,255,245,.10)','--timer-color':'#effffd'}},
-  {id:'magmaCore',      name:'Magma Core',      note:'lava core',       v:{'--ctl-bg':'linear-gradient(180deg,#0e0a09,#140a07)','--ctl-icon-gradient':'linear-gradient(90deg,#ff3e3e,#ff9e00)','--ctl-ring':'rgba(255,120,100,.46)','--prog-fill':'linear-gradient(90deg,#ff3e3e,#ff9e00)','--prog-bg':'rgba(255,170,120,.12)','--timer-color':'#ffd8b8'}},
-  {id:'neonKoi',        name:'Neon Koi',        note:'koi pond',        v:{'--ctl-bg':'linear-gradient(180deg,#0a1216,#0d1412)','--ctl-icon-gradient':'linear-gradient(90deg,#ff6f59,#2ec4b6)','--ctl-ring':'rgba(230,160,160,.40)','--prog-fill':'linear-gradient(90deg,#ff6f59,#2ec4b6)','--prog-bg':'rgba(200,230,230,.10)','--timer-color':'#e7fbf8'}},
-  {id:'orchidFade',     name:'Orchid Fade',     note:'orchid drift',    v:{'--ctl-bg':'linear-gradient(180deg,#110e14,#0f1016)','--ctl-icon-gradient':'linear-gradient(90deg,#da8cff,#9f7aea)','--ctl-ring':'rgba(200,160,240,.40)','--prog-fill':'linear-gradient(90deg,#da8cff,#9f7aea)','--prog-bg':'rgba(210,190,245,.10)','--timer-color':'#efe6ff'}},
-  {id:'solarWind',      name:'Solar Wind',      note:'helium trail',    v:{'--ctl-bg':'linear-gradient(180deg,#0d0f14,#0f120e)','--ctl-icon-gradient':'linear-gradient(90deg,#ffd166,#70e1f5)','--ctl-ring':'rgba(240,210,140,.36)','--prog-fill':'linear-gradient(90deg,#ffd166,#70e1f5)','--prog-bg':'rgba(230,230,210,.10)','--timer-color':'#fff4da'}},
-  {id:'limeCinder',     name:'Lime Cinder',     note:'cinder lime',     v:{'--ctl-bg':'linear-gradient(180deg,#0e100c,#0f130e)','--ctl-icon-gradient':'linear-gradient(90deg,#c9ff73,#8dff6e)','--ctl-ring':'rgba(200,255,140,.40)','--prog-fill':'linear-gradient(90deg,#c9ff73,#8dff6e)','--prog-bg':'rgba(220,255,170,.10)','--timer-color':'#f2ffd8'}},
-  {id:'polarRose',      name:'Polar Rose',      note:'rose ice',        v:{'--ctl-bg':'linear-gradient(180deg,#0f1216,#101316)','--ctl-icon-gradient':'linear-gradient(90deg,#ffb3c1,#bde0fe)','--ctl-ring':'rgba(220,190,230,.34)','--prog-fill':'linear-gradient(90deg,#ffb3c1,#bde0fe)','--prog-bg':'rgba(230,220,245,.10)','--timer-color':'#faf2ff'}},
-  {id:'nebulaMint',     name:'Nebula Mint',     note:'space mint',      v:{'--ctl-bg':'linear-gradient(180deg,#0b0f14,#0c1217)','--ctl-icon-gradient':'linear-gradient(90deg,#6fffe9,#7cffc4)','--ctl-ring':'rgba(140,250,220,.40)','--prog-fill':'linear-gradient(90deg,#6fffe9,#7cffc4)','--prog-bg':'rgba(180,255,230,.10)','--timer-color':'#e9fffa'}},
-  {id:'royalGarnet',    name:'Royal Garnet',    note:'wine silk',       v:{'--ctl-bg':'linear-gradient(180deg,#110b0e,#140c10)','--ctl-icon-gradient':'linear-gradient(90deg,#b6244f,#ff5d8f)','--ctl-ring':'rgba(220,120,160,.42)','--prog-fill':'linear-gradient(90deg,#b6244f,#ff5d8f)','--prog-bg':'rgba(240,170,200,.12)','--timer-color':'#ffdbe6'}},
-  {id:'skyline',        name:'Skyline',         note:'steel skyline',   v:{'--ctl-bg':'linear-gradient(180deg,#0d1116,#0f1218)','--ctl-icon-gradient':'linear-gradient(90deg,#7aa2ff,#b8c6ff)','--ctl-ring':'rgba(160,190,255,.36)','--prog-fill':'linear-gradient(90deg,#7aa2ff,#b8c6ff)','--prog-bg':'rgba(200,220,255,.10)','--timer-color':'#ebf1ff'}},
-  {id:'emberCyan',      name:'Ember Cyan',      note:'fire cyan',       v:{'--ctl-bg':'linear-gradient(180deg,#150f0c,#0c1113)','--ctl-icon-gradient':'linear-gradient(90deg,#ff9a3c,#00eaff)','--ctl-ring':'rgba(230,170,150,.40)','--prog-fill':'linear-gradient(90deg,#ff9a3c,#00eaff)','--prog-bg':'rgba(220,230,240,.10)','--timer-color':'#e6fbff'}},
-  {id:'steelMango',     name:'Steel Mango',     note:'mango steel',     v:{'--ctl-bg':'linear-gradient(180deg,#121317,#141310)','--ctl-icon-gradient':'linear-gradient(90deg,#ffb347,#8bb1ff)','--ctl-ring':'rgba(210,190,180,.36)','--prog-fill':'linear-gradient(90deg,#ffb347,#8bb1ff)','--prog-bg':'rgba(230,220,210,.10)','--timer-color':'#f3f6ff'}}
-]; // 73 entries
-
-  // ---- Build palette button + PORTAL menu ----
-  const wrap = document.createElement('div'); wrap.style.display='inline-block';
-  const btn = document.createElement('button');
-  btn.className = 'ctl-theme-btn'; btn.id = 'ctl-theme-btn';
-  btn.setAttribute('aria-haspopup','menu'); btn.setAttribute('aria-expanded','false');
-  btn.title = 'Player theme';
-  btn.innerHTML = '<span class="material-icons" aria-hidden="true">palette</span>';
-
-  const menu = document.createElement('div');
-  menu.className = 'ctl-theme-menu'; menu.id = 'ctl-theme-menu';
-  menu.setAttribute('role','menu'); menu.setAttribute('aria-label','Player control themes');
-  menu.hidden = true;
-  document.body.appendChild(menu);
-  // Ensure absolutely topmost
-  menu.style.zIndex = '2147483000';
-
-  T.forEach(t=>{
-    const chip = document.createElement('button');
-    chip.type = 'button'; chip.className = 'theme-chip'; chip.setAttribute('role','menuitem'); chip.dataset.id = t.id;
-    const sw = document.createElement('span'); sw.className = 'swatch'; sw.style.setProperty('--chip-gradient', t.v['--ctl-icon-gradient'] || 'linear-gradient(90deg,#999,#bbb)');
-    const text = document.createElement('div'); text.className = 'text';
-    const title = document.createElement('div'); title.className = 'title'; title.textContent = t.name;
-    const note  = document.createElement('div'); note.className  = 'note';  note.textContent  = t.note;
-    text.appendChild(title); text.appendChild(note);
-    chip.appendChild(sw); chip.appendChild(text);
-    chip.addEventListener('click', ()=>{ applyThemeId(t.id); closeMenu(); });
-    menu.appendChild(chip);
-  });
-
-  wrap.appendChild(btn);
-  controls.appendChild(wrap);
-
-  // ---- Helpers ----
-  function setImportant(el, prop, value){ if(!el) return; try{ el.style.setProperty(prop, value, 'important'); }catch{} }
-  function applyVars(target, vars){ Object.keys(vars).forEach(k => target.style.setProperty(k, vars[k])); }
-
-  // Center the portal menu under the button (viewport-clamped)
-  function positionMenu(){
-    if (menu.hidden) return;
-    // Temporarily ensure we can measure
-    const prevVis = menu.style.visibility; menu.style.visibility = 'hidden'; menu.style.display = 'grid';
-    const r = btn.getBoundingClientRect();
-    const spacing = 8;
-    const mw = Math.min(320, Math.max(260, menu.offsetWidth || 320));
-    const mh = menu.offsetHeight || 280;
-    let left = r.left + r.width/2 - mw/2;
-    left = Math.min(window.innerWidth - mw - 8, Math.max(8, left));
-    let top  = r.bottom + spacing;
-    if (top + mh > window.innerHeight - 8) top = Math.max(8, r.top - spacing - mh);
-    menu.style.left = `${left}px`;
-    menu.style.top  = `${top}px`;
-    // Restore visibility
-    menu.style.visibility = prevVis || '';
-  }
-
-  // ---- Apply + persist ----
-  function applyThemeId(id, persist=true){
-    const t = T.find(x=>x.id===id) || T[0];
-    applyVars(controls, t.v);
-
-    // Play/Pause disc + icon color (solid)
-    const ppInner = t.v['--prog-fill'] || t.v['--ctl-icon-gradient'] || 'linear-gradient(90deg,#ffffff,#ffffff)';
-    controls.style.setProperty('--pp-inner', ppInner);
-    controls.style.setProperty('--pp-outer', 'linear-gradient(135deg, #232a3a, #151820)');
-    controls.style.setProperty('--pp-glow',  'rgba(95,160,255,.45)');
-    controls.style.setProperty('--pp-icon-color', t.v['--pp-icon-color'] || '#ffffff');
-
-    // Progress area
-    if (progress){
-      const progFill = t.v['--prog-fill'] || t.v['--ctl-icon-gradient'] || 'linear-gradient(90deg,#5ad1ff,#a97aff)';
-      const progBg   = t.v['--prog-bg']   || 'rgba(255,255,255,.10)';
-      const timerCol = t.v['--timer-color'] || '#d5e6ff';
-      setImportant(progress, 'background', progBg);
-      if (bar) setImportant(bar, 'background', progFill);
-      if (tCur) setImportant(tCur, 'color', timerCol);
-      if (tMax) setImportant(tMax, 'color', timerCol);
-    }
-
-    try{ if(persist) localStorage.setItem(STORE_KEY, id); }catch{}
-    window.dispatchEvent(new CustomEvent('player:controls-theme', { detail:{ id, vars:t.v }}));
-  }
-  function restoreTheme(){ let id=null; try{ id=localStorage.getItem(STORE_KEY); }catch{} applyThemeId(id || T[0].id, false); }
-
-  // ---- Menu interactions (guard against scroll-induced synthetic clicks) ----
-  btn.addEventListener('click', (e)=>{
-    e.stopPropagation();
-    menu.hidden ? openMenu() : closeMenu();
-  });
-
-  // Close only on true outside clicks (not touch scroll inertia)
-  let scrollGuard = false;
-  let scrollGuardTO;
-  function armScrollGuard(){
-    scrollGuard = true;
-    clearTimeout(scrollGuardTO);
-    scrollGuardTO = setTimeout(()=>{ scrollGuard = false; }, 180);
-  }
-
-  document.addEventListener('pointerdown', (e)=>{
-    if (scrollGuard) return;
-    if (!menu.hidden && !menu.contains(e.target) && e.target !== btn){
-      closeMenu();
-    }
-  }, { passive:true });
-
-  // Keep menu following button during scroll, but don't close it
-  window.addEventListener('scroll', ()=>{
-    armScrollGuard();
-    positionMenu();
-  }, { passive:true });
-
-  window.addEventListener('resize', positionMenu, { passive:true });
-
-  // Keyboard a11y
-  btn.addEventListener('keydown', (e)=>{
-    if(e.key==='ArrowDown' || e.key==='Enter' || e.key===' '){
-      e.preventDefault(); openMenu(); const first=menu.querySelector('.theme-chip'); first?.focus();
-    }
-  });
-  menu.addEventListener('keydown', (e)=>{
-    const chips=[...menu.querySelectorAll('.theme-chip')];
-    const i=chips.indexOf(document.activeElement);
-    if(e.key==='Escape'){ closeMenu(); btn.focus(); }
-    else if(e.key==='ArrowDown'){ e.preventDefault(); chips[Math.min(i+1, chips.length-1)]?.focus(); }
-    else if(e.key==='ArrowUp'){   e.preventDefault(); chips[Math.max(i-1, 0)]?.focus(); }
-  });
-
-  function openMenu(){
-    menu.hidden = false; btn.setAttribute('aria-expanded','true');
-    requestAnimationFrame(positionMenu);
-  }
-  function closeMenu(){ menu.hidden = true; btn.setAttribute('aria-expanded','false'); }
-
-  // Boot
-  restoreTheme();
-})();
-</script>
-<script>
-/*!
- * G73 EQ Button Animator – Fixed Gradient (Blue → Purple)
- * - Always uses same gradient for bars
- * - Circular button, smooth animation, "EQ" overlay
- */
-(function(){
-  const btn = document.getElementById('open-eq');
-  if(!btn) return;
-
-  // ---------- Scoped CSS ----------
-  const css = `
-  #open-eq.eq-fab{
-    --eqbtn-size: 64px;
-    --eqbtn-bg: color-mix(in srgb, #0b0f14 78%, transparent);
-    --eqbtn-border: rgba(255,255,255,.12);
-    --eqbtn-ring: rgba(120,200,255,.35);
-
-    width: var(--eqbtn-size) !important;
-    height: var(--eqbtn-size) !important;
-    border-radius: 50% !important;
-    display: grid !important; place-items: center !important;
-    background: var(--eqbtn-bg) !important;
-    border: 1px solid var(--eqbtn-border) !important;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 8px 22px rgba(0,0,0,.45) !important;
-    padding: 0 !important;
-    position: relative !important;
-    overflow: hidden !important;
-  }
-  #open-eq.eq-fab:hover{
-    box-shadow: 0 10px 28px rgba(0,0,0,.5), 0 0 0 3px var(--eqbtn-ring) !important;
-    transform: translateY(-1px);
-  }
-  #open-eq .eq-ico{ width: 66%; height: 66%; display:block; }
-  #open-eq .eq-ico .bar{
-    transform-origin: 50% 100%;
-    animation: g73-eq-bounce 2.25s cubic-bezier(.42,0,.2,1) infinite;
-    animation-play-state: paused;
-  }
-  #open-eq.is-playing .eq-ico .bar{ animation-play-state: running; }
-  #open-eq:not(.is-playing) .eq-ico .bar{
-    animation: g73-eq-idle 6.6s cubic-bezier(.42,0,.2,1) infinite;
-    animation-play-state: running; opacity: .9;
-  }
-  @media (prefers-reduced-motion: reduce){
-    #open-eq .eq-ico .bar{ animation: none !important; }
-  }
-  #open-eq .eq-label{
-    position: absolute; inset: 0;
-    display: grid; place-items: center;
-    pointer-events: none; user-select: none;
-    font-weight: 800; letter-spacing: .04em; font-size: 14px;
-    color: #ffffff;
-    text-shadow: 0 0 2px rgba(0,0,0,.55), 0 1px 6px rgba(0,0,0,.45);
-  }
-  #open-eq .eq-label::after{
-    content: '';
-    position: absolute; width: 46%; height: 1px; bottom: 16%;
-    left: 27%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
-    filter: blur(.3px);
-  }
-  @keyframes g73-eq-bounce{
-    0%   { transform: scaleY(.28); }
-    18%  { transform: scaleY(.92); }
-    36%  { transform: scaleY(.44); }
-    54%  { transform: scaleY(.80); }
-    72%  { transform: scaleY(.38); }
-    100% { transform: scaleY(.70); }
-  }
-  @keyframes g73-eq-idle{
-    0%,100%{ transform: scaleY(.42); }
-    50%    { transform: scaleY(.56); }
-  }
-  `;
-  document.head.appendChild(Object.assign(document.createElement('style'),{textContent:css}));
-
-  // ---------- Render ----------
-  function render(){
-    btn.innerHTML = `
-      <svg class="eq-ico" viewBox="0 0 48 48" role="img" aria-hidden="true">
-        <defs>
-          <linearGradient id="g73-eq-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"  stop-color="#5fa0ff"/>
-            <stop offset="100%" stop-color="#b478ff"/>
-          </linearGradient>
-          <filter id="g73-soft" x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <g filter="url(#g73-soft)">
-          <rect class="bar" x="8.5"  y="10" width="5" height="28" rx="2.5" fill="url(#g73-eq-grad)" style="animation-delay:-0.00s"></rect>
-          <rect class="bar" x="17.5" y="6"  width="5" height="32" rx="2.5" fill="url(#g73-eq-grad)" style="animation-delay:-0.30s"></rect>
-          <rect class="bar" x="26.5" y="12" width="5" height="26" rx="2.5" fill="url(#g73-eq-grad)" style="animation-delay:-0.60s"></rect>
-          <rect class="bar" x="35.5" y="4"  width="5" height="34" rx="2.5" fill="url(#g73-eq-grad)" style="animation-delay:-0.90s"></rect>
-          <rect class="bar" x="22"   y="8"  width="3" height="30" rx="1.5" fill="url(#g73-eq-grad)" style="animation-delay:-1.20s; opacity:.9"></rect>
-        </g>
-      </svg>
-      <div class="eq-label">EQ</div>
-    `;
-  }
-
-  render();
-
-  // ---------- Playback state ----------
-  const audio = document.getElementById('main-audio');
-  if (audio){
-    const setState = ()=> btn.classList.toggle('is-playing', !audio.paused && !audio.ended && audio.currentTime > 0);
-    ['play','playing','pause','ended','timeupdate'].forEach(ev=>audio.addEventListener(ev, setState, {passive:true}));
-    setTimeout(setState, 0);
-  }
-
-  btn.setAttribute('aria-label', btn.getAttribute('aria-label') || 'Open Equalizer');
-})();
-</script>
-<!-- Organizer modal -->
-<script src="js/player/organizer-modal.js"></script>
-<script src="js/player/organizer-adapter.js"></script>
-<script>
-(function syncListTheme(){
-  const src = document.querySelector('.controls[data-ctl-theme]') || document.querySelector('.controls');
-  const dst = document.querySelector('.music-list');
-  if (!src || !dst) return;
-
-  const props = [
-    '--prog-fill','--ctl-bg','--ctl-border','--ctl-text',
-    '--ctl-ring','--ctl-list-accent1','--ctl-list-accent2',
-    '--primary-color','--secondary-color','--mainThemeColor','--accentColor'
-  ];
-  const cs = getComputedStyle(src);
-  props.forEach(p=>{
-    const v = cs.getPropertyValue(p);
-    if (v && v.trim()) dst.style.setProperty(p, v);
-  });
-
-  // Re-sync when your theme changes (attribute swap or custom event)
-  const mo = new MutationObserver(()=> syncListTheme());
-  mo.observe(src, { attributes: true, attributeFilter: ['data-ctl-theme','style','class'] });
-  window.addEventListener('theme:changed', syncListTheme);
-})();
-</script>
-<script src="js/theme-binder.v2.js" defer></script>
-<script>
-(function(){
-  "use strict";
-
-  /* -------- CSS (injected) -------- */
-  const css = `
-  :root{
-    --app-primary: var(--mainThemeColor, #5fa0ff);
-    --app-accent:  var(--accentColor,    #b478ff);
-  }
-
-  /* palette trigger */
-  .icon-btn{all:unset;display:inline-grid;place-items:center;cursor:pointer;border-radius:10px;padding:6px}
-  .icon-btn i.material-icons{
-    font-size:22px; line-height:1;
-    color: var(--app-primary); -webkit-text-fill-color: currentColor;
-    filter: drop-shadow(0 0 10px color-mix(in srgb, var(--app-primary) 35%, transparent));
-  }
-
-  /* viewport-safe modal */
-  #site-theme-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:100000}
-  #site-theme-modal.open{display:flex}
-  #site-theme-modal .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-  /* center on desktop, bottom sheet on small screens */
-  #site-theme-modal .panel{
-    position:relative;background:rgba(20,22,28,.92);color:#e8eef5;border:1px solid rgba(255,255,255,.12);
-    border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.55);max-width:720px;width:92vw;max-height:85vh;overflow:auto;
-    left:50vw;top:50vh;transform:translate(-50%,-50%); outline: none;
-  }
-  @media(max-width:560px){
-    #site-theme-modal .panel{left:auto;top:auto;transform:none;inset:auto 0 0 0;border-bottom-left-radius:0;border-bottom-right-radius:0;max-height:80vh}
-  }
-  #site-theme-modal .head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
-  #site-theme-modal .head h3{margin:0;font:800 15px/1.2 system-ui,Segoe UI,Roboto}
-  #site-theme-modal .grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;padding:12px}
-  @media(max-width:560px){ #site-theme-modal .grid{grid-template-columns:repeat(6,1fr)} }
-  .swatch{height:34px;border-radius:9px;border:2px solid rgba(255,255,255,.55);box-shadow:0 2px 8px rgba(0,0,0,.35);cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s}
-  .swatch:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.45);border-color:rgba(255,255,255,.85)}
-  .swatch:focus-visible{outline:2px solid var(--app-primary);outline-offset:2px;border-color:var(--app-primary)}
-
-  /* lightweight bindings */
-  .navbar-title{
-    color:var(--accent-color, var(--app-accent,#b478ff)) !important;
-    text-shadow:0 0 8px color-mix(in srgb, var(--app-primary,#5fa0ff) 55%, transparent)
-  }
-
-  footer,.branding-footer{
-    border-top:1px solid color-mix(in srgb, var(--app-accent,#b478ff) 35%, transparent);
-    box-shadow:0 0 10px color-mix(in srgb, var(--app-accent,#b478ff) 20%, transparent)
-  }
-  `;
-
-  const style = document.createElement('style');
-  style.setAttribute('data-g73-theme','1');
-  style.textContent = css;
-  document.head.appendChild(style);
-
-/* -------- Presets (100 total: 25 solid, 25 gradient2, 25 gradient3, 25 gradient4) -------- */
-const PRESETS = [
-  /* === 25 SOLID === */
-  {type:'solid', main:'#ff4757', accent:'#ffa502', name:'Cherry Ember'},
-  {type:'solid', main:'#3742fa', accent:'#1e90ff', name:'Ultramarine Duo'},
-  {type:'solid', main:'#2ed573', accent:'#1abc9c', name:'Spring Mint'},
-  {type:'solid', main:'#eccc68', accent:'#ff7f50', name:'Sunset Sorbet'},
-  {type:'solid', main:'#ff6b81', accent:'#ff4757', name:'Rose Heat'},
-  {type:'solid', main:'#7bed9f', accent:'#2ed573', name:'Matcha Pop'},
-  {type:'solid', main:'#70a1ff', accent:'#1e90ff', name:'Skyline Blue'},
-  {type:'solid', main:'#a29bfe', accent:'#6c5ce7', name:'Lavender Beam'},
-  {type:'solid', main:'#ff9ff3', accent:'#e84393', name:'Candy Bloom'},
-  {type:'solid', main:'#ffbe76', accent:'#f0932b', name:'Golden Tangerine'},
-  {type:'solid', main:'#badc58', accent:'#6ab04c', name:'Lime Meadow'},
-  {type:'solid', main:'#f8a5c2', accent:'#f78fb3', name:'Peony Mist'},
-  {type:'solid', main:'#c7ecee', accent:'#7ed6df', name:'Aqua Wash'},
-  {type:'solid', main:'#30336b', accent:'#130f40', name:'Indigo Night'},
-  {type:'solid', main:'#ffb142', accent:'#e58e26', name:'Amber Glow'},
-  {type:'solid', main:'#cd84f1', accent:'#8854d0', name:'Violet Drift'},
-  {type:'solid', main:'#ff3838', accent:'#ff4d4d', name:'Alarm Red'},
-  {type:'solid', main:'#3ae374', accent:'#2ed573', name:'Neon Leaf'},
-  {type:'solid', main:'#67e6dc', accent:'#1abc9c', name:'Seafoam'},
-  {type:'solid', main:'#7158e2', accent:'#3742fa', name:'Purple Core'},
-  {type:'solid', main:'#ff9f1a', accent:'#ffa502', name:'Citrus Peel'},
-  {type:'solid', main:'#2f3542', accent:'#57606f', name:'Slate Pulse'},
-  {type:'solid', main:'#dff9fb', accent:'#c7ecee', name:'Ice Shard'},
-  {type:'solid', main:'#ff6f61', accent:'#e74c3c', name:'Coral Crush'},
-  {type:'solid', main:'#00b894', accent:'#55efc4', name:'Teal Breeze'},
-
-  /* === 25 GRADIENT2 (two-stop) === */
-  {type:'gradient2', main:'#ff4d6d', accent:'#ffd166', name:'Magma Pop',
-    progFill:'linear-gradient(90deg,#ff4d6d,#ffd166)', iconGrad:'linear-gradient(90deg,#ff4d6d,#ffd166)', progBg:'rgba(255,180,150,.12)'},
-  {type:'gradient2', main:'#54e0ff', accent:'#b37aff', name:'Neon Glass',
-    progFill:'linear-gradient(90deg,#54e0ff,#b37aff)', iconGrad:'linear-gradient(90deg,#54e0ff,#b37aff)'},
-  {type:'gradient2', main:'#87b4ff', accent:'#bcd4ff', name:'Steel Sky',
-    progFill:'linear-gradient(90deg,#87b4ff,#bcd4ff)', iconGrad:'linear-gradient(90deg,#a8bed3,#e8eef7)'},
-  {type:'gradient2', main:'#c79c46', accent:'#ffde87', name:'Gilded Onyx',
-    progFill:'linear-gradient(90deg,#c79c46,#ffde87)', iconGrad:'linear-gradient(90deg,#c79c46,#ffde87)'},
-  {type:'gradient2', main:'#d38b5d', accent:'#ffe0a1', name:'Tape Tan',
-    progFill:'linear-gradient(90deg,#d38b5d,#ffe0a1)', iconGrad:'linear-gradient(90deg,#d38b5d,#ffe0a1)'},
-  {type:'gradient2', main:'#ff8a66', accent:'#ffd36e', name:'Warm Sunset',
-    progFill:'linear-gradient(90deg,#ff8a66,#ffd36e)', iconGrad:'linear-gradient(90deg,#ff8a66,#ffd36e)'},
-  {type:'gradient2', main:'#38ff80', accent:'#b8ffc8', name:'Terminal Beam',
-    progFill:'linear-gradient(90deg,#38ff80,#b8ffc8)', iconGrad:'linear-gradient(90deg,#38ff80,#b8ffc8)'},
-  {type:'gradient2', main:'#78c7ff', accent:'#9be7ff', name:'Oceanic Fade',
-    progFill:'linear-gradient(90deg,#78c7ff,#9be7ff)', iconGrad:'linear-gradient(90deg,#78c7ff,#9be7ff)'},
-  {type:'gradient2', main:'#9dff6a', accent:'#d6ff8a', name:'Cyber Lime',
-    progFill:'linear-gradient(90deg,#9dff6a,#d6ff8a)', iconGrad:'linear-gradient(90deg,#9dff6a,#d6ff8a)'},
-  {type:'gradient2', main:'#c9a8ff', accent:'#a8e3ff', name:'Lavender Ice',
-    progFill:'linear-gradient(90deg,#c9a8ff,#a8e3ff)', iconGrad:'linear-gradient(90deg,#c9a8ff,#a8e3ff)'},
-  {type:'gradient2', main:'#ff914d', accent:'#ffc46b', name:'Ember Heat',
-    progFill:'linear-gradient(90deg,#ff914d,#ffc46b)', iconGrad:'linear-gradient(90deg,#ff914d,#ffc46b)'},
-  {type:'gradient2', main:'#ff9ec7', accent:'#ffd1e6', name:'Rose Quartz',
-    progFill:'linear-gradient(90deg,#ff9ec7,#ffd1e6)', iconGrad:'linear-gradient(90deg,#ff9ec7,#ffd1e6)'},
-  {type:'gradient2', main:'#57ffa6', accent:'#69c8ff', name:'Aurora Glow',
-    progFill:'linear-gradient(90deg,#57ffa6,#69c8ff)', iconGrad:'linear-gradient(90deg,#57ffa6,#69c8ff)'},
-  {type:'gradient2', main:'#a78bfa', accent:'#f0abfc', name:'Grape Soda',
-    progFill:'linear-gradient(90deg,#a78bfa,#f0abfc)', iconGrad:'linear-gradient(90deg,#a78bfa,#f0abfc)'},
-  {type:'gradient2', main:'#3b82f6', accent:'#60a5fa', name:'Blue Runner',
-    progFill:'linear-gradient(90deg,#3b82f6,#60a5fa)', iconGrad:'linear-gradient(90deg,#3b82f6,#60a5fa)'},
-  {type:'gradient2', main:'#ffb703', accent:'#ffd166', name:'Electric Mango',
-    progFill:'linear-gradient(90deg,#ffb703,#ffd166)', iconGrad:'linear-gradient(90deg,#ffb703,#ffd166)'},
-  {type:'gradient2', main:'#ff7aa2', accent:'#ffd166', name:'Pink Lemonade',
-    progFill:'linear-gradient(90deg,#ff7aa2,#ffd166)', iconGrad:'linear-gradient(90deg,#ff7aa2,#ffd166)'},
-  {type:'gradient2', main:'#5865f2', accent:'#9aa4ff', name:'Blurple Beam',
-    progFill:'linear-gradient(90deg,#5865f2,#9aa4ff)', iconGrad:'linear-gradient(90deg,#5865f2,#9aa4ff)'},
-  {type:'gradient2', main:'#21d4a3', accent:'#66ffe3', name:'Teal Punch',
-    progFill:'linear-gradient(90deg,#21d4a3,#66ffe3)', iconGrad:'linear-gradient(90deg,#21d4a3,#66ffe3)'},
-  {type:'gradient2', main:'#ff4d6d', accent:'#ffa3a3', name:'Crimson Edge',
-    progFill:'linear-gradient(90deg,#ff4d6d,#ffa3a3)', iconGrad:'linear-gradient(90deg,#ff4d6d,#ffa3a3)'},
-  {type:'gradient2', main:'#7efac8', accent:'#baffde', name:'Mint Byte',
-    progFill:'linear-gradient(90deg,#7efac8,#baffde)', iconGrad:'linear-gradient(90deg,#7efac8,#baffde)'},
-  {type:'gradient2', main:'#8ab4ff', accent:'#ffd166', name:'Royal Sun',
-    progFill:'linear-gradient(90deg,#8ab4ff,#ffd166)', iconGrad:'linear-gradient(90deg,#8ab4ff,#ffd166)'},
-  {type:'gradient2', main:'#b37aff', accent:'#7aa6ff', name:'Violet Storm',
-    progFill:'linear-gradient(90deg,#b37aff,#7aa6ff)', iconGrad:'linear-gradient(90deg,#b37aff,#7aa6ff)'},
-  {type:'gradient2', main:'#e0b084', accent:'#ffe0a1', name:'Desert Dusk',
-    progFill:'linear-gradient(90deg,#e0b084,#ffe0a1)', iconGrad:'linear-gradient(90deg,#e0b084,#ffe0a1)'},
-  {type:'gradient2', main:'#9ae6ff', accent:'#baffde', name:'Ice Mint',
-    progFill:'linear-gradient(90deg,#9ae6ff,#baffde)', iconGrad:'linear-gradient(90deg,#9ae6ff,#baffde)'},
-
-  /* === 25 GRADIENT3 (three-stop) === */
-  {type:'gradient3', main:'#ff006e', accent:'#ffbe0b', name:'Punch Berry',
-    progFill:'linear-gradient(90deg,#ff006e,#ffbe0b,#ffd166)', iconGrad:'linear-gradient(90deg,#ff006e,#ffbe0b,#ffd166)'},
-  {type:'gradient3', main:'#00d4ff', accent:'#7b2cbf', name:'Galaxy Lab',
-    progFill:'linear-gradient(90deg,#00d4ff,#7b2cbf,#c77dff)', iconGrad:'linear-gradient(90deg,#00d4ff,#7b2cbf,#c77dff)'},
-  {type:'gradient3', main:'#c6ff00', accent:'#00e676', name:'Voltage',
-    progFill:'linear-gradient(90deg,#c6ff00,#aaff00,#00e676)', iconGrad:'linear-gradient(90deg,#c6ff00,#aaff00,#00e676)'},
-  {type:'gradient3', main:'#ff6a00', accent:'#00c6ff', name:'Ember Sky',
-    progFill:'linear-gradient(90deg,#ff6a00,#ffb703,#00c6ff)', iconGrad:'linear-gradient(90deg,#ff6a00,#ffb703,#00c6ff)'},
-  {type:'gradient3', main:'#ff80bf', accent:'#ffc0cb', name:'Bubblegum',
-    progFill:'linear-gradient(90deg,#ff80bf,#ff9ad1,#ffc0cb)', iconGrad:'linear-gradient(90deg,#ff80bf,#ff9ad1,#ffc0cb)'},
-  {type:'gradient3', main:'#00c6ff', accent:'#0072ff', name:'Jetstream',
-    progFill:'linear-gradient(90deg,#00c6ff,#3b82f6,#0072ff)', iconGrad:'linear-gradient(90deg,#00c6ff,#3b82f6,#0072ff)'},
-  {type:'gradient3', main:'#ff9a8b', accent:'#a1ffce', name:'Ember Mint',
-    progFill:'linear-gradient(90deg,#ff9a8b,#ffd3b6,#a1ffce)', iconGrad:'linear-gradient(90deg,#ff9a8b,#ffd3b6,#a1ffce)'},
-  {type:'gradient3', main:'#f72585', accent:'#7209b7', name:'Space Candy',
-    progFill:'linear-gradient(90deg,#f72585,#b5179e,#7209b7)', iconGrad:'linear-gradient(90deg,#f72585,#b5179e,#7209b7)'},
-  {type:'gradient3', main:'#ffb347', accent:'#ffd56b', name:'Deep Amber',
-    progFill:'linear-gradient(90deg,#ffb347,#ffc46b,#ffd56b)', iconGrad:'linear-gradient(90deg,#ffb347,#ffc46b,#ffd56b)'},
-  {type:'gradient3', main:'#8a2be2', accent:'#ff00ff', name:'Electric Berry',
-    progFill:'linear-gradient(90deg,#8a2be2,#c77dff,#ff00ff)', iconGrad:'linear-gradient(90deg,#8a2be2,#c77dff,#ff00ff)'},
-  {type:'gradient3', main:'#b8f2e6', accent:'#aed9e0', name:'Frost Grove',
-    progFill:'linear-gradient(90deg,#b8f2e6,#d1fff2,#aed9e0)', iconGrad:'linear-gradient(90deg,#b8f2e6,#d1fff2,#aed9e0)'},
-  {type:'gradient3', main:'#ff6ec7', accent:'#ff9a8b', name:'Neon Taffy',
-    progFill:'linear-gradient(90deg,#ff6ec7,#ff85b3,#ff9a8b)', iconGrad:'linear-gradient(90deg,#ff6ec7,#ff85b3,#ff9a8b)'},
-  {type:'gradient3', main:'#a8e063', accent:'#fcd36a', name:'Citrus Twist',
-    progFill:'linear-gradient(90deg,#a8e063,#ffd166,#fcd36a)', iconGrad:'linear-gradient(90deg,#a8e063,#ffd166,#fcd36a)'},
-  {type:'gradient3', main:'#153677', accent:'#4e9af1', name:'Inkwave',
-    progFill:'linear-gradient(90deg,#153677,#5b8df6,#4e9af1)', iconGrad:'linear-gradient(90deg,#153677,#5b8df6,#4e9af1)'},
-  {type:'gradient3', main:'#3ddc97', accent:'#a1f7c4', name:'Mojito',
-    progFill:'linear-gradient(90deg,#3ddc97,#7bed9f,#a1f7c4)', iconGrad:'linear-gradient(90deg,#3ddc97,#7bed9f,#a1f7c4)'},
-  {type:'gradient3', main:'#ff8e53', accent:'#a18cd1', name:'Ember Violet',
-    progFill:'linear-gradient(90deg,#ff8e53,#ffb199,#a18cd1)', iconGrad:'linear-gradient(90deg,#ff8e53,#ffb199,#a18cd1)'},
-  {type:'gradient3', main:'#00c9ff', accent:'#ff3d00', name:'Sky Lava',
-    progFill:'linear-gradient(90deg,#00c9ff,#7aa2ff,#ff3d00)', iconGrad:'linear-gradient(90deg,#00c9ff,#7aa2ff,#ff3d00)'},
-  {type:'gradient3', main:'#aee1e1', accent:'#f8f9fa', name:'Opal',
-    progFill:'linear-gradient(90deg,#aee1e1,#dfeff1,#f8f9fa)', iconGrad:'linear-gradient(90deg,#aee1e1,#dfeff1,#f8f9fa)'},
-  {type:'gradient3', main:'#ff2a68', accent:'#ff758c', name:'Ruby Night',
-    progFill:'linear-gradient(90deg,#ff2a68,#ff5c8a,#ff758c)', iconGrad:'linear-gradient(90deg,#ff2a68,#ff5c8a,#ff758c)'},
-  {type:'gradient3', main:'#00f5a0', accent:'#00d9f5', name:'Teal Flame',
-    progFill:'linear-gradient(90deg,#00f5a0,#00e5c0,#00d9f5)', iconGrad:'linear-gradient(90deg,#00f5a0,#00e5c0,#00d9f5)'},
-  {type:'gradient3', main:'#cd7f32', accent:'#a8ffcf', name:'Bronze Mint',
-    progFill:'linear-gradient(90deg,#cd7f32,#ffc46b,#a8ffcf)', iconGrad:'linear-gradient(90deg,#cd7f32,#ffc46b,#a8ffcf)'},
-  {type:'gradient3', main:'#5eead4', accent:'#93c5fd', name:'Nordic',
-    progFill:'linear-gradient(90deg,#5eead4,#7dd3fc,#93c5fd)', iconGrad:'linear-gradient(90deg,#5eead4,#7dd3fc,#93c5fd)'},
-  {type:'gradient3', main:'#ff6f61', accent:'#ffd166', name:'Poppy Gold',
-    progFill:'linear-gradient(90deg,#ff6f61,#ff9f1a,#ffd166)', iconGrad:'linear-gradient(90deg,#ff6f61,#ff9f1a,#ffd166)'},
-  {type:'gradient3', main:'#00f0ff', accent:'#ff00f0', name:'Ultra Vapor',
-    progFill:'linear-gradient(90deg,#00f0ff,#7b2cbf,#ff00f0)', iconGrad:'linear-gradient(90deg,#00f0ff,#7b2cbf,#ff00f0)'},
-  {type:'gradient3', main:'#9be7c7', accent:'#d4ffea', name:'Charcoal Mint',
-    progFill:'linear-gradient(90deg,#9be7c7,#baffde,#d4ffea)', iconGrad:'linear-gradient(90deg,#9be7c7,#baffde,#d4ffea)'},
-
-  /* === 25 GRADIENT4 (four-stop) === */
-  {type:'gradient4', main:'#ff3e3e', accent:'#ff9e00', name:'Magma Core',
-    progFill:'linear-gradient(90deg,#ff3e3e,#ff6a00,#ff9e00,#ffd166)', iconGrad:'linear-gradient(90deg,#ff3e3e,#ff6a00,#ff9e00,#ffd166)'},
-  {type:'gradient4', main:'#ff6f59', accent:'#2ec4b6', name:'Neon Koi',
-    progFill:'linear-gradient(90deg,#ff6f59,#ff9a76,#2ec4b6,#00d4ff)', iconGrad:'linear-gradient(90deg,#ff6f59,#ff9a76,#2ec4b6,#00d4ff)'},
-  {type:'gradient4', main:'#da8cff', accent:'#9f7aea', name:'Orchid Fade',
-    progFill:'linear-gradient(90deg,#da8cff,#b892ff,#9f7aea,#7aa2ff)', iconGrad:'linear-gradient(90deg,#da8cff,#b892ff,#9f7aea,#7aa2ff)'},
-  {type:'gradient4', main:'#ffd166', accent:'#70e1f5', name:'Solar Wind',
-    progFill:'linear-gradient(90deg,#ffd166,#ffe29a,#a1c4fd,#70e1f5)', iconGrad:'linear-gradient(90deg,#ffd166,#ffe29a,#a1c4fd,#70e1f5)'},
-  {type:'gradient4', main:'#c9ff73', accent:'#8dff6e', name:'Lime Cinder',
-    progFill:'linear-gradient(90deg,#c9ff73,#a6ff69,#8dff6e,#70e000)', iconGrad:'linear-gradient(90deg,#c9ff73,#a6ff69,#8dff6e,#70e000)'},
-  {type:'gradient4', main:'#ffb3c1', accent:'#bde0fe', name:'Polar Rose',
-    progFill:'linear-gradient(90deg,#ffb3c1,#ffcfe3,#dbeafe,#bde0fe)', iconGrad:'linear-gradient(90deg,#ffb3c1,#ffcfe3,#dbeafe,#bde0fe)'},
-  {type:'gradient4', main:'#6fffe9', accent:'#7cffc4', name:'Nebula Mint',
-    progFill:'linear-gradient(90deg,#6fffe9,#64dfdf,#7cffc4,#80ffdb)', iconGrad:'linear-gradient(90deg,#6fffe9,#64dfdf,#7cffc4,#80ffdb)'},
-  {type:'gradient4', main:'#b6244f', accent:'#ff5d8f', name:'Royal Garnet',
-    progFill:'linear-gradient(90deg,#b6244f,#e5466b,#ff5d8f,#ff85a2)', iconGrad:'linear-gradient(90deg,#b6244f,#e5466b,#ff5d8f,#ff85a2)'},
-  {type:'gradient4', main:'#7aa2ff', accent:'#b8c6ff', name:'Skyline',
-    progFill:'linear-gradient(90deg,#7aa2ff,#8ab4ff,#a7c0ff,#b8c6ff)', iconGrad:'linear-gradient(90deg,#7aa2ff,#8ab4ff,#a7c0ff,#b8c6ff)'},
-  {type:'gradient4', main:'#ff9a3c', accent:'#00eaff', name:'Ember Cyan',
-    progFill:'linear-gradient(90deg,#ff9a3c,#ffd166,#00c6ff,#00eaff)', iconGrad:'linear-gradient(90deg,#ff9a3c,#ffd166,#00c6ff,#00eaff)'},
-  {type:'gradient4', main:'#ff206e', accent:'#33f3ff', name:'Pixel Pop',
-    progFill:'linear-gradient(90deg,#ff206e,#ff49c6,#33f3ff,#00bbf9)', iconGrad:'linear-gradient(90deg,#ff206e,#ff49c6,#33f3ff,#00bbf9)'},
-  {type:'gradient4', main:'#b0c4de', accent:'#dce5f5', name:'Steel Dawn',
-    progFill:'linear-gradient(90deg,#b0c4de,#c9d6ec,#e2e9f8,#dce5f5)', iconGrad:'linear-gradient(90deg,#b0c4de,#c9d6ec,#e2e9f8,#dce5f5)'},
-  {type:'gradient4', main:'#c79081', accent:'#dfa579', name:'Mocha Glow',
-    progFill:'linear-gradient(90deg,#c79081,#d7a98c,#e7b892,#dfa579)', iconGrad:'linear-gradient(90deg,#c79081,#d7a98c,#e7b892,#dfa579)'},
-  {type:'gradient4', main:'#aaffec', accent:'#e4fff8', name:'Crystal Mint',
-    progFill:'linear-gradient(90deg,#aaffec,#c7fff2,#e4fff8,#f3fffd)', iconGrad:'linear-gradient(90deg,#aaffec,#c7fff2,#e4fff8,#f3fffd)'},
-  {type:'gradient4', main:'#ff4d97', accent:'#ff85b3', name:'Ultra Rose',
-    progFill:'linear-gradient(90deg,#ff4d97,#ff6fb0,#ff85b3,#ffc0cb)', iconGrad:'linear-gradient(90deg,#ff4d97,#ff6fb0,#ff85b3,#ffc0cb)'},
-  {type:'gradient4', main:'#00b4d8', accent:'#90e0ef', name:'Azure Fire',
-    progFill:'linear-gradient(90deg,#00b4d8,#48cae4,#ade8f4,#90e0ef)', iconGrad:'linear-gradient(90deg,#00b4d8,#48cae4,#ade8f4,#90e0ef)'},
-  {type:'gradient4', main:'#c19a6b', accent:'#ffd88e', name:'Hazel Gold',
-    progFill:'linear-gradient(90deg,#c19a6b,#d7b98a,#ffcf8e,#ffd88e)', iconGrad:'linear-gradient(90deg,#c19a6b,#d7b98a,#ffcf8e,#ffd88e)'},
-  {type:'gradient4', main:'#b8fff1', accent:'#d1fff8', name:'Vapor Mint',
-    progFill:'linear-gradient(90deg,#b8fff1,#c4fff5,#dcfffb,#d1fff8)', iconGrad:'linear-gradient(90deg,#b8fff1,#c4fff5,#dcfffb,#d1fff8)'},
-  {type:'gradient4', main:'#00e5ff', accent:'#80ffea', name:'Ultra Cyan',
-    progFill:'linear-gradient(90deg,#00e5ff,#54e0ff,#a0fff2,#80ffea)', iconGrad:'linear-gradient(90deg,#00e5ff,#54e0ff,#a0fff2,#80ffea)'},
-  {type:'gradient4', main:'#ff7e5f', accent:'#feb47b', name:'Horizon',
-    progFill:'linear-gradient(90deg,#ff7e5f,#ff9966,#ffb37a,#feb47b)', iconGrad:'linear-gradient(90deg,#ff7e5f,#ff9966,#ffb37a,#feb47b)'},
-  {type:'gradient4', main:'#7dd3fc', accent:'#bae6fd', name:'Iceberg',
-    progFill:'linear-gradient(90deg,#7dd3fc,#a5d8ff,#cfe9ff,#bae6fd)', iconGrad:'linear-gradient(90deg,#7dd3fc,#a5d8ff,#cfe9ff,#bae6fd)'},
-  {type:'gradient4', main:'#ff6f91', accent:'#ffc75f', name:'Sunset Soda',
-    progFill:'linear-gradient(90deg,#ff6f91,#ff9aa2,#ffd166,#ffc75f)', iconGrad:'linear-gradient(90deg,#ff6f91,#ff9aa2,#ffd166,#ffc75f)'},
-  {type:'gradient4', main:'#00f5d4', accent:'#00bbf9', name:'Noir Neon',
-    progFill:'linear-gradient(90deg,#00f5d4,#00e5ff,#00ccff,#00bbf9)', iconGrad:'linear-gradient(90deg,#00f5d4,#00e5ff,#00ccff,#00bbf9)'},
-  {type:'gradient4', main:'#ffd166', accent:'#fff0a3', name:'Golden Hour',
-    progFill:'linear-gradient(90deg,#ffc76b,#ffd166,#ffe29a,#fff0a3)', iconGrad:'linear-gradient(90deg,#ffc76b,#ffd166,#ffe29a,#fff0a3)'},
-  {type:'gradient4', main:'#5ad1ff', accent:'#b478ff', name:'Aqua Purple',
-    progFill:'linear-gradient(90deg,#5ad1ff,#80cfff,#a1b5ff,#b478ff)', iconGrad:'linear-gradient(90deg,#5ad1ff,#80cfff,#a1b5ff,#b478ff)'}
-];
-
-  const STORAGE_KEY = "siteThemeV1";
-  const save = (o)=>{ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(o)); }catch{} };
-  const load = ()=>{ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||"null"); }catch{return null;} };
-
-  /* -------- Helpers -------- */
-  function luminance(hex){
-    const c = hex.replace('#','');
-    const r = parseInt(c.slice(0,2),16)/255;
-    const g = parseInt(c.slice(2,4),16)/255;
-    const b = parseInt(c.slice(4,6),16)/255;
-    const L = [r,g,b].map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));
-    return 0.2126*L[0]+0.7152*L[1]+0.0722*L[2];
-  }
-  function autoText(bg){ return luminance(bg) > 0.5 ? '#0b0d10' : '#ffffff'; }
-  function autoBg(main){ return luminance(main) > 0.5 ? '#ecf0f1' : '#2f3542'; }
-  function autoBorder(bg){ return luminance(bg) > 0.5 ? '#2c3e50' : '#ced6e0'; }
-
-  /* -------- Apply theme to CSS vars already used -------- */
-  function applyTheme(p){
-    const r = document.documentElement;
-    const main   = p.main;
-    const accent = p.accent;
-    const text   = p.text   || autoText(main);
-    const textBg = p.textBg || autoBg(main);
-    const border = p.border || autoBorder(textBg);
-
-    // Canonical
-    r.style.setProperty('--mainThemeColor', main);
-    r.style.setProperty('--accentColor',   accent);
-    r.style.setProperty('--text',          text);
-    r.style.setProperty('--textBg',        textBg);
-    r.style.setProperty('--borderColor',   border);
-
-    // Cross-compat
-    r.style.setProperty('--app-primary', main);
-    r.style.setProperty('--app-accent',  accent);
-    r.style.setProperty('--primary-color', main);
-    r.style.setProperty('--accent-color',  accent);
-    r.style.setProperty('--glow-color',    main);
-
-    // Subtle chrome
-    r.style.setProperty('--navbar-bg', 'rgba(0,0,0,.55)');
-    r.style.setProperty('--glow-box',    `0 0 12px color-mix(in srgb, ${main} 30%, transparent)`);
-    r.style.setProperty('--glow-shadow', `0 0 10px ${main}`);
-
-    // Broadcast so other components (player/list) can react
-    window.dispatchEvent(new CustomEvent('theme:changed', { detail: { main, accent, text, textBg, border } }));
-
-    save({main,accent,text,textBg,border});
-  }
-
-  /* -------- Modal (attached to <body>) -------- */
-  function buildModal(){
-    if (document.getElementById('site-theme-modal')) return;
-
-    const modal = document.createElement('div');
-    modal.id = 'site-theme-modal';
-    modal.innerHTML = `
-      <div class="backdrop" data-close="1" aria-hidden="true"></div>
-      <div class="panel" role="dialog" aria-modal="true" aria-label="Theme">
-        <div class="head">
-          <h3>Pick a Theme</h3>
-          <button class="icon-btn theme-chip" data-close="1" aria-label="Close" type="button">
-            <i class="material-icons" aria-hidden="true">close</i>
-          </button>
+    </header>
+    <footer>
+      <div class="branding-footer">
+        <p>&copy; 2025 G Jordan | <span class="tm">G73&trade; LLC</span></p>
+        <p>You are the <strong><span class="tm" id="visitorOrdinal">—</span></strong> visitor</p>
+        <p>G73 total signed-up users: <strong><span class="tm" id="totalUsers">—</span></strong></p>
+        <p style="font-size:0.9em; opacity:0.9; margin:0;">Total song plays: <strong><span class="tm" id="totalPlays">—</span></strong></p>
+        <p style="font-size:0.9em; opacity:0.9; margin:0;">Total song downloads: <strong><span class="tm" id="totalDownloads">—</span></strong></p>
+        <div class="footer-stats" id="footer-stats" style="
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          gap:16px;
+          flex-wrap:wrap;
+          width:100%;
+          margin:10px auto 0;
+          padding:6px 0;">
+          <div class="stat-chip fans" aria-label="Total Likes" style="
+            position:relative;
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:8px 14px;
+            background:var(--bg-overlay);
+            border-radius:8px;
+            border:1px solid var(--primary-color);
+            box-shadow:0 0 10px var(--primary-color);
+            transition:box-shadow 0.3s ease-in-out;">
+            <i class="material-icons stat-icon" aria-hidden="true" style="
+              font-size:20px;
+              color:var(--primary-color);
+              line-height:1;">thumb_up</i>
+            <span class="stat-label" style="font-weight:700; color:var(--accent-color);">Fans</span>
+            <span class="stat-value" id="fans-count" style="font-weight:800; color:var(--highlight-cyan);">0</span>
+          </div>
+          <div class="stat-chip haters" aria-label="Total Dislikes" style="
+            position:relative;
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:8px 14px;
+            background:var(--bg-overlay);
+            border-radius:8px;
+            border:1px solid var(--primary-color);
+            box-shadow:0 0 10px var(--primary-color);
+            transition:box-shadow 0.3s ease-in-out;">
+            <i class="material-icons stat-icon" aria-hidden="true" style="
+              font-size:20px;
+              color:var(--primary-color);
+              line-height:1;">thumb_down</i>
+            <span class="stat-label" style="font-weight:700; color:var(--accent-color);">Haters</span>
+            <span class="stat-value" id="haters-count" style="font-weight:800; color:var(--highlight-cyan);">0</span>
+          </div>
         </div>
-        <div class="grid"></div>
-      </div>`;
-    document.body.appendChild(modal);
+      </div>
+      <div class="social-links site-footer">
+        <a href="https://www.facebook.com/share/15nmGGZQVH/" target="_blank"><img src="https://img.icons8.com/color/50/facebook.png" alt="Facebook" /></a>
+        <a href="https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu" target="_blank"><img src="https://img.icons8.com/color/50/instagram-new.png" alt="Instagram" /></a>
+        <a href="https://www.bandlab.com/g_jordan" target="_blank">
+          <img src="https://img.icons8.com/color/50/bandlab.png" alt="BandLab" />
+        </a>
+        <a href="https://www.tiktok.com/@g_jordan7?_t=ZP-8z2gOs0zTt1&_r=1" target="_blank"><img src="https://img.icons8.com/color/50/tiktok.png" alt="TikTok" /></a>
+      </div>
+    </footer>
+    <!-- Footer metrics loader (uses your existing window.db from firebase-init.js) -->
+  </div>
 
-    const grid = modal.querySelector('.grid');
-    PRESETS.forEach((p,i)=>{
-      const sw = document.createElement('button');
-      sw.type = 'button';
-      sw.className = 'swatch';
-      sw.title = 'Theme #' + (i+1);
-      sw.style.background = `linear-gradient(145deg, ${p.main}, ${p.accent})`;
-      sw.style.borderColor = 'rgba(255,255,255,.55)';
-      sw.addEventListener('click', ()=>applyTheme(p));
-      grid.appendChild(sw);
-    });
-
-    // ✅ Close when clicking backdrop OR the close button (or its child icon)
-    modal.addEventListener('click', (e)=>{
-      const target = e.target.closest('[data-close]');
-      if (target) closeModal();
-    });
-
-    // Also bind directly to the close button (belt & suspenders)
-    const closeBtn = modal.querySelector('[data-close]');
-    closeBtn?.addEventListener('click', closeModal);
-
-    // Esc to close
-    window.addEventListener('keydown', (e)=>{ if (e.key==='Escape') closeModal(); });
-  }
-
-  function openModal(){
-    buildModal();
-    const m = document.getElementById('site-theme-modal');
-    m.classList.add('open');
-    document.body.style.overflow='hidden';
-    // focus the panel for a11y/escape
-    m.querySelector('.panel')?.focus?.();
-  }
-  function closeModal(){
-    const m=document.getElementById('site-theme-modal'); if(!m) return;
-    m.classList.remove('open'); document.body.style.overflow='';
-  }
-
-  /* -------- Navbar trigger (palette icon) -------- */
-  function ensureTrigger(){
-    const nav = document.querySelector('.navbar');
-    if (!nav) return;
-    let btn = document.getElementById('open-theme');
-    if (!btn){
-      btn = document.createElement('button');
-      btn.id = 'open-theme';
-      btn.className = 'icon-btn';
-      btn.setAttribute('aria-label','Theme');
-      btn.style.marginLeft = '8px';
-      btn.innerHTML = '<i class="material-icons theme-chip" aria-hidden="true">palette</i>';
-     (nav.querySelector('#account-btn') || nav.lastElementChild || nav)
-  .insertAdjacentElement('afterend', btn); 
-    }
-    btn.addEventListener('click', openModal);
-  }
-
-  /* -------- Boot -------- */
-  function boot(){
-    const saved = load();
-    if (saved && saved.main && saved.accent) applyTheme(saved);
-    ensureTrigger();
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
-  else boot();
-
-})();
-</script>
-<script>
-(() => {
-  let rafId, stopId;
-  const onScroll = () => {
-    // throttle via rAF so we don’t spam
-    if (rafId) return;
-    rafId = requestAnimationFrame(() => {
-      rafId = null;
-      document.body.classList.add('is-scrolling');
-      clearTimeout(stopId);
-      stopId = setTimeout(() => {
-        document.body.classList.remove('is-scrolling');
-      }, 150); // resume shortly after scroll stops
-    });
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
-})();
-</script>
-<script src="/js/metrics-footer.js" defer></script>
-<script type="module" src="/js/firebase/firebase-metrics-lite.js"></script>
-<!-- Make sure this is loaded earlier -->
-<script type="module" src="/js/firebase/firebase-init.js"></script>
-
-<!-- Fans/Haters live counter (Firestore) -->
-<script type="module">
-  // Firestore funcs (no re-init; we use window.db from firebase-init.js)
-  import {
-    doc, collection, onSnapshot
-  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-  // Find targets (supports your chip IDs or a fallback by data-role)
-  const fansEl =
-    document.getElementById("fans-count") ||
-    document.querySelector('[data-role="fans-count"]');
-  const hatersEl =
-    document.getElementById("haters-count") ||
-    document.querySelector('[data-role="haters-count"]');
-
-  if (!window.db) {
-    console.warn("[Fans/Haters] window.db not found. Load firebase-init.js first.");
-  }
-  if (!fansEl || !hatersEl) {
-    console.warn("[Fans/Haters] Counter elements not found (#fans-count / #haters-count).");
-  }
-
-  const fmt = (n) => Number(n || 0).toLocaleString();
-
-  function setCounts(likes, dislikes) {
-    if (fansEl)   fansEl.textContent   = fmt(likes);
-    if (hatersEl) hatersEl.textContent = fmt(dislikes);
-  }
-
-  // Try 1) single stats doc
-  const statsRef = doc(window.db, "siteStats", "likesDislikes");
-  let unsubStats = null;
-  let usingFallback = false;
-
-  function startFallbackSum() {
-    if (usingFallback) return;
-    usingFallback = true;
-
-    // 2) live-sum all songs (likes/dislikes fields)
-    const songsRef = collection(window.db, "songs");
-    onSnapshot(songsRef, (snap) => {
-      let totalLikes = 0, totalDislikes = 0;
-      snap.forEach((d) => {
-        const s = d.data() || {};
-        totalLikes    += s.likes    || 0;
-        totalDislikes += s.dislikes || 0;
-      });
-      setCounts(totalLikes, totalDislikes);
-    }, (err) => {
-      console.error("[Fans/Haters] Songs snapshot error:", err);
-    });
-  }
-
-  unsubStats = onSnapshot(statsRef, (snap) => {
-    if (snap.exists()) {
-      const data = snap.data() || {};
-      setCounts(data.totalLikes, data.totalDislikes);
-    } else {
-      // No aggregate doc—switch to fallback summing
-      if (unsubStats) unsubStats();
-      startFallbackSum();
-    }
-  }, (err) => {
-    console.warn("[Fans/Haters] Stats doc not available, using fallback. Error:", err);
-    if (unsubStats) unsubStats();
-    startFallbackSum();
-  });
-</script>
-<script>
-  // ---- Helpful custom events (contact, outbound, downloads, player) ----
-  // Expose helpers globally so you can call them from any page/script.
-  window.trackContactSubmitted = function(){
-    gtag('event', 'generate_lead', { method: 'contact_form' });
-  };
-
-  // Extra outbound tracking (Enhanced Measurement handles most, this adds detail)
-  document.addEventListener('click', (e) => {
-    const a = e.target.closest('a[href]');
-    if (!a) return;
-    if (a.host !== location.host) {
-      gtag('event', 'click_outbound', { link_url: a.href, link_domain: a.host });
-    }
-  });
-
-  window.trackDownload = function(name, url){
-    gtag('event', 'file_download', { file_name: name, file_url: url });
-  };
-
-  // Optional: music player events (dispatch these from your player code)
-  window.addEventListener('player:play',  e => {
-    gtag('event','play',  { track_id: e.detail?.id, track: e.detail?.name });
-  });
-  window.addEventListener('player:pause', e => {
-    gtag('event','pause', { track_id: e.detail?.id, track: e.detail?.name });
-  });
-</script>
-
-<script>
-  // ---- SPA virtual page views (skip this if your site is NOT an SPA) ----
-  // Fires a GA4 page_view whenever the route changes.
-  function trackVirtualPageView(path){
-    gtag('event', 'page_view', {
-      page_location: location.origin + path,
-      page_path: path,
-      page_title: document.title
-    });
-  }
-
-  (function(){
-    const origPush = history.pushState;
-    const origReplace = history.replaceState;
-
-    function onRouteChange(){
-      const path = location.pathname + location.search + location.hash;
-      trackVirtualPageView(path);
-    }
-
-    history.pushState = function(...args){ origPush.apply(this, args); onRouteChange(); };
-    history.replaceState = function(...args){ origReplace.apply(this, args); onRouteChange(); };
-    window.addEventListener('popstate', onRouteChange);
-
-    // initial view for SPAs
-    onRouteChange();
-  })();
-</script>
-<script>
-(function(){
-  // Keep the latest track meta if player-core.js is emitting it
-  let lastMeta = null;
-  window.addEventListener('player:track_change', e => { lastMeta = e.detail || lastMeta; });
-  window.addEventListener('player:play',  e => { lastMeta = e.detail || lastMeta; });
-
-  function filenameFromUrl(url){
-    try { return new URL(url, location.origin).pathname.split('/').pop() || ''; }
-    catch { return ''; }
-  }
-
-  function currentMetaFallback(){
-    // Fallback if player-core.js didn't provide meta yet
-    const list = Array.isArray(window.allMusic) ? window.allMusic : [];
-    const id = window.currentSongId || '';
-    const it = id ? (list.find(x => x?.src === id) || {}) : {};
-    return {
-      item_id: id,
-      item_name: it.name || '',
-      item_brand: it.artist || '',
-      index: window.musicIndex || 0,
-      playlist_size: list.length || 0,
-      // best-guess URL for filename
-      file_url: it.src || '',
-      file_name: filenameFromUrl(it.src || '')
-    };
-  }
-
-  function meta(){
-    if (!lastMeta) return currentMetaFallback();
-    return {
-      item_id: lastMeta.item_id || lastMeta.id || window.currentSongId || '',
-      item_name: lastMeta.item_name || lastMeta.name || '',
-      item_brand: lastMeta.item_brand || lastMeta.artist || '',
-      index: lastMeta.index || window.musicIndex || 0,
-      playlist_size: lastMeta.playlist_size || (Array.isArray(window.allMusic) ? window.allMusic.length : 0),
-      file_url: lastMeta.src || '',
-      file_name: filenameFromUrl(lastMeta.src || '')
-    };
-  }
-
-  function sendGA(eventName, extra){
-    const payload = Object.assign({}, meta(), extra);
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', eventName, payload);
-    }
-    // Also emit a CustomEvent for anything else to hook
-    try { window.dispatchEvent(new CustomEvent('player:' + eventName, { detail: payload })); } catch {}
-  }
-
-  // ---- Wrap existing functions if present; else attach click listeners as fallback ----
-  // LIKE
-  const likeBtn = document.getElementById('like-btn');
-  if (typeof window.likeSongFirebase === 'function') {
-    const _like = window.likeSongFirebase;
-    window.likeSongFirebase = async function(songId){
-      sendGA('like_add', { song_id: songId || window.currentSongId || '' });
-      return _like.apply(this, arguments);
-    };
-  } else if (likeBtn) {
-    likeBtn.addEventListener('click', () => {
-      sendGA('like_add', { song_id: window.currentSongId || '' });
-    }, { passive: true });
-  }
-
-  // DISLIKE
-  const dislikeBtn = document.getElementById('dislike-btn');
-  if (typeof window.dislikeSongFirebase === 'function') {
-    const _dislike = window.dislikeSongFirebase;
-    window.dislikeSongFirebase = async function(songId){
-      sendGA('dislike_add', { song_id: songId || window.currentSongId || '' });
-      return _dislike.apply(this, arguments);
-    };
-  } else if (dislikeBtn) {
-    dislikeBtn.addEventListener('click', () => {
-      sendGA('dislike_add', { song_id: window.currentSongId || '' });
-    }, { passive: true });
-  }
-
-  // DOWNLOAD
-  const downloadBtn = document.getElementById('download-btn');
-  if (typeof window.downloadSong === 'function') {
-    const _download = window.downloadSong;
-    window.downloadSong = async function(){
-      const m = meta();
-      sendGA('file_download', { file_name: m.file_name, file_url: m.file_url || '' });
-      return _download.apply(this, arguments);
-    };
-  } else if (downloadBtn) {
-    downloadBtn.addEventListener('click', () => {
-      const m = meta();
-      sendGA('file_download', { file_name: m.file_name, file_url: m.file_url || '' });
-    }, { passive: true });
-  }
-})();
-</script>
-<!-- ▼▼ G73 Theme Inspector (drop-in) ▼▼ -->
-<div id="g73-theme-inspector" hidden></div>
-<script>
-(function(){
-  const VARS_OF_INTEREST = [
-    '--app-primary','--app-accent',
-    '--primary-color','--accent-color',
-    '--mainThemeColor','--accentColor',
-    '--theme-primary','--theme-accent',
-    '--secondary-color','--prog-fill','--glow-color'
-  ];
-
-  const HEX   = /#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})\b/ig;
-  const FUNC  = /\b(?:rgb|rgba|hsl|hsla)\([^\)]*\)/ig;
-  const GRAD  = /\b(?:linear-gradient|radial-gradient)\([^\)]*\)/ig;
-  const MAYBE = /\b(?:color-mix|oklch|lab|lch)\([^\)]*\)/ig;
-
-  const container = document.getElementById('g73-theme-inspector');
-  container.innerHTML = `
-    <style>
-      #g73ti {
-        position: fixed; bottom: 16px; right: 16px; z-index: 999999;
-        width: 380px; max-height: 70vh; overflow: hidden; border-radius: 14px;
-        background: color-mix(in srgb, var(--app-primary, #5fa0ff) 8%, #0b0d10);
-        color: var(--white-faint, #e8eef6);
-        border: 1px solid color-mix(in srgb, var(--app-accent, #b478ff) 35%, transparent);
-        box-shadow:
-          0 14px 36px rgba(0,0,0,.5),
-          0 0 22px color-mix(in srgb, var(--app-accent, #b478ff) 28%, transparent);
-        font: 13px/1.4 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      }
-      #g73ti header{
-        display:flex; align-items:center; gap:8px; padding:10px 12px;
-        background: linear-gradient(90deg,
-          color-mix(in srgb, var(--app-primary, #5fa0ff) 18%, transparent),
-          color-mix(in srgb, var(--app-accent, #b478ff) 18%, transparent));
-        border-bottom: 1px solid color-mix(in srgb, var(--app-primary, #5fa0ff) 35%, transparent);
-      }
-      #g73ti header h3{ margin:0; font-size:13px; letter-spacing:.4px; text-transform:uppercase; }
-      #g73ti .sp{ flex:1 }
-      #g73ti button{
-        border:1px solid color-mix(in srgb, var(--app-primary, #5fa0ff) 35%, transparent);
-        background: color-mix(in srgb, var(--app-primary, #5fa0ff) 12%, transparent);
-        color: color-mix(in srgb, var(--app-primary, #5fa0ff) 86%, white);
-        border-radius: 9px; padding:6px 10px; font-weight:700; cursor:pointer;
-      }
-      #g73ti button:hover{
-        border-color: color-mix(in srgb, var(--app-accent, #b478ff) 45%, transparent);
-        box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-accent, #b478ff) 20%, transparent);
-      }
-      #g73ti main{ padding:10px 12px; overflow:auto; max-height: calc(70vh - 48px); }
-      #g73ti section{ margin-bottom:12px; }
-      #g73ti h4{ margin:8px 0 6px; font-size:12px; opacity:.9; text-transform:uppercase; letter-spacing:.3px; }
-      #g73ti .kv{ display:grid; grid-template-columns: 1fr auto; gap:6px 8px; align-items:center; }
-      #g73ti .chip{
-        display:inline-flex; align-items:center; gap:8px; padding:6px 8px; border-radius:10px;
-        background: rgba(255,255,255,.04);
-        border:1px solid color-mix(in srgb, var(--app-primary, #5fa0ff) 30%, transparent);
-        white-space:nowrap;
-      }
-      #g73ti .sw{ width:16px; height:16px; border-radius:4px; display:inline-block;
-        outline:1px solid rgba(255,255,255,.25); box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
-      }
-      #g73ti details{ border:1px solid rgba(255,255,255,.12); border-radius:10px; padding:6px 8px; }
-      #g73ti summary{ cursor:pointer; color: color-mix(in srgb, var(--app-accent, #b478ff) 90%, white); }
-      #g73ti pre{
-        margin:8px 0 0; padding:8px; border-radius:8px; background:#0b0d10; color:#e6edf3;
-        max-height:200px; overflow:auto; border:1px solid rgba(255,255,255,.12);
-      }
-      #g73ti .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:12px; }
-      #g73ti .small{ font-size:11px; opacity:.85 }
-      #g73ti .row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-      #g73ti .tag{ padding:2px 6px; border-radius:6px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.04) }
-      #g73ti .muted{ opacity:.7 }
-      #g73ti .divider{ height:1px; background: rgba(255,255,255,.12); margin:8px 0 }
-      #g73ti .ok{ color:#9be9a8 } .warn{ color:#ffd86b } .err{ color:#ff7b72 }
-    </style>
-    <div id="g73ti" role="dialog" aria-label="Theme Inspector" aria-modal="false">
-      <header>
-        <h3>Theme Inspector</h3>
-        <div class="sp"></div>
-        <button id="g73ti-rescan" title="Rescan">Rescan</button>
-        <button id="g73ti-copy"   title="Copy log">Copy Log</button>
-        <button id="g73ti-close"  title="Close">✕</button>
-      </header>
-      <main id="g73ti-main">
-        <!-- filled by JS -->
-      </main>
-    </div>
-  `;
-
-  const $ = sel => container.querySelector(sel);
-  const main = $('#g73ti-main');
-
-  function getComputedVars(){
-    const cs = getComputedStyle(document.documentElement);
-    const out = {};
-    for (const v of VARS_OF_INTEREST){
-      const val = cs.getPropertyValue(v).trim();
-      if (val) out[v] = val;
-    }
-    return out;
-  }
-
-  function safeParseJSON(str){
-    try{ return JSON.parse(str); }catch{ return null; }
-  }
-
-  function collectColorsFrom(any, path=''){
-    const hits = [];
-    function push(val, pth){
-      const found = String(val).match(HEX)?.concat(String(val).match(FUNC)||[], String(val).match(GRAD)||[], String(val).match(MAYBE)||[])?.filter(Boolean) || [];
-      if (found.length) hits.push({ path: pth, value: val, colors: [...new Set(found.flat())] });
-    }
-    function walk(v, p){
-      if (v==null) return;
-      if (typeof v === 'string'){ push(v, p); return; }
-      if (typeof v !== 'object') return;
-      if (Array.isArray(v)){ v.forEach((x,i)=>walk(x, p+'['+i+']')); return; }
-      for (const k of Object.keys(v)){ walk(v[k], p ? p+'.'+k : k); }
-    }
-    walk(any, path);
-    return hits;
-  }
-
-  function scanStorageOne(store, label){
-    const list = [];
-    for (let i=0;i<store.length;i++){
-      const key = store.key(i);
-      let raw = null; try{ raw = store.getItem(key); }catch{}
-      if (raw==null) continue;
-      const json = safeParseJSON(raw);
-      if (json){
-        const hits = collectColorsFrom(json, key);
-        if (hits.length) list.push({ key, type:'json', value: json, hits });
-        else if (/(color|theme|accent|primary)/i.test(key)) list.push({ key, type:'json', value: json, hits: [] });
-      }else{
-        const hits = collectColorsFrom(raw, key);
-        if (hits.length || /(color|theme|accent|primary)/i.test(key)) list.push({ key, type:'string', value: raw, hits });
-      }
-    }
-    return { where: label, entries: list };
-  }
-
-  function scanStorage(){
-    const out = [];
-    try{ out.push(scanStorageOne(localStorage, 'localStorage')); }catch(e){ out.push({ where:'localStorage', error: String(e) }); }
-    try{ out.push(scanStorageOne(sessionStorage, 'sessionStorage')); }catch(e){ out.push({ where:'sessionStorage', error: String(e) }); }
-    return out;
-  }
-
-  function sheetLabel(ss){
-    if (!ss) return 'unknown stylesheet';
-    if (ss.ownerNode && ss.ownerNode.id) return `inline <style>#${ss.ownerNode.id}`;
-    if (ss.ownerNode && ss.ownerNode.tagName === 'STYLE') return 'inline <style>';
-    if (ss.href) return ss.href.split('/').slice(-1)[0] + ' (same-origin)';
-    return 'stylesheet';
-  }
-
-  function tryRules(ss){
-    try{ return ss.cssRules || []; }catch(e){ return null; } // cross-origin -> null
-  }
-
-  function scanCSSSources(){
-    const sources = [];
-    const want = new Set(VARS_OF_INTEREST);
-    // Inline <style> blocks first (easy source-of-truth)
-    const inlineStyles = Array.from(document.querySelectorAll('style')).map(el=>{
-      const text = el.textContent || '';
-      const matches = VARS_OF_INTEREST
-        .map(v => ({ v, idx: text.indexOf(v) }))
-        .filter(x => x.idx >= 0);
-      if (!matches.length) return null;
-      // Try to extract var:value pairs crudely
-      const found = [];
-      for (const {v} of matches){
-        const re = new RegExp(v.replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&') + '\\s*:\\s*([^;]+);');
-        const m = text.match(re);
-        if (m) found.push([v, m[1].trim()]);
-      }
-      return { type:'inline-style', id: el.id || null, found };
-    }).filter(Boolean);
-
-    // Stylesheets + CSS rules
-    const ssList = Array.from(document.styleSheets);
-    for (const ss of ssList){
-      const rules = tryRules(ss);
-      if (!rules) { // cross-origin
-        sources.push({ sheet: sheetLabel(ss), crossed:true, note: 'Skipped (cross-origin)' });
-        continue;
-      }
-      const file = sheetLabel(ss);
-      const found = [];
-      for (const rule of rules){
-        if (!rule.style) continue;
-        for (const v of want){
-          const val = rule.style.getPropertyValue(v);
-          if (val){ found.push({ var:v, value:val.trim(), selector: rule.selectorText || '@' + (rule.type||'') }); }
-        }
-      }
-      if (found.length) sources.push({ sheet:file, crossed:false, vars:found });
-    }
-
-    // Merge inline at top
-    for (const it of inlineStyles){
-      sources.unshift({
-        sheet: it.id ? `inline <style>#${it.id}` : 'inline <style>',
-        crossed:false,
-        vars: it.found.map(([v,val]) => ({ var:v, value:val, selector:':root (inline)' }))
-      });
-    }
-    return sources;
-  }
-
-  function colorSwatch(styleValue){
-    const c = (styleValue||'').split(',')[0].trim();
-    const sw = `<span class="sw" style="background:${styleValue}"></span>`;
-    return `${sw}<span class="mono">${styleValue}</span>`;
-  }
-
-  function h(v){ return (v||'').replace(/[&<>"']/g,s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s])); }
-
-  function render(){
-    const computed = getComputedVars();
-    const storage  = scanStorage();
-    const cssSrc   = scanCSSSources();
-
-    // --- UI
-    const compRows = Object.keys(computed).length
-      ? Object.entries(computed).map(([k,v])=>`
-          <div class="kv">
-            <div class="mono muted">${h(k)}</div>
-            <div class="chip">${colorSwatch(v)}</div>
-          </div>`).join('')
-      : `<div class="small muted">No known CSS variables found on <code class="mono">:root</code>.</div>`;
-
-    const storageBlocks = storage.map(bucket=>{
-      if (bucket.error) return `
-        <details open>
-          <summary><strong>${h(bucket.where)}</strong> <span class="err">(error)</span></summary>
-          <div class="small mono">${h(bucket.error)}</div>
-        </details>`;
-      if (!bucket.entries.length) return `
-        <details>
-          <summary><strong>${h(bucket.where)}</strong> <span class="muted">(no theme-like keys)</span></summary>
-        </details>`;
-      const entries = bucket.entries.map(e=>{
-        const title = `<span class="mono">${h(e.key)}</span> <span class="tag">${e.type}</span>`;
-        const hits  = e.hits && e.hits.length ? `
-          <div class="small muted">color hits (${e.hits.length})</div>
-          <ul class="small" style="margin:4px 0 0 16px;">
-            ${e.hits.slice(0,8).map(hh=>`<li><span class="mono">${h(hh.path)}</span> → ${hh.colors.map(c=>`<span class="chip"><span class="sw" style="background:${h(c)}"></span><span class="mono">${h(c)}</span></span>`).join(' ')}</li>`).join('')}
-            ${e.hits.length>8?`<li class="muted small">…and ${e.hits.length-8} more</li>`:''}
-          </ul>` : '';
-        const preview = typeof e.value === 'string'
-          ? `<pre class="mono">${h(e.value.slice(0,1000))}${e.value.length>1000?'\\n…':''}</pre>`
-          : `<pre class="mono">${h(JSON.stringify(e.value, null, 2).slice(0,2000))}${JSON.stringify(e.value).length>2000?'\\n…':''}</pre>`;
-        return `<details><summary>${title}</summary>${hits}${preview}</details>`;
-      }).join('');
-      return `<details open><summary><strong>${h(bucket.where)}</strong> (${bucket.entries.length} key${bucket.entries.length!==1?'s':''})</summary>${entries}</details>`;
-    }).join('');
-
-    const cssBlocks = cssSrc.length
-      ? cssSrc.map(s=>{
-          if (s.crossed) return `<details><summary>${h(s.sheet)}</summary><div class="small muted">Skipped (cross-origin CSS).</div></details>`;
-          const vars = (s.vars||[]).map(x=>`
-            <div class="kv">
-              <div class="mono">${h(x.var)} <span class="muted">in</span> <span class="small">${h(x.selector||'@rule')}</span></div>
-              <div class="chip">${colorSwatch(x.value)}</div>
-            </div>`).join('');
-          return `<details><summary>${h(s.sheet)}</summary>${vars || '<div class="small muted">No relevant vars in this sheet.</div>'}</details>`;
-        }).join('')
-      : `<div class="small muted">No sources found for tracked CSS variables.</div>`;
-
-    main.innerHTML = `
-      <section>
-        <h4>Computed tokens (:root)</h4>
-        ${compRows}
-      </section>
-      <div class="divider"></div>
-      <section>
-        <h4>Storage (theme-like keys)</h4>
-        ${storageBlocks}
-      </section>
-      <div class="divider"></div>
-      <section>
-        <h4>CSS Sources (where variables are set)</h4>
-        ${cssBlocks}
-      </section>
-      <div class="divider"></div>
-      <section class="small muted">
-        Tip: Press <strong>Alt+Shift+T</strong> to toggle this panel. It auto-rescans on <code class="mono">theme:changed</code> &amp; <code class="mono">storage</code>.
-      </section>
-    `;
-
-    // Save last log for copy button
-    lastLog = buildLog({ computed, storage, cssSrc });
-  }
-
-  function buildLog({ computed, storage, cssSrc }){
-    const lines = [];
-    lines.push(`G73 Theme Inspector Log`);
-    lines.push(`Time: ${new Date().toISOString()}`);
-    lines.push(`URL: ${location.href}`);
-    lines.push(`UA: ${navigator.userAgent}`);
-    lines.push(``);
-    lines.push(`== Computed CSS Variables (:root) ==`);
-    if (Object.keys(computed).length){
-      for (const [k,v] of Object.entries(computed)){ lines.push(`${k}: ${v}`); }
-    }else{
-      lines.push(`(none found)`);
-    }
-    lines.push(``);
-    lines.push(`== Storage scan ==`);
-    for (const bucket of storage){
-      if (bucket.error){ lines.push(`[${bucket.where}] ERROR: ${bucket.error}`); continue; }
-      lines.push(`[${bucket.where}] ${bucket.entries.length} key(s)`);
-      for (const e of bucket.entries){
-        lines.push(`- key: ${e.key} (${e.type})`);
-        if (typeof e.value === 'string'){
-          lines.push(`  value: ${e.value}`);
-        }else{
-          lines.push(`  json: ${JSON.stringify(e.value)}`);
-        }
-        if (e.hits && e.hits.length){
-          lines.push(`  color hits:`);
-          for (const h of e.hits.slice(0,25)){
-            lines.push(`    • ${h.path}: ${h.colors.join(' | ')} (raw="${h.value}")`);
-          }
-          if (e.hits.length>25) lines.push(`    …and ${e.hits.length-25} more`);
-        }
-      }
-    }
-    lines.push(``);
-    lines.push(`== CSS Sources ==`);
-    for (const s of cssSrc){
-      if (s.crossed){ lines.push(`sheet: ${s.sheet}  (skipped: cross-origin)`); continue; }
-      lines.push(`sheet: ${s.sheet}`);
-      for (const v of (s.vars||[])){
-        lines.push(`  ${v.var}  @ ${v.selector}  = ${v.value}`);
-      }
-    }
-    return lines.join('\n');
-  }
-
-  let lastLog = '(no data yet)';
-
-  function copyLog(){
-    navigator.clipboard?.writeText(lastLog).then(()=>{
-      toast('Theme log copied ✓');
-    }).catch(()=>{
-      // fallback: show modal text
-      const temp = document.createElement('textarea');
-      temp.value = lastLog; document.body.appendChild(temp);
-      temp.select(); document.execCommand('copy'); temp.remove();
-      toast('Theme log copied ✓ (fallback)');
-    });
-  }
-
-  let toastTimer = null;
-  function toast(msg){
-    let t = document.getElementById('g73ti-toast');
-    if (!t){
-      t = document.createElement('div');
-      t.id = 'g73ti-toast';
-      t.style.cssText = 'position:fixed;bottom:8px;right:16px;background:rgba(0,0,0,.75);color:#fff;padding:6px 10px;border-radius:8px;z-index:1000000;font:12px ui-sans-serif,system-ui;';
-      document.body.appendChild(t);
-    }
-    t.textContent = msg;
-    t.style.opacity = '1';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=>{ t.style.opacity = '0'; }, 1600);
-  }
-
-  // Buttons
-  container.querySelector('#g73ti-rescan').addEventListener('click', render);
-  container.querySelector('#g73ti-copy').addEventListener('click', copyLog);
-  container.querySelector('#g73ti-close').addEventListener('click', ()=>{ container.hidden = true; });
-
-  // Global API + hotkey
-  window.ThemeInspector = {
-    open(){ container.hidden = false; render(); },
-    close(){ container.hidden = true; },
-    rescan(){ render(); },
-    getReport(){ return lastLog; }
-  };
-  window.addEventListener('keydown', (e)=>{
-    if (e.altKey && e.shiftKey && e.code === 'KeyT'){
-      e.preventDefault();
-      container.hidden ? ThemeInspector.open() : ThemeInspector.close();
-    }
-  }, { passive:false });
-
-  // Auto-rescan on theme or storage changes
-  window.addEventListener('theme:changed', ()=>{ if (!container.hidden) render(); }, { passive:true });
-  window.addEventListener('storage',       ()=>{ if (!container.hidden) render(); }, { passive:true });
-
-  // Optional: open immediately the first time if you want
-  // ThemeInspector.open();
-})();
-</script>
-<!-- ▲▲ G73 Theme Inspector ▲▲ -->
+  <!-- Core Inline Logic 005 -->
+  <!-- Core Inline Logic 005 -->
+<script  src="js/index/core-inline-logic-005.js"></script>
+  <!-- Music List Handler -->
+  <script src="js/music-list.js"></script>
+  <!-- Firebase Initialization (module) -->
+  <script type="module" src="js/firebase/firebase-init.js"></script>
+  <!-- Firebase Stats Tracker (module) -->
+  <script type="module" src="js/firebase/firebase-stats.js"></script>
+  <!-- Firebase Authentication (module) -->
+  <script type="module" src="js/firebase/firebase-auth.js"></script>
+  <!-- Theme Initialization -->
+  <script src="js/theme/theme-init.js"></script>
+  <!-- Theme Preview -->
+  <script src="js/theme/theme-preview.js"></script>
+  <!-- Theme Save Handler -->
+  <script src="js/theme/theme-save.js"></script>
+  <!-- Theme Synchronization -->
+  <script src="js/theme/theme-sync.js"></script>
+  <!-- Player Core Logic -->
+  <script src="js/player/player-core.js"></script>
+  <!-- Player UI Events -->
+  <script src="js/player/ui-events.js"></script>
+  <!-- Audio Visualizer -->
+  <script src="js/player/visualizer.js"></script>
+  <!-- Visualizer Editor -->
+  <script src="js/player/visualizer-editor.js"></script>
+  <!-- Audio Equalizer Logic -->
+  <script src="js/player/equalizer.js"></script>
+  <!-- Core Inline Logic 006 -->
+  <!-- Core Inline Logic 006 -->
+<script  src="js/index/core-inline-logic-006.js"></script>
+  <!-- Navbar UI Logic -->
+  <script src="js/ui/navbar.js"></script>
+  <!-- Modal Dialog Handler -->
+  <script src="js/ui/modals.js"></script>
+  <!-- Toast Notification System -->
+  <script src="js/ui/toast.js"></script>
+  <!-- Password Visibility Toggle -->
+  <script src="js/ui/password-visibility.js"></script>
+  <!-- Password Strength Checker -->
+  <script src="js/ui/password-check.js"></script>
+  <!-- Main Site Boot Logic -->
+  <script src="js/main.js"></script>
+  <!-- Safety Boot Logic (in case main.js doesn't start it) -->
+  <!-- Safety Boot Logic (in case main.js doesn't start it) -->
+<script  src="js/index/safety-boot-logic-in-case-main-js-doesn-t-start-it.js"></script>
+  <!-- Navbar Height Setter (for container padding) -->
+  <!-- Navbar Height Setter (for container padding) -->
+<script  src="js/index/navbar-height-setter-for-container-padding.js"></script>
+  <!-- Visualizer Orb Builder (builds the animated orb inside #vz-open-editor) -->
+  <!-- Visualizer Orb Builder (builds the animated orb inside #vz-open-editor) -->
+<script  src="js/index/visualizer-orb-builder-builds-the-animated-orb-inside-vz-ope.js"></script>
+  <!-- Volume Knob Handler (Volume Knob logic) -->
+  <!-- Volume Knob Handler (Volume Knob logic) -->
+<script  src="js/index/volume-knob-handler-volume-knob-logic.js"></script>
+  <!-- Core Inline Logic 011 -->
+  <!-- Core Inline Logic 011 -->
+<script  src="js/index/core-inline-logic-011.js"></script>
+  <!-- Equalizer Modal Handler (EQ modal opener/closer) -->
+  <!-- Equalizer Modal Handler (EQ modal opener/closer) -->
+<script  src="js/index/equalizer-handler.js"></script>
+  <!-- Theme to Equalizer Sync (Theme → EQ hook) -->
+  <!-- Theme to Equalizer Sync (Theme → EQ hook) -->
+<script  src="js/index/eqsync.js"></script>
+  <script src="js/index/inline-014.js"></script>
+  <!-- Core Inline Logic 015 -->
+  <!-- Core Inline Logic 015 -->
+<script  src="js/index/core-inline-logic-015.js"></script>
+  <!-- Organizer Modal Handler -->
+  <script src="js/player/organizer-modal.js"></script>
+  <!-- Organizer Adapter -->
+  <script src="js/player/organizer-adapter.js"></script>
+  <!-- Organizer Modal Inline -->
+  <!-- Organizer Modal Inline -->
+<script  src="js/index/organizer-modal-inline.js"></script>
+  <!-- Theme Binder v2 -->
+  <script src="js/theme-binder.v2.js" defer></script>
+  <!-- Core Inline Logic 017 -->
+  <!-- Core Inline Logic 017 -->
+<script  src="js/index/core-inline-logic-017.js"></script>
+  <!-- Core Inline Logic 018 -->
+  <!-- Core Inline Logic 018 -->
+<script  src="js/index/core-inline-logic-018.js"></script>
+  <!-- Footer Metrics Loader -->
+  <script src="/js/metrics-footer.js" defer></script>
+  <!-- Firebase Metrics Lite (module) -->
+  <script type="module" src="/js/firebase/firebase-metrics-lite.js"></script>
+  <!-- Firebase Initialization (module, additional) -->
+  <script type="module" src="/js/firebase/firebase-init.js"></script>
+  <!-- Fans/Haters Live Counter (Firestore) -->
+  <!-- Fans/Haters Live Counter (Firestore) -->
+<script type="module"  src="js/index/fans-haters-live-counter-firestore.js"></script>
+  <!-- Core Inline Logic 020 -->
+  <!-- Core Inline Logic 020 -->
+<script  src="js/index/core-inline-logic-020.js"></script>
+  <!-- Core Inline Logic 021 -->
+  <!-- Core Inline Logic 021 -->
+<script  src="js/index/core-inline-logic-021.js"></script>
+  <!-- Core Inline Logic 022 -->
+  <!-- Core Inline Logic 022 -->
+<script  src="js/index/core-inline-logic-022.js"></script>
+  <!-- ▼▼ G73 Theme Inspector (drop-in) ▼▼ -->
+  <div id="g73-theme-inspector" hidden></div>
+  <!-- G73 Theme Inspector -->
+  <!-- G73 Theme Inspector -->
+<script  src="js/index/g73-theme-inspector.js"></script>
+  <!-- ▲▲ G73 Theme Inspector ▲▲ -->
 </body>
 </html>
