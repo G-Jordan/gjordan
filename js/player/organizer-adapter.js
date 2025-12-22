@@ -1,3 +1,4 @@
+// js/player/organizer-adapter.js
 (function(){
   const wrapper = document.querySelector('.wrapper');
   const ul = wrapper?.querySelector('.music-list ul');
@@ -31,7 +32,10 @@
     return `songs/${key}.mp3`;
   };
   const secondsToClock = (s=0)=> {
-    const m = Math.floor(s/60); let r = Math.floor(s%60); if (r<10) r = '0'+r; return `${m}:${r}`;
+    const m = Math.floor(s/60);
+    let r = Math.floor(s%60);
+    if (r<10) r = '0'+r;
+    return `${m}:${r}`;
   };
 
   // --- true current index from audio.currentSrc ---
@@ -93,6 +97,59 @@
   applyListThemeFromControls();
   window.addEventListener('player:controls-theme', applyListThemeFromControls);
 
+  // -------------------------------------------------------------------
+  // ✅ FIX: Sequential duration probing (prevents mobile throttling where
+  // last few tracks never fire loadedmetadata)
+  // -------------------------------------------------------------------
+  const __durProbe = new Audio();
+  __durProbe.preload = "metadata";
+
+  function probeDurationOnce(src, timeoutMs = 6000){
+    return new Promise((resolve) => {
+      let done = false;
+
+      const cleanup = () => {
+        __durProbe.removeEventListener('loadedmetadata', onMeta);
+        __durProbe.removeEventListener('error', onErr);
+        try { __durProbe.src = ""; } catch {}
+      };
+
+      const finish = (val) => {
+        if (done) return;
+        done = true;
+        clearTimeout(t);
+        cleanup();
+        resolve(val);
+      };
+
+      const onMeta = () => finish(__durProbe.duration || 0);
+      const onErr  = () => finish(0);
+
+      __durProbe.addEventListener('loadedmetadata', onMeta);
+      __durProbe.addEventListener('error', onErr);
+
+      // timeout fallback (missing/broken files can hang)
+      const t = setTimeout(() => finish(0), timeoutMs);
+
+      __durProbe.src = src;
+      try { __durProbe.load(); } catch {}
+    });
+  }
+
+  async function fillDurationsSequentially(queue){
+    for (const item of queue){
+      const li = item.li;
+      if (!li || !document.contains(li)) continue;
+
+      const secs = await probeDurationOnce(item.src);
+      const txt  = secondsToClock(secs);
+
+      const d = li.querySelector('.audio-duration .g73-time');
+      if (d) d.textContent = txt;
+      li.querySelector('.audio-duration')?.setAttribute('t-duration', txt);
+    }
+  }
+
   // ---------- Build the list ----------
   function build(){
     const list = LIST();
@@ -100,6 +157,9 @@
 
     ul.innerHTML = '';
     ul.classList.add('g73-adapted');
+
+    // ✅ queue for sequential duration fills
+    const durQueue = [];
 
     list.forEach((it, idx)=>{
       const i = idx + 1;
@@ -121,17 +181,8 @@
       `;
       ul.appendChild(li);
 
-      // Duration probe
-      const probe = new Audio();
-      probe.src = audioPath(it.src);
-      probe.addEventListener('loadedmetadata', ()=>{
-        const d = li.querySelector('.audio-duration .g73-time');
-        if (d){
-          const txt = secondsToClock(probe.duration||0);
-          d.textContent = txt;
-          li.querySelector('.audio-duration')?.setAttribute('t-duration', txt);
-        }
-      }, {once:true});
+      // ✅ Queue duration probe (sequential, reliable on mobile)
+      durQueue.push({ li, src: audioPath(it.src) });
 
       measureMarquee(li);
 
@@ -181,6 +232,9 @@
     // Align to actual current track on first build
     markActive(currentIndexBySrc(), true);
     refreshIcons();
+
+    // ✅ Fill durations AFTER list is in DOM, sequentially
+    fillDurationsSequentially(durQueue);
   }
 
   // Title marquee setup per row

@@ -5,20 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G Jordan - Official</title>
 
+  <!-- Base styles -->
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/eq.css" />
+  <link rel="stylesheet" href="css/g73-fixes.css" />
+
   <!-- Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="icon" href="favicon.png" type="image/png">
-  <link rel="stylesheet" href="css/main.css" />
-  <!-- Equalizer styles -->
-  <link rel="stylesheet" href="css/eq.css" />
-  <link rel="stylesheet" href="css/g73-fixes.css" />
 
   <!-- Site → EQ theme mapping (single source of truth) -->
   <style>
     :root{
       /* Your site sets these or they fall back. eq.css reads them. */
-      --app-primary: var(--mainThemeColor, var(--theme-primary, var(--primary-color, #5fa0ff)));
+      --app-primary: var(--mainThemeColor, var(--theme-primary, var(--primary-color, #c30000)));
       --app-accent:  var(--accentColor,    var(--theme-accent,  var(--secondary-color, #b478ff)));
     }
   </style>
@@ -67,8 +68,7 @@
       border: 1px solid rgba(255,255,255,.55);
       box-shadow: 0 2px 8px rgba(0,0,0,.45), 0 0 0 3px var(--eq-accent-ring, rgba(0,0,0,.12));
       transition: transform .12s, box-shadow .12s, filter .12s;
-      /* Precisely center thumb over narrow track */
-      margin: 0; /* reset any margins */
+      margin: 0;
       transform: translateX(calc((var(--eq-thumb-size, 18px) - var(--eq-band-track-w, 10px)) / -2));
     }
 
@@ -97,7 +97,8 @@
     .icon-btn.ghost{ background: transparent; }
     .icon-btn.danger{
       border-color: var(--eq-danger, rgba(255,80,80,.35));
-      box-shadow: 0 4px 12px color-mix(in srgb, var(--eq-danger, rgba(255,80,80,.35)) 34%, transparent), inset 0 0 0 1px var(--eq-inner-border, rgba(255,255,255,.06));
+      box-shadow: 0 4px 12px color-mix(in srgb, var(--eq-danger, rgba(255,80,80,.35)) 34%, transparent),
+                  inset 0 0 0 1px var(--eq-inner-border, rgba(255,255,255,.06));
     }
     .icon-btn .material-icons{ font-size: 20px; }
   </style>
@@ -175,9 +176,9 @@
     }
     .knob:focus-visible{ outline: 2px solid rgba(100,200,255,.6); outline-offset: 3px; border-radius: 12px; }
     .knob svg{ width: 86%; height: 86%; display:block; }
-    .knob .track{ stroke: var(--track); stroke-width: 8; fill: none; }
-    .knob .arc{ stroke: url(#volGradient); stroke-width: 8; stroke-linecap: round; fill: none; filter: drop-shadow(0 0 6px var(--glow)); }
-    .knob .handle{ fill: #dff2ff; filter: drop-shadow(0 0 6px var(--glow)); }
+    .knob .track{ stroke: rgba(255,255,255,.12); stroke-width: 8; fill: none; }
+    .knob .arc{ stroke: url(#volGradient); stroke-width: 8; stroke-linecap: round; fill: none; filter: drop-shadow(0 0 6px rgba(98,178,255,.7)); }
+    .knob .handle{ fill: #dff2ff; filter: drop-shadow(0 0 6px rgba(98,178,255,.7)); }
     .knob .label {
       position: absolute;
       top: 50%;
@@ -193,30 +194,8 @@
     @media (min-width:900px){
       #vz-panel{ left:50%; top:50%; transform:translate(-50%,-50%); inset:auto; }
     }
-    @keyframes dash-wave {
-      0%   { stroke-dasharray: 10 14; stroke-dashoffset: 0;   }
-      50%  { stroke-dasharray: 18 14; stroke-dashoffset: -10; }
-      100% { stroke-dasharray: 10 14; stroke-dashoffset: 0;   }
-    }
-    @keyframes dash-wave-2 {
-      0%   { stroke-dasharray: 8 10;  stroke-dashoffset: 0;   }
-      50%  { stroke-dasharray: 14 10; stroke-dashoffset: -8;  }
-      100% { stroke-dasharray: 8 10;  stroke-dashoffset: 0;   }
-    }
-    #vz-open-editor .vz-orb g { transform-box: fill-box; transform-origin: 24px 24px; }
-    @media (prefers-reduced-motion: reduce){
-      .vz-orb .no-reduce{ animation: none !important; }
-    }
-    #vz-open-editor .vz-orb g { transform-box: fill-box; transform-origin: 24px 24px; }
-    @media (prefers-reduced-motion: reduce){
-      .vz-orb .no-reduce{ animation: none !important; }
-    }
-    #volume-knob,
-    #vz-open-editor,
-    #open-eq {
-      position: relative;
-      z-index: 1 !important;
-    }
+    #volume-knob,#vz-open-editor,#open-eq{ position: relative; z-index: 1 !important; }
+
     .top-bar{ position: relative; }
     .top-bar img[alt="G73 Logo"]{ position: relative; z-index: 1; }
     .top-bar .g73-glow::after{
@@ -244,6 +223,7 @@
     @media (prefers-reduced-motion: reduce){
       .top-bar .g73-glow::after{ animation:none; }
     }
+
     .music-list > .header{
       display:flex; align-items:center; justify-content:space-between;
       padding:.75rem 1rem;
@@ -273,6 +253,7 @@
       filter: brightness(1.1);
     }
   </style>
+
   <!-- Perf hints (optional) -->
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://www.google-analytics.com">
@@ -281,10 +262,11 @@
 
   <!-- Google Analytics Loader -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-L48EX09QBQ"></script>
+
   <!-- Core Inline Logic 001 -->
-  <!-- Core Inline Logic 001 -->
-<script  src="js/index/core-inline-logic-001.js"></script>
+  <script src="js/index/core-inline-logic-001.js"></script>
 </head>
+
 <body>
   <div class="navbar">
     <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>
@@ -321,16 +303,14 @@
       </div>
     </div>
   </div>
-  
+
   <!-- THEME-AWARE AUTH MODAL -->
   <style id="auth-modal-theme">
-    /* Let icons inherit color (so accents work) */
     #auth-modal i.material-icons{
       color: currentColor;
       -webkit-text-fill-color: currentColor;
       line-height: 1;
     }
-    /* ...rest of modal styles unchanged... */
     #auth-modal .modal-content{
       background:
         linear-gradient(180deg,
@@ -345,13 +325,233 @@
         0 0 18px color-mix(in srgb, var(--app-primary, #5fa0ff) 28%, transparent);
       backdrop-filter: blur(6px);
     }
-    /* ...rest of modal styles unchanged... */
+
+    /* ===== G73 Out Now Popup (Scrollable + Centered + Glass) ===== */
+    .g73on{
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      pointer-events: none;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .g73on__scrim{
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      opacity: 0;
+      transition: opacity .2s ease;
+      pointer-events: none;
+    }
+    .g73on__card{
+      pointer-events: auto;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) translateY(18px);
+      width: min(980px, calc(100% - 20px));
+      max-height: min(86vh, 820px);
+      overflow: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+
+      border-radius: 22px;
+      padding: 18px;
+      color: #fff;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: 0 22px 90px rgba(0,0,0,.62);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      opacity: 0;
+      transition: opacity .22s ease, transform .22s ease;
+    }
+    .g73on.is-open .g73on__card{
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(0);
+    }
+    .g73on.is-modal .g73on__scrim{ opacity: 1; pointer-events: auto; }
+
+    .g73on__close{
+      position: sticky;
+      top: 0;
+      margin-left: auto;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+      color: #fff;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease;
+      display: grid;
+      place-items: center;
+      z-index: 2;
+    }
+    .g73on__close:hover{ transform: scale(1.03); background: rgba(0,0,0,.35); }
+
+    .g73on__badge{
+      display: inline-flex;
+      justify-content: center;
+      font-weight: 950;
+      letter-spacing: .14em;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, rgba(0,255,150,.25), rgba(120,80,255,.25), rgba(255,210,80,.25));
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .g73on__top{ text-align: center; }
+    .g73on__row{
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: center;
+      justify-items: center;
+    }
+    .g73on__art{
+      width: 160px;
+      height: 160px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.25);
+    }
+    .g73on__art img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .g73on__title{
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.12;
+    }
+    .g73on__sub{
+      margin: 0 auto 12px;
+      max-width: 58ch;
+      color: rgba(255,255,255,.86);
+      line-height: 1.5;
+      font-size: 15px;
+    }
+    .g73on__cta{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .g73on__btn{
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 950;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255,255,255,.08);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .g73on__btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.12);
+      border-color: rgba(255,255,255,.26);
+    }
+    .g73on__btn--primary{
+      background: linear-gradient(90deg, rgba(0,255,150,.25), rgba(120,80,255,.25), rgba(255,210,80,.25));
+      min-width: 240px;
+    }
+    .g73on__btn--ghost{ background: rgba(0,0,0,.18); }
+
+    .g73on__gridWrap{
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      text-align: center;
+    }
+    .g73on__gridTitle{
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+      margin-bottom: 12px;
+    }
+    .g73on__grid{
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .g73on__plat{
+      display: grid;
+      grid-template-rows: 38px auto;
+      gap: 8px;
+      justify-items: center;
+      padding: 12px 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      text-decoration: none;
+      color: #fff;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .g73on__plat:hover{
+      transform: translateY(-1px);
+      background: rgba(0,0,0,.30);
+      border-color: rgba(255,255,255,.22);
+    }
+    .g73on__logo{
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: color-mix(in srgb, var(--brand) 26%, rgba(0,0,0,.18));
+      border: 1px solid color-mix(in srgb, var(--brand) 35%, rgba(255,255,255,.14));
+      box-shadow: 0 0 20px color-mix(in srgb, var(--brand) 40%, transparent);
+    }
+    .g73on__logo svg{ width: 22px; height: 22px; fill: #fff; opacity: .98; }
+    .g73on__logo img{ width: 22px; height: 22px; object-fit: contain; display:block; }
+    .g73on__name{
+      font-weight: 900;
+      font-size: 12px;
+      line-height: 1.1;
+      color: rgba(255,255,255,.92);
+      text-align: center;
+    }
+    .g73on__footer{
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: rgba(255,255,255,.75);
+    }
+    .g73on__dot{
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(0,255,150,.95);
+      box-shadow: 0 0 18px rgba(0,255,150,.55);
+    }
+    .g73on__sep{ opacity: .5; }
+
+    @media (max-width: 820px){
+      .g73on__grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px){
+      .g73on__grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .g73on__title{ font-size: 22px; }
+      .g73on__btn{ width: 100%; }
+    }
   </style>
 
   <!-- Core Inline Logic 002 -->
-  <!-- Core Inline Logic 002 -->
-<script  src="js/index/core-inline-logic-002.js"></script>
-  
+  <script src="js/index/core-inline-logic-002.js"></script>
+
   <div id="toast"></div>
 
   <div class="container">
@@ -359,6 +559,7 @@
       <div class="wrapper">
         <!-- VISUALIZER CANVAS AS BACKGROUND LAYER -->
         <canvas id="audio-visualizer"></canvas>
+
         <div class="top-bar">
           <i class="material-icons"></i>
           <div class="top-bar g73-glow">
@@ -368,12 +569,15 @@
           </div>
           <i class="material-icons"></i>
         </div>
+
         <div class="img-area">
           <img src="" alt="Album Art" />
         </div>
+
         <div class="song-details">
           <p class="name"></p>
           <p class="artist"></p>
+
           <div id="reaction-buttons">
             <button id="like-btn" onclick="animateButton(this); likeSongFirebase(currentSongId)">
               <i class="material-icons">thumb_up</i>
@@ -385,9 +589,10 @@
               <i class="material-icons">file_download</i>
             </button>
           </div>
-          <!-- Song Reaction Buttons & Stats -->
-          <!-- Song Reaction Buttons & Stats -->
-<script  src="js/index/song-reaction-buttons-and-stats.js"></script>
+
+          <!-- ✅ FIX: DO NOT load this file here as a normal script.
+               It uses import, so it must be loaded as type="module" later (bottom). -->
+
           <div id="song-stats">
             <span id="stats-plays">Plays 0</span>
             <span id="stats-likes">Likes 0</span>
@@ -395,6 +600,7 @@
             <span id="stats-downloads">Downloads 0</span>
           </div>
         </div>
+
         <div class="progress-area">
           <div class="progress-bar"></div>
           <div class="song-timer">
@@ -403,6 +609,7 @@
           </div>
           <audio id="main-audio" src=""></audio>
         </div>
+
         <!-- Player Controls -->
         <div class="controls">
           <i id="repeat-plist" class="material-icons" title="Playlist looped">repeat</i>
@@ -411,9 +618,9 @@
           <i id="next" class="material-icons">skip_next</i>
           <i id="more-music" class="material-icons">queue_music</i>
         </div>
-        <!-- Volume Knob + Visualizer Editor (LEFT aligned) -->
+
+        <!-- Volume Knob + Visualizer Editor + EQ -->
         <div class="vz-row">
-          <!-- Volume Knob -->
           <button id="volume-knob" class="knob" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%" title="Volume">
             <svg viewBox="0 0 100 100" aria-hidden="true">
               <defs>
@@ -428,74 +635,74 @@
             </svg>
             <span class="label" id="knob-label">100%</span>
           </button>
-          <!-- Visualizer Editor Button -->
+
           <button id="vz-open-editor" class="vz-fab" aria-haspopup="dialog" aria-controls="vz-panel" title="Open Visualizer Editor" aria-label="Open Visualizer Editor"></button>
-          <!-- NEW: Equalizer Button -->
+
           <button id="open-eq" class="eq-fab" title="Open Equalizer" aria-haspopup="dialog" aria-controls="eq-modal">
             <span class="material-icons" aria-hidden="true">equalizer</span>
           </button>
         </div>
+
         <div id="vz-editor-root"></div>
-        
-      <div id="eq-modal" class="modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Audio Equalizer">
-  <div class="modal-content eq-content simple">
-    <!-- Header -->
-    <div class="eq-header" ...>
-      <div class="eq-title" ...>
-        <span class="material-icons" aria-hidden="true">equalizer</span>
-        <h3 style="margin:0;">Equalizer</h3>
-      </div>
-      <div class="eq-toggle" ...>
-        <label class="switch">
-          <input type="checkbox" id="eq-enable" checked />
-          <span class="slider"></span>
-        </label>
-        <span class="toggle-label">Enabled</span>
-      </div>
-      <button class="icon-btn ghost" type="button" data-eq-close ...>
-        <span class="material-icons" aria-hidden="true">close</span>
-      </button>
-    </div>
-    <!-- Controls row -->
-    <div class="eq-controls" ...>
-      <div class="preset-row" ...>
-        <label for="eq-preset">Preset</label>
-        <select id="eq-preset"></select>
-        <button class="icon-btn" id="eq-save-preset" ...>
-          <span class="material-icons" aria-hidden="true">bookmark_add</span>
-        </button>
-        <button class="icon-btn danger" id="eq-delete-preset" ...>
-          <span class="material-icons" aria-hidden="true">delete</span>
-        </button>
-      </div>
-      <div class="preamp-row" ...>
-        <label for="eq-preamp">Preamp</label>
-        <input id="eq-preamp" type="range" min="-12" max="12" step="0.1" value="0" />
-        <output id="eq-preamp-out">0 dB</output>
-      </div>
-    </div>
-    <!-- Bands -->
-    <div class="eq-bands" id="eq-bands"><!-- JS fills sliders --></div>
-    <!-- Footer -->
-    <div class="eq-footer" ...>
-      <div class="mode-toggle" ...>
-        <button class="icon-btn ghost" id="eq-mode" ...>
-          <span class="material-icons" aria-hidden="true">tune</span>
-        </button>
-        <span class="mode-hint">Tap to switch Simple/Pro (10-band)</span>
-      </div>
-      <div class="footer-actions" ...>
-        <button class="icon-btn ghost" type="button" data-eq-close ...>
-          <span class="material-icons" aria-hidden="true">close</span>
-        </button>
-        <button class="icon-btn" type="button" id="eq-reset" ...>
-          <span class="material-icons" aria-hidden="true">restore</span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>  
-        
+
+        <div id="eq-modal" class="modal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Audio Equalizer">
+          <div class="modal-content eq-content simple">
+            <div class="eq-header">
+              <div class="eq-title">
+                <span class="material-icons" aria-hidden="true">equalizer</span>
+                <h3 style="margin:0;">Equalizer</h3>
+              </div>
+              <div class="eq-toggle">
+                <label class="switch">
+                  <input type="checkbox" id="eq-enable" checked />
+                  <span class="slider"></span>
+                </label>
+                <span class="toggle-label">Enabled</span>
+              </div>
+              <button class="icon-btn ghost" type="button" data-eq-close>
+                <span class="material-icons" aria-hidden="true">close</span>
+              </button>
+            </div>
+
+            <div class="eq-controls">
+              <div class="preset-row">
+                <label for="eq-preset">Preset</label>
+                <select id="eq-preset"></select>
+                <button class="icon-btn" id="eq-save-preset">
+                  <span class="material-icons" aria-hidden="true">bookmark_add</span>
+                </button>
+                <button class="icon-btn danger" id="eq-delete-preset">
+                  <span class="material-icons" aria-hidden="true">delete</span>
+                </button>
+              </div>
+              <div class="preamp-row">
+                <label for="eq-preamp">Preamp</label>
+                <input id="eq-preamp" type="range" min="-12" max="12" step="0.1" value="0" />
+                <output id="eq-preamp-out">0 dB</output>
+              </div>
+            </div>
+
+            <div class="eq-bands" id="eq-bands"></div>
+
+            <div class="eq-footer">
+              <div class="mode-toggle">
+                <button class="icon-btn ghost" id="eq-mode">
+                  <span class="material-icons" aria-hidden="true">tune</span>
+                </button>
+                <span class="mode-hint">Tap to switch Simple/Pro (10-band)</span>
+              </div>
+              <div class="footer-actions">
+                <button class="icon-btn ghost" type="button" data-eq-close>
+                  <span class="material-icons" aria-hidden="true">close</span>
+                </button>
+                <button class="icon-btn" type="button" id="eq-reset">
+                  <span class="material-icons" aria-hidden="true">restore</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Music list -->
         <div class="music-list">
           <div class="header">
@@ -509,6 +716,7 @@
         </div>
       </div>
     </header>
+
     <footer>
       <div class="branding-footer">
         <p>&copy; 2025 G Jordan | <span class="tm">G73&trade; LLC</span></p>
@@ -516,6 +724,7 @@
         <p>G73 total signed-up users: <strong><span class="tm" id="totalUsers">—</span></strong></p>
         <p style="font-size:0.9em; opacity:0.9; margin:0;">Total song plays: <strong><span class="tm" id="totalPlays">—</span></strong></p>
         <p style="font-size:0.9em; opacity:0.9; margin:0;">Total song downloads: <strong><span class="tm" id="totalDownloads">—</span></strong></p>
+
         <div class="footer-stats" id="footer-stats" style="
           display:flex;
           justify-content:center;
@@ -536,13 +745,11 @@
             border:1px solid var(--primary-color);
             box-shadow:0 0 10px var(--primary-color);
             transition:box-shadow 0.3s ease-in-out;">
-            <i class="material-icons stat-icon" aria-hidden="true" style="
-              font-size:20px;
-              color:var(--primary-color);
-              line-height:1;">thumb_up</i>
+            <i class="material-icons stat-icon" aria-hidden="true" style="font-size:20px;color:var(--primary-color);line-height:1;">thumb_up</i>
             <span class="stat-label" style="font-weight:700; color:var(--accent-color);">Fans</span>
             <span class="stat-value" id="fans-count" style="font-weight:800; color:var(--highlight-cyan);">0</span>
           </div>
+
           <div class="stat-chip haters" aria-label="Total Dislikes" style="
             position:relative;
             display:inline-flex;
@@ -554,134 +761,275 @@
             border:1px solid var(--primary-color);
             box-shadow:0 0 10px var(--primary-color);
             transition:box-shadow 0.3s ease-in-out;">
-            <i class="material-icons stat-icon" aria-hidden="true" style="
-              font-size:20px;
-              color:var(--primary-color);
-              line-height:1;">thumb_down</i>
+            <i class="material-icons stat-icon" aria-hidden="true" style="font-size:20px;color:var(--primary-color);line-height:1;">thumb_down</i>
             <span class="stat-label" style="font-weight:700; color:var(--accent-color);">Haters</span>
             <span class="stat-value" id="haters-count" style="font-weight:800; color:var(--highlight-cyan);">0</span>
           </div>
         </div>
       </div>
+
       <div class="social-links site-footer">
-        <a href="https://www.facebook.com/share/15nmGGZQVH/" target="_blank"><img src="https://img.icons8.com/color/50/facebook.png" alt="Facebook" /></a>
-        <a href="https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu" target="_blank"><img src="https://img.icons8.com/color/50/instagram-new.png" alt="Instagram" /></a>
-        <a href="https://www.bandlab.com/g_jordan" target="_blank">
-          <img src="https://img.icons8.com/color/50/bandlab.png" alt="BandLab" />
-        </a>
-        <a href="https://www.tiktok.com/@g_jordan7?_t=ZP-8z2gOs0zTt1&_r=1" target="_blank"><img src="https://img.icons8.com/color/50/tiktok.png" alt="TikTok" /></a>
+        <a href="https://www.facebook.com/share/15nmGGZQVH/" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/facebook.png" alt="Facebook" /></a>
+        <a href="https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/instagram-new.png" alt="Instagram" /></a>
+        <a href="https://www.bandlab.com/g_jordan" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/bandlab.png" alt="BandLab" /></a>
+        <a href="https://www.tiktok.com/@g_jordan7?_t=ZP-8z2gOs0zTt1&_r=1" target="_blank" rel="noopener"><img src="https://img.icons8.com/color/50/tiktok.png" alt="TikTok" /></a>
       </div>
     </footer>
-    <!-- Footer metrics loader (uses your existing window.db from firebase-init.js) -->
   </div>
 
+  <!-- =======================================================
+       ✅ DROP-IN READY SCRIPT ORDER (FIXES BOTH ERRORS)
+       - music-list.js before player-core.js
+       - anything with import MUST be type="module"
+       - reaction module loaded ONCE at bottom as module (absolute path)
+     ======================================================= -->
+
   <!-- Core Inline Logic 005 -->
-  <!-- Core Inline Logic 005 -->
-<script  src="js/index/core-inline-logic-005.js"></script>
-  <!-- Music List Handler -->
-  <script src="js/music-list.js"></script>
-  <!-- Firebase Initialization (module) -->
-  <script type="module" src="js/firebase/firebase-init.js"></script>
-  <!-- Firebase Stats Tracker (module) -->
-  <script type="module" src="js/firebase/firebase-stats.js"></script>
-  <!-- Firebase Authentication (module) -->
-  <script type="module" src="js/firebase/firebase-auth.js"></script>
-  <!-- Theme Initialization -->
+  <script src="js/index/core-inline-logic-005.js"></script>
+
+  <!-- Theme (non-module) -->
   <script src="js/theme/theme-init.js"></script>
-  <!-- Theme Preview -->
   <script src="js/theme/theme-preview.js"></script>
-  <!-- Theme Save Handler -->
   <script src="js/theme/theme-save.js"></script>
-  <!-- Theme Synchronization -->
   <script src="js/theme/theme-sync.js"></script>
+
+  <!-- ✅ MUSIC LIST FIRST (fixes: [player-core] No tracks) -->
+  <script src="js/music-list.js"></script>
+
+  <!-- Firebase (module) -->
+  <script type="module" src="js/firebase/firebase-init.js"></script>
+  <script type="module" src="js/firebase/firebase-auth.js"></script>
+  <script type="module" src="js/firebase/firebase-stats.js"></script>
+  <script type="module" src="js/firebase/firebase-metrics-lite.js"></script>
+
+  <!-- ✅ FIX: this file uses import → MUST be module -->
+  <script type="module" src="js/index/fans-haters-live-counter-firestore.js"></script>
+
   <!-- Player Core Logic -->
   <script src="js/player/player-core.js"></script>
-  <!-- Player UI Events -->
   <script src="js/player/ui-events.js"></script>
-  <!-- Audio Visualizer -->
+
+  <!-- Visualizer -->
   <script src="js/player/visualizer.js"></script>
-  <!-- Visualizer Editor -->
   <script src="js/player/visualizer-editor.js"></script>
-  <!-- Audio Equalizer Logic -->
+
+  <!-- Equalizer -->
   <script src="js/player/equalizer.js"></script>
+
+  <!-- ✅ FIX: provide a stable absolute URL for any bridge/dynamic-import logic -->
+  <script>
+    window.G73_REACTIONS_MODULE_URL = "/js/index/song-reaction-buttons-and-stats.js";
+  </script>
+
+  <!-- ✅ FIX: load reactions/stats as a MODULE (prevents "import outside module" + fixes bridge) -->
+  <script type="module" src="/js/index/song-reaction-buttons-and-stats.js"></script>
+
   <!-- Core Inline Logic 006 -->
-  <!-- Core Inline Logic 006 -->
-<script  src="js/index/core-inline-logic-006.js"></script>
-  <!-- Navbar UI Logic -->
+  <script src="js/index/core-inline-logic-006.js"></script>
+
+  <!-- UI -->
   <script src="js/ui/navbar.js"></script>
-  <!-- Modal Dialog Handler -->
   <script src="js/ui/modals.js"></script>
-  <!-- Toast Notification System -->
   <script src="js/ui/toast.js"></script>
-  <!-- Password Visibility Toggle -->
   <script src="js/ui/password-visibility.js"></script>
-  <!-- Password Strength Checker -->
   <script src="js/ui/password-check.js"></script>
-  <!-- Main Site Boot Logic -->
-  <script src="js/main.js"></script>
-  <!-- Safety Boot Logic (in case main.js doesn't start it) -->
-  <!-- Safety Boot Logic (in case main.js doesn't start it) -->
-<script  src="js/index/safety-boot-logic-in-case-main-js-doesn-t-start-it.js"></script>
-  <!-- Navbar Height Setter (for container padding) -->
-  <!-- Navbar Height Setter (for container padding) -->
-<script  src="js/index/navbar-height-setter-for-container-padding.js"></script>
-  <!-- Visualizer Orb Builder (builds the animated orb inside #vz-open-editor) -->
-  <!-- Visualizer Orb Builder (builds the animated orb inside #vz-open-editor) -->
-<script  src="js/index/visualizer-orb-builder-builds-the-animated-orb-inside-vz-ope.js"></script>
-  <!-- Volume Knob Handler (Volume Knob logic) -->
-  <!-- Volume Knob Handler (Volume Knob logic) -->
-<script  src="js/index/volume-knob-handler-volume-knob-logic.js"></script>
-  <!-- Core Inline Logic 011 -->
-  <!-- Core Inline Logic 011 -->
-<script  src="js/index/core-inline-logic-011.js"></script>
-  <!-- Equalizer Modal Handler (EQ modal opener/closer) -->
-  <!-- Equalizer Modal Handler (EQ modal opener/closer) -->
-<script  src="js/index/equalizer-handler.js"></script>
-  <!-- Theme to Equalizer Sync (Theme → EQ hook) -->
-  <!-- Theme to Equalizer Sync (Theme → EQ hook) -->
-<script  src="js/index/eqsync.js"></script>
+
+  <!-- Main Site Boot -->
+  <script type="modals" src="js/main.js"></script>
+
+  <!-- Safety/Boot helpers -->
+  <script src="js/index/safety-boot-logic-in-case-main-js-doesn-t-start-it.js"></script>
+  <script src="js/index/navbar-height-setter-for-container-padding.js"></script>
+  <script src="js/index/visualizer-orb-builder-builds-the-animated-orb-inside-vz-ope.js"></script>
+  <script src="js/index/volume-knob-handler-volume-knob-logic.js"></script>
+  <script src="js/index/core-inline-logic-011.js"></script>
+  <script src="js/index/equalizer-handler.js"></script>
+  <script src="js/index/eqsync.js"></script>
   <script src="js/index/inline-014.js"></script>
-  <!-- Core Inline Logic 015 -->
-  <!-- Core Inline Logic 015 -->
-<script  src="js/index/core-inline-logic-015.js"></script>
-  <!-- Organizer Modal Handler -->
-  <script src="js/player/organizer-modal.js"></script>
-  <!-- Organizer Adapter -->
+  <script src="js/index/core-inline-logic-015.js"></script>
+
+  <!-- Organizer (keep AFTER player & list exist) -->
+  <script type="module" src="js/player/organizer-modal.js?v=debug1"></script>
   <script src="js/player/organizer-adapter.js"></script>
-  <!-- Organizer Modal Inline -->
-  <!-- Organizer Modal Inline -->
-<script  src="js/index/organizer-modal-inline.js"></script>
+  <script src="js/index/organizer-modal-inline.js"></script>
+
   <!-- Theme Binder v2 -->
   <script src="js/theme-binder.v2.js" defer></script>
-  <!-- Core Inline Logic 017 -->
-  <!-- Core Inline Logic 017 -->
-<script  src="js/index/core-inline-logic-017.js"></script>
-  <!-- Core Inline Logic 018 -->
-  <!-- Core Inline Logic 018 -->
-<script  src="js/index/core-inline-logic-018.js"></script>
+
+  <!-- More core inline -->
+  <script src="js/index/core-inline-logic-017.js"></script>
+  <script src="js/index/core-inline-logic-018.js"></script>
+
   <!-- Footer Metrics Loader -->
-  <script src="/js/metrics-footer.js" defer></script>
-  <!-- Firebase Metrics Lite (module) -->
-  <script type="module" src="/js/firebase/firebase-metrics-lite.js"></script>
-  <!-- Firebase Initialization (module, additional) -->
-  <script type="module" src="/js/firebase/firebase-init.js"></script>
-  <!-- Fans/Haters Live Counter (Firestore) -->
-  <!-- Fans/Haters Live Counter (Firestore) -->
-<script type="module"  src="js/index/fans-haters-live-counter-firestore.js"></script>
-  <!-- Core Inline Logic 020 -->
-  <!-- Core Inline Logic 020 -->
-<script  src="js/index/core-inline-logic-020.js"></script>
-  <!-- Core Inline Logic 021 -->
-  <!-- Core Inline Logic 021 -->
-<script  src="js/index/core-inline-logic-021.js"></script>
-  <!-- Core Inline Logic 022 -->
-  <!-- Core Inline Logic 022 -->
-<script  src="js/index/core-inline-logic-022.js"></script>
-  <!-- ▼▼ G73 Theme Inspector (drop-in) ▼▼ -->
+  <script src="js/metrics-footer.js" defer></script>
+
+  <!-- More core inline -->
+  <script src="js/index/core-inline-logic-020.js"></script>
+  <script src="js/index/core-inline-logic-021.js"></script>
+  <script src="js/index/core-inline-logic-022.js"></script>
+
+  <!-- Theme Inspector -->
   <div id="g73-theme-inspector" hidden></div>
-  <!-- G73 Theme Inspector -->
-  <!-- G73 Theme Inspector -->
-<script  src="js/index/g73-theme-inspector.js"></script>
-  <!-- ▲▲ G73 Theme Inspector ▲▲ -->
+  <script src="js/index/g73-theme-inspector.js"></script>
+
+  <!-- G73 OUT NOW POPUP -->
+  <div id="g73OutNow" class="g73on" aria-live="polite">
+    <div class="g73on__scrim" data-g73-close></div>
+
+    <section class="g73on__card" role="dialog" aria-modal="true" aria-label="Out Now: G Jordan - Broken Promises">
+      <button class="g73on__close" type="button" aria-label="Close" data-g73-close>✕</button>
+
+      <div class="g73on__top">
+        <div class="g73on__badge">OUT NOW • G73</div>
+
+        <div class="g73on__row">
+          <div class="g73on__art">
+            <img id="g73Art" alt="G Jordan — Broken Promises cover art" />
+          </div>
+
+          <div class="g73on__copy">
+            <h2 class="g73on__title">G Jordan — <span>Broken Promises</span></h2>
+            <p class="g73on__sub">
+              Now out on <strong>all music streaming platforms</strong>. Pick your app and press play.
+            </p>
+
+            <div class="g73on__cta">
+              <a id="g73MainLink" class="g73on__btn g73on__btn--primary" target="_blank" rel="noopener">
+                Listen (All Platforms)
+              </a>
+              <button class="g73on__btn g73on__btn--ghost" type="button" data-g73-close>Not now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="g73on__gridWrap">
+        <div class="g73on__gridTitle">Available on</div>
+        <div id="g73Platforms" class="g73on__grid"></div>
+      </div>
+
+      <div class="g73on__footer">
+        <span class="g73on__dot"></span>
+        <span>G73</span>
+        <span class="g73on__sep">•</span>
+        <span>Explicit</span>
+      </div>
+    </section>
+  </div>
+
+  <script>
+  (() => {
+    const ART_URL   = "https://i.kfs.io/album/global/287760064,0v1/fit/500x500.jpg";
+    const SMART_LINK = "https://gjordan.music";
+    const ARTIST = "G Jordan";
+    const TITLE  = "Broken Promises";
+    const q = encodeURIComponent(`${ARTIST} ${TITLE}`);
+
+    const SHOW_AS_MODAL = true;
+    const AUTO_SHOW_MS  = 700;
+    const DISMISS_DAYS  = 2;
+
+    const platforms = [
+      { name:"Spotify", brand:"#1DB954", icon:"https://img.icons8.com/color/96/spotify--v1.png", url:`https://open.spotify.com/search/${q}` },
+      { name:"Apple Music", brand:"#FA243C", icon:"https://img.icons8.com/color/96/apple-music.png", url:`https://music.apple.com/us/search?term=${q}` },
+      { name:"YouTube", brand:"#FF0000", icon:"https://img.icons8.com/color/96/youtube-play.png", url:`https://www.youtube.com/results?search_query=${q}` },
+      { name:"YouTube Music", brand:"#FF0033", icon:"https://img.icons8.com/color/96/youtube-music.png", url:`https://music.youtube.com/search?q=${q}` },
+      { name:"Amazon Music", brand:"#FF9900", icon:"https://img.icons8.com/color/96/amazon-music.png", url:`https://music.amazon.com/search/${q}` },
+      { name:"TIDAL", brand:"#FFFFFF", icon:"https://img.icons8.com/color/96/tidal.png", url:`https://tidal.com/search?q=${q}` },
+      { name:"Deezer", brand:"#FF2D55", icon:"https://img.icons8.com/color/96/deezer.png", url:`https://www.deezer.com/search/${q}` },
+      { name:"SoundCloud", brand:"#FF5500", icon:"https://img.icons8.com/color/96/soundcloud.png", url:`https://soundcloud.com/search?q=${q}` },
+      { name:"Pandora", brand:"#3668FF", icon:"https://img.icons8.com/color/96/pandora-app.png", url:`https://www.pandora.com/search/${q}/all` },
+      { name:"iHeartRadio", brand:"#FF1D25", icon:"https://img.icons8.com/color/96/iheart-radio.png", url:`https://www.iheart.com/search/?q=${q}` },
+      { name:"TikTok", brand:"#00F2EA", icon:"https://img.icons8.com/color/96/tiktok.png", url:`https://www.tiktok.com/search?q=${q}` },
+      { name:"Mixcloud", brand:"#5000FF", icon:"https://img.icons8.com/color/96/mixcloud.png", url:`https://www.mixcloud.com/search/?q=${q}` },
+
+      { name:"Facebook", brand:"#1877F2", icon:"https://img.icons8.com/color/96/facebook-new.png", url:`https://www.facebook.com/search/top?q=${q}` },
+      { name:"Instagram", brand:"#E4405F", icon:"https://img.icons8.com/color/96/instagram-new.png", url:`https://www.instagram.com/` },
+
+      { name:"7Digital", brand:"#2F89FF", icon:"https://img.icons8.com/color/96/music-record.png", url:`https://www.7digital.com/search?q=${q}` },
+      { name:"Gracenote", brand:"#00E5FF", icon:"https://img.icons8.com/color/96/database.png", url: SMART_LINK },
+      { name:"KKBOX", brand:"#00C853", icon:"https://img.icons8.com/color/96/music.png", url:`https://www.kkbox.com/search.php?word=${q}` },
+      { name:"LINE Music", brand:"#00C300", icon:"https://img.icons8.com/color/96/line-me.png", url:`https://music.line.me/webapp/search/tracks?query=${q}` },
+      { name:"Tencent", brand:"#00A0FF", icon:"https://img.icons8.com/color/96/tencent-qq.png", url: SMART_LINK }
+    ];
+
+    const root = document.getElementById("g73OutNow");
+    if (!root) return;
+
+    const key = "g73_outnow_dismissed_final";
+    const dismissed = () => {
+      try {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return false;
+        const { t } = JSON.parse(raw);
+        return (Date.now() - t) < (DISMISS_DAYS * 86400000);
+      } catch { return false; }
+    };
+
+    const close = () => {
+      try { sessionStorage.setItem(key, JSON.stringify({ t: Date.now() })); } catch {}
+      root.classList.remove("is-open","is-modal");
+      setTimeout(() => root.remove(), 180);
+      document.documentElement.style.overflow = "";
+    };
+
+    if (dismissed()) { root.remove(); return; }
+
+    document.documentElement.style.overflow = "hidden";
+
+    const img = document.getElementById("g73Art");
+    if (img) img.src = ART_URL;
+
+    const main = document.getElementById("g73MainLink");
+    if (main) main.href = SMART_LINK;
+
+    const grid = document.getElementById("g73Platforms");
+    if (grid) {
+      grid.innerHTML = "";
+      for (const p of platforms) {
+        const a = document.createElement("a");
+        a.className = "g73on__plat";
+        a.style.setProperty("--brand", p.brand);
+        a.href = p.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.setAttribute("aria-label", p.name);
+
+        const logo = document.createElement("div");
+        logo.className = "g73on__logo";
+        logo.innerHTML = `
+          <img
+            src="${p.icon}"
+            alt="${p.name} logo"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            onerror="this.style.display='none'; this.parentElement.textContent='♪';"
+          />
+        `;
+
+        const name = document.createElement("div");
+        name.className = "g73on__name";
+        name.textContent = p.name;
+
+        a.appendChild(logo);
+        a.appendChild(name);
+        grid.appendChild(a);
+      }
+    }
+
+    root.addEventListener("click", (e) => {
+      if (e.target.matches("[data-g73-close]")) close();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+    });
+
+    setTimeout(() => {
+      root.classList.add("is-open");
+      if (SHOW_AS_MODAL) root.classList.add("is-modal");
+    }, AUTO_SHOW_MS);
+  })();
+  </script>
 </body>
 </html>

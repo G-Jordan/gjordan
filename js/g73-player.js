@@ -13,6 +13,34 @@ const stripExt=n=>n.replace(/\.mp4$/i,'');
 function toast(msg, ms=1500){ const box=$('#toastBox'); const t=document.createElement('div'); t.className='toast'; t.textContent=msg; box.appendChild(t); requestAnimationFrame(()=>t.classList.add('show')); setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),180); }, ms); }
 function setPressed(btn, val){ btn.setAttribute('aria-pressed', String(!!val)); }
 
+/* ✅ NEW: Build a stable Firestore videoId from a video URL (filename without extension) */
+function videoIdFromUrl(url){
+  try{
+    const u = new URL(url, location.href);
+    const base = (u.pathname.split('/').pop() || '').replace(/\.[a-z0-9]+$/i,'');
+    return base || null;
+  }catch{
+    const base = (String(url).split('/').pop() || '').replace(/\.[a-z0-9]+$/i,'');
+    return base || null;
+  }
+}
+
+/* ✅ NEW: Tell firebase video-stats which video is active (no more relying on MutationObserver) */
+function notifyVideoStats(url){
+  const vid = videoIdFromUrl(url);
+  if (!vid) return;
+
+  // keep a global id for reaction buttons
+  window.currentVideoId = vid;
+
+  // prefer explicit setter if present, else subscribe directly
+  if (typeof window.setActiveVideoForStats === 'function') {
+    window.setActiveVideoForStats(vid);
+  } else if (typeof window.subscribeToVideoStats === 'function') {
+    window.subscribeToVideoStats(vid);
+  }
+}
+
 /* Hex → rgba helper for secondary tints */
 function hexToRGBA(hex, a){
   if(!hex) return 'rgba(139,107,27,'+a+')';
@@ -220,6 +248,9 @@ async function selectOnly(index, rowEl){
   if(rowEl) rowEl.classList.add('active');
   currentIndex=index; video.src=url;
 
+  // ✅ NEW: immediately inform Firebase stats which video is active
+  notifyVideoStats(url);
+
   try{ const p=await getOrCreateFrame(url); video.poster=p; }catch{ video.removeAttribute('poster'); }
   name.textContent=stripExt(filenameFromUrl(url));
   if(rowEl){ const img=rowEl.querySelector('.thumb'); if(img && !img.dataset.ready){ try{ img.src=await getOrCreateFrame(url); img.dataset.ready='1'; }catch{} } }
@@ -254,7 +285,10 @@ $('#video').addEventListener('ended', ()=>{
     if(initialIndex<0 && files.length) initialIndex=Math.floor(Math.random()*files.length);
     if(initialIndex>=0){
       const row=document.querySelector(`#list .item[data-index="${initialIndex}"]`);
-      suppressUrlUpdate=!query; await selectOnly(initialIndex,row); suppressUrlUpdate=false; if(row) row.scrollIntoView({block:'nearest'});
+      suppressUrlUpdate=!query;
+      await selectOnly(initialIndex,row);
+      suppressUrlUpdate=false;
+      if(row) row.scrollIntoView({block:'nearest'});
     }
   }catch(err){
     $('#list').innerHTML='<div class="item">Error: '+(err?.message||err)+'</div>';

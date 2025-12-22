@@ -1,6 +1,6 @@
 // js/player/organizer-modal.js
 (function () {
-  const LS_KEY = 'g73:allMusicOrder:v1';
+  const LS_KEY = `g73:allMusicOrder:${window.ALLMUSIC_VERSION || 'v1'}`;
 
   // ---------- THEME BRIDGE ----------
   function extractTwoStops(gradientStr){
@@ -226,7 +226,9 @@
     display:block; width:22px; height:22px;
   }
   `;
-  const style = document.createElement('style'); style.textContent = css; document.head.appendChild(style);
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
 
   // ---------- Build modal ----------
   const modal = document.createElement('div');
@@ -273,20 +275,22 @@
 
   // ---------- HARDENED MOUNT + THEME SYNC ----------
   function mountOrganizerModal(){
-    if (!document.getElementById('org-modal')) {
-      try {
-        document.body.appendChild(modal);
-        // apply theme once mounted
-        applyModalThemeFromControls(modal);
-        console.log('[Organizer] modal mounted');
-      } catch (e) {
-        console.warn('[Organizer] mount failed (body not ready yet)', e);
-      }
+    if (document.getElementById('org-modal')) return;
+    if (!document.body) return;
+    try {
+      document.body.appendChild(modal);
+      applyModalThemeFromControls(modal);
+      console.log('[Organizer] modal mounted');
+    } catch (e) {
+      console.warn('[Organizer] mount failed (body not ready yet)', e);
     }
   }
+
   function safeInitialRender(){
-    try { render(); } catch (e) { console.warn('[Organizer] initial render skipped (list missing yet)', e); }
+    try { render(); }
+    catch (e) { console.warn('[Organizer] initial render skipped (list missing yet)', e); }
   }
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => { mountOrganizerModal(); safeInitialRender(); });
   } else {
@@ -319,7 +323,6 @@
     btn.setAttribute('aria-haspopup', 'dialog');
     btn.innerHTML = `<span class="material-icons" aria-hidden="true">view_list</span>`;
 
-    // Try to place right AFTER the palette button if it exists
     const palette = document.getElementById('ctl-theme-btn') || controls.querySelector('.ctl-theme-btn');
     if (palette && palette.parentElement && palette.parentElement.parentElement === controls) {
       palette.parentElement.insertAdjacentElement('afterend', btn);
@@ -330,7 +333,6 @@
     btn.addEventListener('click', openModal);
     injectedOnce = true;
 
-    // make sure button picks up theme
     applyModalThemeFromControls(document.getElementById('org-modal'));
     return true;
   }
@@ -350,9 +352,7 @@
     const mo = new MutationObserver(() => {
       const controls = getControls();
       if (!controls) return;
-      if (!controls.querySelector('#open-organizer')) {
-        placeButton(controls);
-      }
+      if (!controls.querySelector('#open-organizer')) placeButton(controls);
     });
     mo.observe(document.documentElement, { childList: true, subtree: true });
   }
@@ -370,7 +370,6 @@
     return result;
   }
 
-  // live working set (rebuilt on open)
   let working = [];
 
   function syncFromGlobal(){
@@ -398,7 +397,6 @@
     }
   }
 
-  // Try to apply saved order early during boot, once allMusic exists
   function tryApplySavedOrderOnBoot(){
     const saved = readOrder();
     if (!saved.length) return;
@@ -424,10 +422,11 @@
     if (/^https?:\/\//i.test(key) || /\.[a-z0-9]{2,5}$/i.test(key)) return key;
     return `images/${key}.jpg`;
   }
+
   function tryFillCover(div, key){
     if (!div || !key) return;
     const direct = resolveCover(key);
-    let img = new Image();
+    const img = new Image();
     let tried = 0;
 
     function set(url){ div.style.backgroundImage = `url("${url}")`; }
@@ -451,28 +450,40 @@
 
   // ---------- Modal show/hide ----------
   function openModal() {
-    // Re-sync and render fresh
     syncFromGlobal();
-    render(true);
-    applyToGlobalAndNotify('open');
+
+    // show first, then render (prevents "0 songs" flash on slow DOM)
+    modal.setAttribute('aria-hidden', 'false');
 
     // ensure theme is current at open time
     applyModalThemeFromControls(document.getElementById('org-modal'));
 
-    modal.setAttribute('aria-hidden', 'false');
+    // now render fresh
+    render(true);
+    applyToGlobalAndNotify('open');
+
     const ctx = window.audioCtx || window.AudioContextInstance;
     if (ctx && ctx.state === 'suspended') ctx.resume?.();
   }
+
   function closeModal() { modal.setAttribute('aria-hidden', 'true'); }
+
+  // Close on backdrop or [data-close]
   document.addEventListener('click', (e) => {
     const m = document.getElementById('org-modal');
     if (!m) return;
-    if (e.target === m || e.target?.hasAttribute?.('data-close')) closeModal();
+
+    if (e.target?.closest?.('#org-close')) return closeModal();
+
+    // If clicking the backdrop or anything marked data-close
+    if (e.target?.matches?.('.org-backdrop') || e.target?.hasAttribute?.('data-close')) {
+      closeModal();
+    }
   });
-  document.addEventListener('click', (e) => {
-    if (e.target?.id === 'org-close' || e.target?.closest?.('#org-close')) closeModal();
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
 
   // ---------- Organizer UI refs ----------
   const el = {
@@ -486,7 +497,11 @@
     get count(){ return document.querySelector('#org-count'); },
   };
 
-  function escapeHtml(s) { return String(s ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>\"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
 
   function row(item) {
     const id = getId(item);
@@ -510,20 +525,25 @@
     const coverKey = item.cover || item.img || item.src;
     tryFillCover(r.querySelector('.org-cover'), coverKey);
 
-    // ----- Desktop HTML5 drag support -----
     const handle = r.querySelector('.org-handle');
+
+    // ----- Desktop HTML5 drag support -----
     handle.addEventListener('dragstart', (e) => {
       r.classList.add('dragging'); r.setAttribute('aria-grabbed', 'true');
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', id);
     });
-    handle.addEventListener('dragend', () => { r.classList.remove('dragging'); r.removeAttribute('aria-grabbed'); });
+    handle.addEventListener('dragend', () => {
+      r.classList.remove('dragging');
+      r.removeAttribute('aria-grabbed');
+    });
 
     r.addEventListener('dragover', (e) => { e.preventDefault(); r.classList.add('over'); });
     r.addEventListener('dragleave', () => r.classList.remove('over'));
     r.addEventListener('drop', (e) => {
       e.preventDefault(); r.classList.remove('over');
-      const fromId = e.dataTransfer.getData('text/plain'); const toId = id;
+      const fromId = e.dataTransfer.getData('text/plain');
+      const toId = id;
       if (!fromId || fromId === toId) return;
       moveId(fromId, toId);
     });
@@ -543,26 +563,40 @@
       handle.setPointerCapture?.(e.pointerId);
       pointerDragging = true;
       dragRow = r;
-      r.classList.add('dragging'); r.setAttribute('aria-grabbed','true');
+      r.classList.add('dragging');
+      r.setAttribute('aria-grabbed','true');
       e.preventDefault();
     }
+
     function onPointerMove(e){
       if (!pointerDragging || !dragRow) return;
+
+      const listEl = document.getElementById('org-list');
+      if (!listEl) return;
+
       const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
       const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
+
       const elUnder = document.elementFromPoint(clientX, clientY);
       const overRow = elUnder && elUnder.closest('.org-row');
-      if (!overRow || overRow === dragRow || overRow.parentElement !== el.list) return;
+      if (!overRow || overRow === dragRow || overRow.parentElement !== listEl) return;
+
       const rect = overRow.getBoundingClientRect();
       const before = (clientY < rect.top + rect.height/2);
-      el.list.insertBefore(dragRow, before ? overRow : overRow.nextSibling);
+      listEl.insertBefore(dragRow, before ? overRow : overRow.nextSibling);
     }
+
     function onPointerUpCancel(){
       if (!pointerDragging) return;
       pointerDragging = false;
-      r.classList.remove('dragging'); r.removeAttribute('aria-grabbed');
-      const ids = [...el.list.querySelectorAll('.org-row')].map(d => d.dataset.id);
-      working = ids.map(id => working.find(it => getId(it) === id)).filter(Boolean);
+      r.classList.remove('dragging');
+      r.removeAttribute('aria-grabbed');
+
+      const listEl = document.getElementById('org-list');
+      if (!listEl) return;
+
+      const ids = [...listEl.querySelectorAll('.org-row')].map(d => d.dataset.id);
+      working = ids.map(x => working.find(it => getId(it) === x)).filter(Boolean);
       persistIfCustom(); render(); dispatch();
     }
 
@@ -588,6 +622,7 @@
       console.warn('[Organizer] #org-list not in DOM yet; deferring render.');
       return;
     }
+
     const searchEl = document.getElementById('org-search');
     const sortEl   = document.getElementById('org-sort');
     const countEl  = document.getElementById('org-count');
@@ -618,7 +653,8 @@
     const i = working.findIndex(it => getId(it) === id); if (i < 0) return;
     const j = Math.max(0, Math.min(working.length - 1, i + delta));
     if (i === j) return;
-    const [m] = working.splice(i, 1); working.splice(j, 0, m);
+    const [m] = working.splice(i, 1);
+    working.splice(j, 0, m);
     persistIfCustom(); render(); dispatch();
   }
 
@@ -640,7 +676,9 @@
     if (Array.isArray(window.allMusic)) {
       const order = working.map(x => x);
       window.allMusic = order;
-      window.dispatchEvent(new CustomEvent('playlist:reordered', { detail: { allMusic: order.slice(), source:'drag' } }));
+      window.dispatchEvent(new CustomEvent('playlist:reordered', {
+        detail: { allMusic: order.slice(), source:'drag' }
+      }));
       bestEffortRebuildUI();
     }
   }
@@ -654,7 +692,10 @@ console.log('[music-list] allMusic length =', window.allMusic.length);
 `;
     const blob = new Blob([code], { type: 'application/javascript' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = 'music-list.js'; a.click();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'music-list.js';
+    a.click();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
 
@@ -694,14 +735,20 @@ console.log('[music-list] allMusic length =', window.allMusic.length);
 
   // Control wiring
   document.addEventListener('click', (e)=>{
-    if (e.target?.id === 'org-save') { writeOrder(working.map(getId)); applyToGlobalAndNotify('save'); alert('Saved! This order will stick on this browser.'); }
+    if (e.target?.id === 'org-save') {
+      writeOrder(working.map(getId));
+      applyToGlobalAndNotify('save');
+      alert('Saved! This order will stick on this browser.');
+    }
     if (e.target?.id === 'org-reset') resetToSaved();
     if (e.target?.id === 'org-export') exportJS();
   });
+
   document.addEventListener('change', (e)=>{
     if (e.target?.id === 'org-import') importJSON(e.target.files[0]);
     if (e.target?.id === 'org-sort') { e.target._touched = true; render(); }
   });
+
   document.addEventListener('input', (e)=>{
     if (e.target?.id === 'org-search') { e.target._touched = true; render(); }
   });

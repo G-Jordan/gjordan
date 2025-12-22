@@ -1,6 +1,10 @@
 // js/music-list.js
-// Define the playlist as a GLOBAL so other scripts can use it.
-window.allMusic = [
+
+// ✅ Base playlist (never mutate this one)
+window.allMusicBase = [
+ { "name": "Thats my baby (prod.Cobra)", "artist": "G Jordan, Cobra", "img": "music-27", "src": "music-27" }, 
+  { "name": "Treacherous Behavior", "artist": "G Jordan", "img": "music-26", "src": "music-26" },
+  { "name": "Feels This Way (prod. Cobra)", "artist": "G Jordan, Cobra", "img": "music-25", "src": "music-25" },
   { "name": "Johnny Nails & G Jordan 2025 (prod. Cobra)", "artist": "G Jordan, Johnny Naills, Cobra", "img": "music-10", "src": "music-10" },
   { "name": "Im the Monster (prod. Riddiman)",            "artist": "G Jordan, Riddiman",            "img": "music-9",  "src": "music-9"  },
   { "name": "Trying (prod. greyskies)",                   "artist": "G Jordan, greyskies",           "img": "music-17", "src": "music-17" },
@@ -27,6 +31,16 @@ window.allMusic = [
   { "name": "Living That Dream (prod. Cobra)",            "artist": "G Jordan, Cobra",               "img": "music-11", "src": "music-11" }
 ];
 
-console.log('[music-list] allMusic length =', window.allMusic.length);
-// Optional: signal readiness to any listeners
-window.dispatchEvent(new Event('musiclist:ready'));
+// ✅ Working playlist (other scripts can reorder/mutate this one safely)
+window.allMusic = window.allMusicBase.map(t => ({ ...t }));
+
+// ✅ helper: restore working playlist to original order any time
+window.resetAllMusic = () => {
+  window.allMusic = window.allMusicBase.map(t => ({ ...t }));
+  window.dispatchEvent(new Event("musiclist:ready"));
+};
+
+console.log("[music-list] allMusic length =", window.allMusic.length);
+window.dispatchEvent(new Event("musiclist:ready"));
+
+window.ALLMUSIC_VERSION = "2025-12-22"; // change when playlist changes

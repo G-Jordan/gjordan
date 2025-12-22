@@ -12,13 +12,11 @@
   const ANALYTICS_EVENT_PREFIX = "audio"; // will produce events like audio_play, audio_pause, etc.
 
   function fireGA(eventName, params){
-    // Send to GA4 if available
     if (typeof window.gtag === 'function') {
       window.gtag('event', eventName, params || {});
     }
   }
   function emitPlayerEvent(name, detail){
-    // Dispatch site-wide CustomEvent
     try { window.dispatchEvent(new CustomEvent(`player:${name}`, { detail })); } catch {}
   }
   function currentTrackMeta(){
@@ -32,16 +30,15 @@
       src: audioPath(it.src),
       index: musicIndex || 1,
       playlist_size: LIST.length || 0,
-      // GA-friendly fields
       item_id: it.src || '',
       item_name: it.name || '',
-      item_brand: it.artist || '', // GA doesn't have 'artist' native; use brand
+      item_brand: it.artist || '',
     };
   }
 
   // Engagement/milestones state
   const milestonePercents = [0.25, 0.5, 0.75];
-  let milestonesHit = new Set(); // resets per track
+  let milestonesHit = new Set();
   let engaged10s = false;
 
   function resetMilestones(){
@@ -49,31 +46,11 @@
     engaged10s = false;
   }
 
-  function logPlay(){
-    const meta = currentTrackMeta();
-    emitPlayerEvent('play', meta);
-    fireGA(`${ANALYTICS_EVENT_PREFIX}_play`, meta);
-  }
-  function logPause(){
-    const meta = currentTrackMeta();
-    emitPlayerEvent('pause', meta);
-    fireGA(`${ANALYTICS_EVENT_PREFIX}_pause`, meta);
-  }
-  function logEnded(){
-    const meta = currentTrackMeta();
-    emitPlayerEvent('ended', meta);
-    fireGA(`${ANALYTICS_EVENT_PREFIX}_ended`, meta);
-  }
-  function logTrackChange(){
-    const meta = currentTrackMeta();
-    emitPlayerEvent('track_change', meta);
-    fireGA(`${ANALYTICS_EVENT_PREFIX}_track_change`, meta);
-  }
-  function logPrevNext(dir){
-    const meta = currentTrackMeta();
-    emitPlayerEvent(dir, meta); // 'prev' or 'next'
-    fireGA(`${ANALYTICS_EVENT_PREFIX}_${dir}`, meta);
-  }
+  function logPlay(){  const meta=currentTrackMeta(); emitPlayerEvent('play', meta);  fireGA(`${ANALYTICS_EVENT_PREFIX}_play`, meta); }
+  function logPause(){ const meta=currentTrackMeta(); emitPlayerEvent('pause', meta); fireGA(`${ANALYTICS_EVENT_PREFIX}_pause`, meta); }
+  function logEnded(){ const meta=currentTrackMeta(); emitPlayerEvent('ended', meta); fireGA(`${ANALYTICS_EVENT_PREFIX}_ended`, meta); }
+  function logTrackChange(){ const meta=currentTrackMeta(); emitPlayerEvent('track_change', meta); fireGA(`${ANALYTICS_EVENT_PREFIX}_track_change`, meta); }
+  function logPrevNext(dir){ const meta=currentTrackMeta(); emitPlayerEvent(dir, meta); fireGA(`${ANALYTICS_EVENT_PREFIX}_${dir}`, meta); }
   function logMilestone(kind, value){
     const meta = currentTrackMeta();
     const payload = { ...meta, milestone_type: kind, milestone_value: value };
@@ -81,7 +58,6 @@
     fireGA(`${ANALYTICS_EVENT_PREFIX}_milestone`, payload);
   }
 
-  // If we truly can't find audio, don't abort everything—expose no-op controls so UI stays alive.
   if (!mainAudio) {
     console.warn('[player-core] #main-audio NOT FOUND. Controls will be no-ops.');
   }
@@ -119,9 +95,9 @@
     if (musicName) musicName.textContent = it.name || '';
     if (musicArt)  musicArt.textContent  = it.artist || '';
     if (musicImg)  musicImg.src          = imgPath(it.img);
+
     if (mainAudio){
       const src = audioPath(it.src);
-      // Safety: never allow index.html or empty
       if (src && !/index\.html$/i.test(src)) mainAudio.src = src;
     }
 
@@ -130,7 +106,6 @@
     resetMilestones();
     window.subscribeToSongStats?.(window.currentSongId);
 
-    // 🔔 Analytics: track change (when a new track is loaded)
     logTrackChange();
   }
 
@@ -142,8 +117,6 @@
     const p = mainAudio.play();
     if (p?.catch) p.catch(err => console.warn('[player-core] play() failed or blocked:', err));
     window.setupVisualizer?.();
-
-    // 🔔 Analytics
     logPlay();
   }
 
@@ -153,26 +126,21 @@
     const pp = document.querySelector(".play-pause i");
     if (pp) pp.innerText = "play_arrow";
     mainAudio.pause();
-
-    // 🔔 Analytics
     logPause();
   }
 
   function prevMusic(){
     const len = resolvePlaylistNow().length || 1;
     setMusicIndex((musicIndex - 2 + len) % len + 1);
-    loadMusic(musicIndex); 
-    playMusic(); 
+    loadMusic(musicIndex);
+    playMusic();
     playingSong();
-
-    // 🔔 Analytics
     logPrevNext('prev');
   }
 
   function nextMusic(){
-    // Will call handleSongEnd() which advances; we still log explicit intent:
     logPrevNext('next');
-    handleSongEnd(); 
+    handleSongEnd();
     playingSong();
   }
 
@@ -181,7 +149,6 @@
     const len = LIST.length || 1;
     if (!len) return;
 
-    // 🔔 Analytics: end-of-track
     logEnded();
 
     if (repeatMode === "repeat_one" && mainAudio){
@@ -194,11 +161,11 @@
       setMusicIndex(musicIndex + 1);
       if (musicIndex > len) setMusicIndex(1);
     }
-    loadMusic(musicIndex); 
+    loadMusic(musicIndex);
     playMusic();
   }
 
-  // Build legacy list (kept)
+  // Build legacy list (kept) — ✅ FIXED metadata loading so last items don’t “break”
   (function buildList(){
     const LIST = resolvePlaylistNow();
     if (!LIST.length) {
@@ -210,29 +177,48 @@
     if (!listUl) { console.warn('[player-core] .music-list ul not found.'); return; }
 
     listUl.innerHTML = '';
+
     for (let i=0;i<LIST.length;i++){
       const it = LIST[i];
       const li = document.createElement('li');
       li.setAttribute('li-index', i+1);
+
+      // Useful for CSS stagger animations: animation-delay: calc(var(--i) * 40ms);
+      li.style.setProperty('--i', String(i + 1));
+
       li.innerHTML = `
         <div class="row">
           <span>${it.name}</span>
           <p>${it.artist || ''}</p>
         </div>
         <span id="${it.src}" class="audio-duration">--:--</span>
-        <audio class="${it.src}" src="${audioPath(it.src)}"></audio>`;
+        <audio class="${it.src}" preload="metadata" src="${audioPath(it.src)}"></audio>
+      `;
+
       listUl.appendChild(li);
 
       const liAudio = li.querySelector(`audio.${CSS.escape(it.src)}`);
       const durEl   = li.querySelector(`#${CSS.escape(it.src)}`);
+
       if (liAudio && durEl){
-        liAudio.addEventListener('loadeddata', () => {
+        // Use loadedmetadata (duration available) instead of loadeddata
+        const onMeta = () => {
           const d  = liAudio.duration || 0;
           const mm = Math.floor(d/60);
           const ss = String(Math.floor(d%60)).padStart(2,'0');
           durEl.textContent = d ? `${mm}:${ss}` : '--:--';
           durEl.setAttribute('t-duration', durEl.textContent);
-        });
+        };
+
+        liAudio.addEventListener('loadedmetadata', onMeta, { once:true });
+
+        liAudio.addEventListener('error', () => {
+          durEl.textContent = '--:--';
+          durEl.setAttribute('t-duration', '--:--');
+        }, { once:true });
+
+        // Force the browser to actually fetch metadata (prevents “last items never load”)
+        try { liAudio.load(); } catch {}
       }
     }
   })();
@@ -248,7 +234,6 @@
     return pos >= 0 ? pos+1 : 1;
   }
 
-  // Keep musicIndex aligned with the actual loaded/playing song
   function syncIndexToCurrent(){
     const LIST = resolvePlaylistNow();
     if (!LIST.length) return;
@@ -266,7 +251,6 @@
     }
   }
 
-  // CSS-only highlighting across all lists: no innerHTML mutation
   function playingSong(){
     syncIndexToCurrent();
     document.querySelectorAll(".music-list ul").forEach(ul=>{
@@ -294,16 +278,16 @@
         window.updateViewCount?.(window.currentSongId);
         window.__viewLogged = true;
 
-        // 🔔 Analytics: engaged 10s
         if (!engaged10s){
           engaged10s = true;
-          logMilestone('time', 10); // audio_milestone { milestone_type:"time", milestone_value:10 }
+          logMilestone('time', 10);
           fireGA(`${ANALYTICS_EVENT_PREFIX}_engaged_10s`, currentTrackMeta());
         }
       }
+
       const cur = e.target.currentTime;
       const dur = e.target.duration || 1;
-      if (progressBar) progressBar.style.width = `${(cur/dur)*100}%`; // ✅ fixed
+      if (progressBar) progressBar.style.width = `${(cur/dur)*100}%`;
 
       const mm = Math.floor((mainAudio.duration||0)/60);
       const ss = String(Math.floor((mainAudio.duration||0)%60)).padStart(2,'0');
@@ -313,7 +297,6 @@
       const cs = String(Math.floor(cur%60)).padStart(2,'0');
       if (musicCurrentTime) musicCurrentTime.textContent = `${cm}:${cs}`;
 
-      // 🔔 Analytics: % milestones (25/50/75)
       const pct = (cur / (mainAudio.duration || 1));
       milestonePercents.forEach(p => {
         if (!milestonesHit.has(p) && pct >= p) {
@@ -325,16 +308,15 @@
 
     mainAudio.addEventListener('ended', ()=>{
       window.__viewLogged = false;
-      // 'ended' analytics is logged in handleSongEnd(), but we double-fire here for robustness if needed
       logEnded();
       handleSongEnd();
     });
+
     mainAudio.addEventListener('loadedmetadata', playingSong);
     mainAudio.addEventListener('play',  playingSong);
     mainAudio.addEventListener('pause', playingSong);
   }
 
-  // Legacy list clicking (ignored when enhanced list owns events)
   function shouldIgnoreClick(t){
     return !!t.closest('.download-btn,.like-btn,.dislike-btn,.org-handle,.g73-play-ignore');
   }
@@ -363,13 +345,11 @@
   }
   document.addEventListener('click', onListClick);
 
-  // Keep classes correct if another component rebuilds the UL
   if (listUl) {
     new MutationObserver(() => playingSong())
       .observe(listUl, { childList: true, subtree: false });
   }
 
-  // Init
   window.addEventListener('load', ()=>{
     const LIST = resolvePlaylistNow();
     if (LIST.length){
@@ -386,11 +366,9 @@
 
   window.addEventListener('playlist:reordered', ()=>{
     playingSong();
-    // Track reorder if you want:
     fireGA(`${ANALYTICS_EVENT_PREFIX}_playlist_reordered`, { playlist_size: resolvePlaylistNow().length });
   });
 
-  // Expose controls
   window.loadMusic     = loadMusic;
   window.playMusic     = playMusic;
   window.pauseMusic    = pauseMusic;
