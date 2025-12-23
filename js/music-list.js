@@ -2,6 +2,10 @@
 
 // ✅ Base playlist (never mutate this one)
 window.allMusicBase = [
+ { "name": "Stay The Same (prod.Cobra)", "artist": "G Jordan, Cobra", "img": "music-31", "src": "music-31" }, 
+ { "name": "Going Out Here (prod.Cobra)", "artist": "G Jordan, Cobra", "img": "music-30", "src": "music-30" }, 
+ { "name": "Feels (prod.Cobra)", "artist": "G Jordan, Cobra", "img": "music-29", "src": "music-29" }, 
+ { "name": "Picture Perfect", "artist": "G Jordan", "img": "music-28", "src": "music-28" }, 
  { "name": "Thats my baby (prod.Cobra)", "artist": "G Jordan, Cobra", "img": "music-27", "src": "music-27" }, 
   { "name": "Treacherous Behavior", "artist": "G Jordan", "img": "music-26", "src": "music-26" },
   { "name": "Feels This Way (prod. Cobra)", "artist": "G Jordan, Cobra", "img": "music-25", "src": "music-25" },
