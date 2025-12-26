@@ -1,374 +1,451 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Contact G Jordan</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-            rel="stylesheet" />
-        <style>
-            :root {
-                --primary-color: limegreen;
-                --accent-color: gold;
-                --dark-bg: #111;
-                --text-color: #ddd;
-                --navbar-bg: #000;
-            }
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: "Arial", sans-serif;
-                background: var(--dark-bg);
-                color: var(--text-color);
-                overflow-x: hidden;
-            }
-            #background-canvas {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                z-index: -1;
-                pointer-events: none;
-                opacity: 0.4;
-                mix-blend-mode: screen;
-            }
-            .navbar {
-                position: fixed;
-                top: 0;
-                width: 100%;
-                background: var(--navbar-bg);
-                padding: 15px;
-                display: flex;
-                align-items: center;
-                z-index: 1000;
-            }
-            .navbar-title {
-                font-size: 20px;
-                font-weight: bold;
-                color: var(--accent-color);
-                text-shadow: 0px 0px 8px var(--accent-color);
-                flex-grow: 1;
-                text-align: center;
-                transition: all 0.4s ease;
-            }
-            .menu-icon {
-                font-size: 30px;
-                cursor: pointer;
-                transition: transform 0.3s ease-in-out;
-                margin-left: 15px;
-            }
-            .menu-icon.open {
-                transform: rotate(180deg);
-                color: red;
-            }
-            .menu {
-                display: none;
-                flex-direction: column;
-                position: fixed;
-                top: 60px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(0, 0, 0, 0.9);
-                width: 80%;
-                border-radius: 10px;
-                text-align: center;
-                padding: 10px 0;
-                opacity: 0;
-                transition:
-                    opacity 0.5s ease-in-out,
-                    transform 0.5s ease-in-out;
-            }
-            .menu.show {
-                display: flex;
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-            .menu a {
-                display: block;
-                margin: 10px 20px;
-                padding: 12px 20px;
-                background: rgba(0, 0, 0, 0.7);
-                color: var(--accent-color);
-                border-radius: 12px;
-                border: 1px solid var(--primary-color);
-                box-shadow: 0 0 10px var(--primary-color);
-                text-decoration: none;
-                font-size: 18px;
-                text-shadow: 0 0 8px var(--primary-color);
-                transition: all 0.3s ease;
-            }
-            .menu a:hover {
-                background: rgba(0, 255, 0, 0.1);
-                color: var(--primary-color);
-                transform: scale(1.05);
-                box-shadow: 0 0 16px var(--primary-color);
-            }
-            .contact-container {
-                max-width: 450px;
-                background: rgba(0, 0, 0, 0.7);
-                margin: 120px auto 50px;
-                padding: 30px;
-                border-radius: 15px;
-                box-shadow: 0 0 15px var(--primary-color);
-            }
-            h1 {
-                text-align: center;
-                margin-bottom: 20px;
-                color: var(--accent-color);
-                text-shadow: 0 0 8px var(--accent-color);
-            }
-            input,
-            textarea,
-            button {
-                width: 100%;
-                margin-bottom: 15px;
-                padding: 12px;
-                border: none;
-                border-radius: 8px;
-                background: rgba(255, 255, 255, 0.1);
-                color: var(--text-color);
-                font-size: 16px;
-            }
-            input::placeholder,
-            textarea::placeholder {
-                color: #999;
-            }
-            button {
-                background: var(--primary-color);
-                color: black;
-                font-weight: bold;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-            button:hover {
-                background: var(--accent-color);
-            }
-            footer {
-                text-align: center;
-                margin-top: 40px;
-                padding: 20px;
-                background: rgba(0, 0, 0, 0.8);
-                color: var(--accent-color);
-                font-size: 14px;
-                box-shadow: 0 0 8px var(--primary-color);
-                text-shadow: 0 0 6px var(--accent-color);
-            }
-        </style>
-    </head>
+    <!-- ✅ SEO / Social (added, matches About + Player pattern) -->
+    <title>Contact — G Jordan | G73.music</title>
+    <meta
+      name="description"
+      content="Contact G Jordan (G73 / Studio G73) — official contact form for booking, business, collaborations, and support. Kalamazoo, Michigan."
+    />
+    <link rel="canonical" href="https://gjordan.music/contact.html" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+    <meta name="theme-color" content="#0b0d10" />
 
-    <body>
-        <canvas id="background-canvas"></canvas>
-<!-- Navbar -->
-<div class="navbar">
-  <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>
-  <span class="navbar-title" id="navbarTitle">GJordan.music</span>
-  <div class="menu" id="menu">
-    <a href="index.html">Home</a>
-    <a href="player.html">Videos</a>
-    <a href="about.html">About</a>
-    <a href="#">Contact</a>
-  </div>
-</div>
-        <!-- Contact Form -->
-        <div class="contact-container">
-            <h1>Contact G Jordan</h1>
-            <form id="contact-form">
-                <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Your Name"
-                    required />
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="Your Email"
-                    required />
-                <input
-                    type="text"
-                    name="subject"
-                    id="subject"
-                    placeholder="Subject"
-                    required />
-                <textarea
-                    name="message"
-                    id="message"
-                    placeholder="Your Message"
-                    rows="6"
-                    required></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Contact — G Jordan | G73" />
+    <meta
+      property="og:description"
+      content="Official contact page for G Jordan (G73 / Studio G73). Booking, business, collaborations, and support."
+    />
+    <meta property="og:url" content="https://gjordan.music/contact.html" />
+    <meta property="og:site_name" content="GJordan.music" />
+    <meta property="og:image" content="https://gjordan.music/gjordan.jpg" />
+    <meta property="og:image:alt" content="G Jordan (official photo)" />
 
-        <!-- Footer -->
-        <footer>
-            &copy; 2025 G Jordan |
-            <span style="color: limegreen">G73™ LLC</span>
-        </footer>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Contact — G Jordan | G73" />
+    <meta
+      name="twitter:description"
+      content="Official contact page for G Jordan (G73 / Studio G73)."
+    />
+    <meta name="twitter:image" content="https://gjordan.music/gjordan.jpg" />
 
-        <!-- Firebase Contact Form -->
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
-            import {
-                getFirestore,
-                collection,
-                addDoc
-            } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- ✅ Structured data (added, reuses your About entities) -->
+    <script type="application/ld+json">
+    {
+      "@context":"https://schema.org",
+      "@graph":[
+        {
+          "@type":"WebSite",
+          "@id":"https://gjordan.music/#website",
+          "url":"https://gjordan.music/",
+          "name":"GJordan.music",
+          "inLanguage":"en",
+          "publisher":{"@id":"https://gjordan.music/#org"}
+        },
+        {
+          "@type":"Organization",
+          "@id":"https://gjordan.music/#org",
+          "name":"G73",
+          "alternateName":"Studio G73",
+          "url":"https://gjordan.music/",
+          "logo":"https://gjordan.music/favicon.png",
+          "sameAs":[
+            "https://www.bandlab.com/g_jordan",
+            "https://www.facebook.com/share/17xHGmRWXU/",
+            "https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu",
+            "https://www.tiktok.com/@gjordan73?_r=1&_t=ZP-92Sq17Zufi3",
+            "https://open.spotify.com/artist/6pdXs7p04tLtS7zqeZXmIt?si=abnA5hFkSCqudZpMu-c6iw",
+            "https://music.apple.com/us/artist/g-jordan/1862575717?ls",
+            "https://youtube.com/@gjordan73?si=0DDKqL8ceqMHYdql",
+            "https://youtube.com/channel/UCP2j_X2YRqBKF4pbceeGyPw?si=8FkqZv47q2e_4kZn"
+          ]
+        },
+        {
+          "@type":"Person",
+          "@id":"https://gjordan.music/#person",
+          "name":"G Jordan",
+          "alternateName":"Jordan Smith",
+          "url":"https://gjordan.music/about.html",
+          "image":"https://gjordan.music/gjordan.jpg",
+          "homeLocation":{"@type":"Place","name":"Kalamazoo, Michigan, United States"},
+          "jobTitle":"Music artist, producer, founder",
+          "worksFor":{"@id":"https://gjordan.music/#org"},
+          "sameAs":[
+            "https://www.bandlab.com/g_jordan",
+            "https://www.facebook.com/share/17xHGmRWXU/",
+            "https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu",
+            "https://www.tiktok.com/@gjordan73?_r=1&_t=ZP-92Sq17Zufi3",
+            "https://open.spotify.com/artist/6pdXs7p04tLtS7zqeZXmIt?si=abnA5hFkSCqudZpMu-c6iw",
+            "https://music.apple.com/us/artist/g-jordan/1862575717?ls",
+            "https://youtube.com/@gjordan73?si=0DDKqL8ceqMHYdql",
+            "https://youtube.com/channel/UCP2j_X2YRqBKF4pbceeGyPw?si=8FkqZv47q2e_4kZn"
+          ]
+        },
+        {
+          "@type":"ContactPage",
+          "@id":"https://gjordan.music/contact.html#contactpage",
+          "url":"https://gjordan.music/contact.html",
+          "name":"Contact — G Jordan | G73.music",
+          "isPartOf":{"@id":"https://gjordan.music/#website"},
+          "about":{"@id":"https://gjordan.music/#person"},
+          "inLanguage":"en",
+          "primaryImageOfPage":{"@type":"ImageObject","url":"https://gjordan.music/gjordan.jpg"}
+        },
+        {
+          "@type":"BreadcrumbList",
+          "@id":"https://gjordan.music/contact.html#breadcrumbs",
+          "itemListElement":[
+            {"@type":"ListItem","position":1,"name":"Home","item":"https://gjordan.music/"},
+            {"@type":"ListItem","position":2,"name":"Contact","item":"https://gjordan.music/contact.html"}
+          ]
+        }
+      ]
+    }
+    </script>
 
-            const firebaseConfig = {
-                apiKey: "AIzaSyAwAfhOcpHxU_NEbMoWBJYviomMKnyekas",
-                authDomain: "gj-email-1b224.firebaseapp.com",
-                projectId: "gj-email-1b224",
-                storageBucket: "gj-email-1b224.appspot.com",
-                messagingSenderId: "709429809330",
-                appId: "1:709429809330:web:6da4635425e2e1702a79ab",
-                measurementId: "G-JNCGSP9YZ4"
-            };
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-            const db = getFirestore(app);
+    <style>
+      :root {
+        --primary-color: limegreen;
+        --accent-color: gold;
+        --dark-bg: #111;
+        --text-color: #ddd;
+        --navbar-bg: #000;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, "Arial", sans-serif;
+        background: var(--dark-bg);
+        color: var(--text-color);
+        overflow-x: hidden;
+      }
+      #background-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0.4;
+        mix-blend-mode: screen;
+      }
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: var(--navbar-bg);
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        z-index: 1000;
+      }
+      .navbar-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--accent-color);
+        text-shadow: 0px 0px 8px var(--accent-color);
+        flex-grow: 1;
+        text-align: center;
+        transition: all 0.4s ease;
+      }
+      .menu-icon {
+        font-size: 30px;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out;
+        margin-left: 15px;
+        user-select: none;
+      }
+      .menu-icon.open {
+        transform: rotate(180deg);
+        color: red;
+      }
+      .menu {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        width: 80%;
+        border-radius: 10px;
+        text-align: center;
+        padding: 10px 0;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      }
+      .menu.show {
+        display: flex;
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      .menu a {
+        display: block;
+        margin: 10px 20px;
+        padding: 12px 20px;
+        background: rgba(0, 0, 0, 0.7);
+        color: var(--accent-color);
+        border-radius: 12px;
+        border: 1px solid var(--primary-color);
+        box-shadow: 0 0 10px var(--primary-color);
+        text-decoration: none;
+        font-size: 18px;
+        text-shadow: 0 0 8px var(--primary-color);
+        transition: all 0.3s ease;
+      }
+      .menu a:hover {
+        background: rgba(0, 255, 0, 0.1);
+        color: var(--primary-color);
+        transform: scale(1.05);
+        box-shadow: 0 0 16px var(--primary-color);
+      }
+      .contact-container {
+        max-width: 450px;
+        background: rgba(0, 0, 0, 0.7);
+        margin: 120px auto 50px;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px var(--primary-color);
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: var(--accent-color);
+        text-shadow: 0 0 8px var(--accent-color);
+      }
+      input,
+      textarea,
+      button {
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-color);
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: #999;
+      }
+      button {
+        background: var(--primary-color);
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background: var(--accent-color);
+      }
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        color: var(--accent-color);
+        font-size: 14px;
+        box-shadow: 0 0 8px var(--primary-color);
+        text-shadow: 0 0 6px var(--accent-color);
+      }
 
-            const form = document.getElementById("contact-form");
-            form.addEventListener("submit", async e => {
-                e.preventDefault();
+      /* ✅ (small) keep menu from appearing behind navbar on tiny screens */
+      @media (max-width: 420px){
+        .menu{ width: 92%; }
+        .navbar{ padding: 12px; }
+      }
+    </style>
+  </head>
 
-                try {
-                    await addDoc(collection(db, "contacts"), {
-                        name: form.name.value.trim(),
-                        email: form.email.value.trim(),
-                        subject: form.subject.value.trim(),
-                        message: form.message.value.trim(),
-                        timestamp: new Date()
-                    });
+  <body>
+    <canvas id="background-canvas"></canvas>
 
-                    window.location.href = "thankyou.html";
-                } catch (error) {
-                    console.error("Error sending message:", error);
-                    alert("Something went wrong. Please try again later.");
-                }
-            });
-        </script>
+    <!-- Navbar -->
+    <div class="navbar">
+      <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>
+      <span class="navbar-title" id="navbarTitle">GJordan.music</span>
+      <div class="menu" id="menu" hidden>
+        <!-- ✅ Make nav consistent + mark current page -->
+        <a href="index.html">Home</a>
+        <a href="player.html">Videos</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </div>
+    </div>
 
-        <!-- Navbar Animation Script -->
-        <script>
-            function toggleMenu() {
-                const menu = document.getElementById("menu");
-                const menuIcon = document.getElementById("menuIcon");
-                const navbarTitle = document.getElementById("navbarTitle");
-                if (menu.classList.contains("show")) {
-                    menu.classList.remove("show");
-                    menuIcon.innerHTML = "☰";
-                    menuIcon.classList.remove("open");
-                    navbarTitle.innerText = "G Jordan's Official Webpage";
-                } else {
-                    menu.classList.add("show");
-                    menuIcon.innerHTML = "✖";
-                    menuIcon.classList.add("open");
-                    navbarTitle.innerText = "G Jordan’s World";
-                }
-            }
-        </script>
+    <!-- Contact Form -->
+    <div class="contact-container">
+      <h1>Contact G Jordan</h1>
+      <form id="contact-form">
+        <input type="text" name="name" id="name" placeholder="Your Name" required />
+        <input type="email" name="email" id="email" placeholder="Your Email" required />
+        <input type="text" name="subject" id="subject" placeholder="Subject" required />
+        <textarea name="message" id="message" placeholder="Your Message" rows="6" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
 
-        <!-- Background Particles Script -->
-        <script>
-            const canvas = document.getElementById("background-canvas");
-            const ctx = canvas.getContext("2d");
+    <!-- Footer -->
+    <footer>
+      &copy; 2025 G Jordan | <span class="tm" style="color: limegreen">G73™ LLC</span>
+    </footer>
 
-            let particlesArray;
+    <!-- Firebase Contact Form -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+      import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-            function initParticles() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                particlesArray = [];
+      const firebaseConfig = {
+        apiKey: "AIzaSyAwAfhOcpHxU_NEbMoWBJYviomMKnyekas",
+        authDomain: "gj-email-1b224.firebaseapp.com",
+        projectId: "gj-email-1b224",
+        storageBucket: "gj-email-1b224.appspot.com",
+        messagingSenderId: "709429809330",
+        appId: "1:709429809330:web:6da4635425e2e1702a79ab",
+        measurementId: "G-JNCGSP9YZ4"
+      };
 
-                const numberOfParticles = 70;
-                for (let i = 0; i < numberOfParticles; i++) {
-                    particlesArray.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        size: Math.random() * 2 + 1,
-                        speedX: Math.random() * 0.5 - 0.25,
-                        speedY: Math.random() * 0.5 - 0.25,
-                        color: `hsl(${Math.random() * 360}, 100%, 60%)`
-                    });
-                }
-            }
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
 
-            function animateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const form = document.getElementById("contact-form");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-                particlesArray.forEach(p => {
-                    p.x += p.speedX;
-                    p.y += p.speedY;
+        try {
+          await addDoc(collection(db, "contacts"), {
+            name: form.name.value.trim(),
+            email: form.email.value.trim(),
+            subject: form.subject.value.trim(),
+            message: form.message.value.trim(),
+            timestamp: new Date()
+          });
 
-                    if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                    if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+          window.location.href = "thankyou.html";
+        } catch (error) {
+          console.error("Error sending message:", error);
+          alert("Something went wrong. Please try again later.");
+        }
+      });
+    </script>
 
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = p.color;
-                    ctx.fill();
-                });
+    <!-- Navbar Animation Script (fixed: hidden attribute + title text consistency) -->
+    <script>
+      function toggleMenu() {
+        const menu = document.getElementById("menu");
+        const menuIcon = document.getElementById("menuIcon");
+        const navbarTitle = document.getElementById("navbarTitle");
 
-                requestAnimationFrame(animateParticles);
-            }
+        const open = menu.classList.toggle("show");
+        menuIcon.classList.toggle("open", open);
+        menuIcon.textContent = open ? "✖" : "☰";
+        navbarTitle.textContent = open ? "G Jordan’s World" : "GJordan.music";
 
-            window.addEventListener("resize", initParticles);
-            initParticles();
-            animateParticles();
-        </script>
-       <!-- ▼▼ G73 Contact Binder v2.3.1 — preserves background/particles; themed form + footer; darker icons (no glow) ▼▼ -->
-<script>
-(()=>{
-  const $r = document.documentElement;
+        if (open) menu.removeAttribute("hidden");
+        else menu.setAttribute("hidden", "");
+      }
+    </script>
 
-  /* ---------- Palette from storage/computed ---------- */
-  function loadPalette(){
-    try{ const s = JSON.parse(localStorage.getItem('siteThemeV1')||'null');
-      if (s?.main && s?.accent) return { primary:s.main, accent:s.accent }; }catch{}
-    try{ const t = JSON.parse(localStorage.getItem('themeSettings')||'null');
-      if (t?.mainColor && t?.accentColor) return { primary:t.mainColor, accent:t.accentColor }; }catch{}
-    const cs = getComputedStyle($r);
-    const p = (cs.getPropertyValue('--app-primary')||cs.getPropertyValue('--primary-color')).trim();
-    const a = (cs.getPropertyValue('--app-accent') ||cs.getPropertyValue('--accent-color')).trim();
-    return (p && a) ? { primary:p, accent:a } : { primary:'#00f0ff', accent:'#ff00f0' };
-  }
+    <!-- Background Particles Script -->
+    <script>
+      const canvas = document.getElementById("background-canvas");
+      const ctx = canvas.getContext("2d");
 
-  /* ---------- Vars that the page can read + darker icons (no glow) ---------- */
-  function applyVars({primary,accent}){
-    $r.style.setProperty('--app-primary', primary);
-    $r.style.setProperty('--app-accent',  accent);
-    $r.style.setProperty('--primary-color', primary);
-    $r.style.setProperty('--accent-color',  accent);
-    $r.style.setProperty('--prog-fill',     `linear-gradient(90deg, ${primary}, ${accent})`);
+      let particlesArray;
 
-    // icon tokens (darker accent)
-    $r.style.setProperty('--g73-icon',        `color-mix(in srgb, ${accent} 68%, black)`);
-    $r.style.setProperty('--g73-icon-hover',  `color-mix(in srgb, ${accent} 82%, black)`);
-    $r.style.setProperty('--g73-icon-muted',  `color-mix(in srgb, ${accent} 55%, black)`);
-    $r.style.setProperty('--g73-icon-primary',`color-mix(in srgb, ${primary} 72%, black)`);
+      function initParticles() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particlesArray = [];
 
-    let meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta){ meta = document.createElement('meta'); meta.name='theme-color'; document.head.appendChild(meta); }
-    meta.setAttribute('content', primary);
+        const numberOfParticles = 70;
+        for (let i = 0; i < numberOfParticles; i++) {
+          particlesArray.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2 + 1,
+            speedX: Math.random() * 0.5 - 0.25,
+            speedY: Math.random() * 0.5 - 0.25,
+            color: `hsl(${Math.random() * 360}, 100%, 60%)`
+          });
+        }
+      }
 
-    window.dispatchEvent(new CustomEvent('theme:changed', { detail:{ primary, accent, source:'contact-binder-v2.3.1' } }));
-  }
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  /* ---------- Styles (do NOT touch body/canvas/particles) ---------- */
-  function ensureStyle(){
-    if (document.getElementById('g73-contact-binder-v231')) return;
-    const css = `
-/* === G73 Contact Binder v2.3.1 — safe (no background/animation override) === */
+        particlesArray.forEach((p) => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+
+          if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(animateParticles);
+      }
+
+      window.addEventListener("resize", initParticles);
+      initParticles();
+      animateParticles();
+    </script>
+
+    <!-- ▼▼ G73 Contact Binder v2.3.1 — themed form + footer; darker icons (no glow) ▼▼ -->
+    <script>
+      (()=>{
+        const $r = document.documentElement;
+
+        function loadPalette(){
+          try{ const s = JSON.parse(localStorage.getItem('siteThemeV1')||'null');
+            if (s?.main && s?.accent) return { primary:s.main, accent:s.accent }; }catch{}
+          try{ const t = JSON.parse(localStorage.getItem('themeSettings')||'null');
+            if (t?.mainColor && t?.accentColor) return { primary:t.mainColor, accent:t.accentColor }; }catch{}
+          const cs = getComputedStyle($r);
+          const p = (cs.getPropertyValue('--app-primary')||cs.getPropertyValue('--primary-color')).trim();
+          const a = (cs.getPropertyValue('--app-accent') ||cs.getPropertyValue('--accent-color')).trim();
+          return (p && a) ? { primary:p, accent:a } : { primary:'#00f0ff', accent:'#ff00f0' };
+        }
+
+        function applyVars({primary,accent}){
+          $r.style.setProperty('--app-primary', primary);
+          $r.style.setProperty('--app-accent',  accent);
+          $r.style.setProperty('--primary-color', primary);
+          $r.style.setProperty('--accent-color',  accent);
+          $r.style.setProperty('--prog-fill', `linear-gradient(90deg, ${primary}, ${accent})`);
+
+          $r.style.setProperty('--g73-icon',        `color-mix(in srgb, ${accent} 68%, black)`);
+          $r.style.setProperty('--g73-icon-hover',  `color-mix(in srgb, ${accent} 82%, black)`);
+          $r.style.setProperty('--g73-icon-muted',  `color-mix(in srgb, ${accent} 55%, black)`);
+          $r.style.setProperty('--g73-icon-primary',`color-mix(in srgb, ${primary} 72%, black)`);
+
+          let meta = document.querySelector('meta[name="theme-color"]');
+          if (!meta){ meta = document.createElement('meta'); meta.name='theme-color'; document.head.appendChild(meta); }
+          meta.setAttribute('content', primary);
+
+          window.dispatchEvent(new CustomEvent('theme:changed', { detail:{ primary, accent, source:'contact-binder-v2.3.1' } }));
+        }
+
+        function ensureStyle(){
+          if (document.getElementById('g73-contact-binder-v231')) return;
+          const css = `
 :root{ --primary-color: var(--app-primary); --accent-color: var(--app-accent); }
 
-/* NAV + MENU */
 .navbar{
   background: var(--navbar-bg, #000) !important;
   border-bottom:1px solid color-mix(in srgb, var(--app-primary) 36%, transparent) !important;
@@ -399,7 +476,6 @@
   border-color: color-mix(in srgb, var(--app-accent) 40%, transparent) !important;
 }
 
-/* CONTACT CARD */
 .contact-container{
   border:1px solid color-mix(in srgb, var(--app-primary) 30%, transparent) !important;
   background:
@@ -414,7 +490,6 @@
   text-shadow: 0 0 10px color-mix(in srgb, var(--app-accent) 34%, transparent) !important;
 }
 
-/* FORM FIELDS */
 input, textarea, select{
   border:1px solid color-mix(in srgb, var(--app-primary) 32%, transparent) !important;
   background: color-mix(in srgb, #0b0d10 78%, transparent) !important;
@@ -430,7 +505,6 @@ input:focus, textarea:focus, select:focus{
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-primary) 25%, transparent) !important;
 }
 
-/* SUBMIT BUTTON */
 button[type="submit"]{
   background: var(--prog-fill, linear-gradient(90deg, var(--app-primary), var(--app-accent))) !important;
   color:#0b0d10 !important;
@@ -444,7 +518,6 @@ button[type="submit"]:hover{
   box-shadow: 0 10px 24px rgba(0,0,0,.45), 0 0 16px color-mix(in srgb, var(--app-accent) 28%, transparent) !important;
 }
 
-/* FOOTER + “G73™ LLC” brand */
 footer{
   background:
     linear-gradient(180deg,
@@ -458,11 +531,10 @@ footer{
 footer .tm{
   background: linear-gradient(90deg, var(--app-primary), var(--app-accent));
   -webkit-background-clip: text; background-clip: text;
-  color: transparent !important; text-shadow: none !important;
+  color: transparent !important;
   font-weight: 800;
 }
 
-/* ICONS — darker accent, NO glow */
 i.material-icons,
 .icon-btn i,
 .icon-btn svg, .icon-btn svg path{
@@ -473,50 +545,47 @@ i.material-icons,
 .menu-icon:hover,
 .icon-btn:hover i, .icon-btn:hover svg{ color: var(--g73-icon-hover) !important; }
 `;
-    const el = document.createElement('style');
-    el.id = 'g73-contact-binder-v231';
-    el.textContent = css;
-    document.head.appendChild(el);
-  }
+          const el = document.createElement('style');
+          el.id = 'g73-contact-binder-v231';
+          el.textContent = css;
+          document.head.appendChild(el);
+        }
 
-  /* ---------- Make sure “G73™ LLC” span gets themed (.tm) ---------- */
-  function normalizeFooterBrand(){
-    try{
-      const foot = document.querySelector('footer');
-      if (!foot) return;
-      const candidate = [...foot.querySelectorAll('span')].find(s=>/G73/i.test(s.textContent||''));
-      if (candidate){
-        candidate.classList.add('tm');
-        candidate.style.color = '';
-      }
-    }catch{}
-  }
+        function normalizeFooterBrand(){
+          try{
+            const foot = document.querySelector('footer');
+            if (!foot) return;
+            const candidate = [...foot.querySelectorAll('span')].find(s=>/G73/i.test(s.textContent||''));
+            if (candidate){
+              candidate.classList.add('tm');
+              candidate.style.color = '';
+            }
+          }catch{}
+        }
 
-  /* ---------- Boot & live updates ---------- */
-  let queued = false;
-  const queue = ()=>{
-    if (queued) return; queued = true;
-    requestAnimationFrame(()=>{
-      queued = false;
-      applyVars(loadPalette());
-      ensureStyle();
-      normalizeFooterBrand();
-    });
-  };
+        let queued = false;
+        const queue = ()=>{
+          if (queued) return; queued = true;
+          requestAnimationFrame(()=>{
+            queued = false;
+            applyVars(loadPalette());
+            ensureStyle();
+            normalizeFooterBrand();
+          });
+        };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', queue, { once:true });
-  else queue();
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', queue, { once:true });
+        else queue();
 
-  window.addEventListener('theme:changed', queue, { passive:true });
-  window.addEventListener('storage', (e)=>{
-    if (e.key === 'siteThemeV1' || e.key === 'themeSettings') queue();
-  }, { passive:true });
-  new MutationObserver(queue).observe($r, { attributes:true, attributeFilter:['style','class','data-theme'] });
+        window.addEventListener('theme:changed', queue, { passive:true });
+        window.addEventListener('storage', (e)=>{
+          if (e.key === 'siteThemeV1' || e.key === 'themeSettings') queue();
+        }, { passive:true });
+        new MutationObserver(queue).observe($r, { attributes:true, attributeFilter:['style','class','data-theme'] });
 
-  // optional manual
-  window.G73ContactBinder = { apply: queue };
-})();
-</script>
-<!-- ▲▲ G73 Contact Binder v2.3.1 ▲▲ --> 
-    </body>
+        window.G73ContactBinder = { apply: queue };
+      })();
+    </script>
+    <!-- ▲▲ G73 Contact Binder v2.3.1 ▲▲ -->
+  </body>
 </html>

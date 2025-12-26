@@ -1,24 +1,118 @@
 <!doctype html>
-<html lang="en">  
-<head>  
-  <meta charset="utf-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1" />  
-  <title>G73 Player</title>  
-  <meta name="theme-color" content="#0b0d10">
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- ✅ SEO / Social (added) -->
+  <title>Videos — G73 Player | G Jordan</title>
+  <meta name="description" content="Official video player for G Jordan (G73 / Studio G73). Watch videos, react, and explore releases. Kalamazoo, Michigan." />
+  <link rel="canonical" href="https://gjordan.music/player.html" />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+  <meta name="author" content="G Jordan / G73" />
+  <meta name="theme-color" content="#0b0d10" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Videos — G73 Player | G Jordan" />
+  <meta property="og:description" content="Official video player for G Jordan (G73 / Studio G73). Watch, react, and explore releases." />
+  <meta property="og:url" content="https://gjordan.music/player.html" />
+  <meta property="og:site_name" content="GJordan.music" />
+  <meta property="og:image" content="https://gjordan.music/gjordan.jpg" />
+  <meta property="og:image:alt" content="G Jordan (official photo)" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Videos — G73 Player | G Jordan" />
+  <meta name="twitter:description" content="Official video player for G Jordan (G73). Watch videos and react." />
+  <meta name="twitter:image" content="https://gjordan.music/gjordan.jpg" />
+
+  <!-- ✅ Structured data (added) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {
+        "@type":"WebSite",
+        "@id":"https://gjordan.music/#website",
+        "url":"https://gjordan.music/",
+        "name":"GJordan.music",
+        "inLanguage":"en",
+        "publisher":{"@id":"https://gjordan.music/#org"}
+      },
+      {
+        "@type":"Organization",
+        "@id":"https://gjordan.music/#org",
+        "name":"G73",
+        "alternateName":"Studio G73",
+        "url":"https://gjordan.music/",
+        "logo":"https://gjordan.music/favicon.png",
+        "sameAs":[
+          "https://www.bandlab.com/g_jordan",
+          "https://www.facebook.com/share/17xHGmRWXU/",
+          "https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu",
+          "https://www.tiktok.com/@gjordan73?_r=1&_t=ZP-92Sq17Zufi3",
+          "https://open.spotify.com/artist/6pdXs7p04tLtS7zqeZXmIt?si=abnA5hFkSCqudZpMu-c6iw",
+          "https://music.apple.com/us/artist/g-jordan/1862575717?ls",
+          "https://youtube.com/@gjordan73?si=0DDKqL8ceqMHYdql",
+          "https://youtube.com/channel/UCP2j_X2YRqBKF4pbceeGyPw?si=8FkqZv47q2e_4kZn"
+        ]
+      },
+      {
+        "@type":"Person",
+        "@id":"https://gjordan.music/#person",
+        "name":"G Jordan",
+        "alternateName":"Jordan Smith",
+        "url":"https://gjordan.music/about.html",
+        "image":"https://gjordan.music/gjordan.jpg",
+        "homeLocation":{"@type":"Place","name":"Kalamazoo, Michigan, United States"},
+        "jobTitle":"Music artist, producer, founder",
+        "worksFor":{"@id":"https://gjordan.music/#org"},
+        "sameAs":[
+          "https://www.bandlab.com/g_jordan",
+          "https://www.facebook.com/share/17xHGmRWXU/",
+          "https://www.instagram.com/g.jordan73?igsh=amprcjA2bTZ3OXFu",
+          "https://www.tiktok.com/@gjordan73?_r=1&_t=ZP-92Sq17Zufi3",
+          "https://open.spotify.com/artist/6pdXs7p04tLtS7zqeZXmIt?si=abnA5hFkSCqudZpMu-c6iw",
+          "https://music.apple.com/us/artist/g-jordan/1862575717?ls",
+          "https://youtube.com/@gjordan73?si=0DDKqL8ceqMHYdql",
+          "https://youtube.com/channel/UCP2j_X2YRqBKF4pbceeGyPw?si=8FkqZv47q2e_4kZn"
+        ]
+      },
+      {
+        "@type":"WebPage",
+        "@id":"https://gjordan.music/player.html#webpage",
+        "url":"https://gjordan.music/player.html",
+        "name":"Videos — G73 Player | G Jordan",
+        "isPartOf":{"@id":"https://gjordan.music/#website"},
+        "about":{"@id":"https://gjordan.music/#person"},
+        "inLanguage":"en",
+        "primaryImageOfPage":{"@type":"ImageObject","url":"https://gjordan.music/gjordan.jpg"}
+      },
+      {
+        "@type":"BreadcrumbList",
+        "@id":"https://gjordan.music/player.html#breadcrumbs",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Home","item":"https://gjordan.music/"},
+          {"@type":"ListItem","position":2,"name":"Videos","item":"https://gjordan.music/player.html"}
+        ]
+      }
+    ]
+  }
+  </script>
+
   <!-- Base styles -->
-  <link rel="stylesheet" href="css/g73-player.css">  
-  <link rel="stylesheet" href="style.css" />  
-  <link rel="stylesheet" href="css/main.css" />  
-  <link rel="stylesheet" href="css/g73-scope.css">  
-  <link rel="stylesheet" href="css/g73-overrides.css">  
+  <link rel="stylesheet" href="css/g73-player.css">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/g73-scope.css">
+  <link rel="stylesheet" href="css/g73-overrides.css">
 
   <!-- Material Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
   <!-- Favicon -->
-  <link rel="icon" href="favicon.png" type="image/png">  
+  <link rel="icon" href="favicon.png" type="image/png">
 
-  <!-- Minimal, theme-safe styles for video reactions + stats -->
+  <!-- ✅ Minimal, theme-safe styles for video reactions + stats -->
   <style>
     .video-reaction-bar{
       display:flex;justify-content:center;gap:10px;margin:8px 0 2px;
@@ -49,79 +143,73 @@
     }
     .video-stats span{ font-weight:700; }
   </style>
+
+  <!-- Theme overrides (kept) -->
   <style id="g73-theme-overrides">
   :root {
-    /* Core brand from report */
-    --primary-color: #badc58;   /* also used as --glow-color */
+    --primary-color: #badc58;
     --accent-color:  #6ab04c;
 
-    /* Feed the app/eq token chain used in g73-fixes.css & eq.css */
     --mainThemeColor: var(--primary-color);
     --accentColor:    var(--accent-color);
     --theme-primary:  var(--primary-color);
     --theme-accent:   var(--accent-color);
     --secondary-color: var(--accent-color);
 
-    /* App-facing tokens (these drive eq.css’ computed accents) */
     --app-primary: var(--mainThemeColor, var(--theme-primary, var(--primary-color, #5fa0ff)));
     --app-accent:  var(--accentColor,    var(--theme-accent,  var(--secondary-color, #b478ff)));
 
-    /* Effects & misc from the report’s winners */
     --glow-color:  #badc58;
     --glow-border: 1px solid #2d3436;
     --text-muted:  #ff0000;
     --white-faint: #dff9fb;
     --artist-color:#ffff00;
 
-    /* Keep existing dark UI defaults */
     --dark-bg: #111;
     --bg-overlay: rgba(0,0,0,.6);
   }
-</style>
-<!-- ▼▼ G73 Player Binder v2.3 (icons: no glow) ▼▼ -->
-<script>
-(()=>{
-  const $r = document.documentElement;
+  </style>
 
-  /* ---- Resolve palette from storage / computed (same logic as before) ---- */
-  function loadPalette(){
-    try{ const s = JSON.parse(localStorage.getItem('siteThemeV1')||'null');
-      if (s?.main && s?.accent) return { primary:s.main, accent:s.accent }; }catch{}
-    try{ const t = JSON.parse(localStorage.getItem('themeSettings')||'null');
-      if (t?.mainColor && t?.accentColor) return { primary:t.mainColor, accent:t.accentColor }; }catch{}
-    const cs = getComputedStyle($r);
-    const p = (cs.getPropertyValue('--app-primary')||cs.getPropertyValue('--primary-color')).trim();
-    const a = (cs.getPropertyValue('--app-accent') ||cs.getPropertyValue('--accent-color')).trim();
-    return (p && a) ? { primary:p, accent:a } : { primary:'#00f0ff', accent:'#ff00f0' };
-  }
+  <!-- ▼▼ G73 Player Binder v2.3 (icons: no glow) ▼▼ -->
+  <script>
+  (()=>{
+    const $r = document.documentElement;
 
-  function applyVars({primary,accent}){
-    $r.style.setProperty('--app-primary', primary);
-    $r.style.setProperty('--app-accent',  accent);
-    $r.style.setProperty('--primary-color', primary);
-    $r.style.setProperty('--accent-color',  accent);
-    $r.style.setProperty('--glow-color',    primary);
-    $r.style.setProperty('--prog-fill',     `linear-gradient(90deg, ${primary}, ${accent})`);
-    // icon darkness tokens
-    $r.style.setProperty('--g73-icon',        `color-mix(in srgb, ${accent} 68%, black)`);   /* base */
-    $r.style.setProperty('--g73-icon-hover',  `color-mix(in srgb, ${accent} 82%, black)`);   /* hover */
-    $r.style.setProperty('--g73-icon-muted',  `color-mix(in srgb, ${accent} 55%, black)`);   /* subtle */
-    $r.style.setProperty('--g73-icon-primary',`color-mix(in srgb, ${primary} 72%, black)`);  /* primary-dark */
-    let meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta){ meta = document.createElement('meta'); meta.name='theme-color'; document.head.appendChild(meta); }
-    meta.setAttribute('content', primary);
-    window.dispatchEvent(new CustomEvent('theme:changed', { detail:{ primary, accent, source:'player-binder-v2.3' } }));
-  }
+    function loadPalette(){
+      try{ const s = JSON.parse(localStorage.getItem('siteThemeV1')||'null');
+        if (s?.main && s?.accent) return { primary:s.main, accent:s.accent }; }catch{}
+      try{ const t = JSON.parse(localStorage.getItem('themeSettings')||'null');
+        if (t?.mainColor && t?.accentColor) return { primary:t.mainColor, accent:t.accentColor }; }catch{}
+      const cs = getComputedStyle($r);
+      const p = (cs.getPropertyValue('--app-primary')||cs.getPropertyValue('--primary-color')).trim();
+      const a = (cs.getPropertyValue('--app-accent') ||cs.getPropertyValue('--accent-color')).trim();
+      return (p && a) ? { primary:p, accent:a } : { primary:'#00f0ff', accent:'#ff00f0' };
+    }
 
-  function ensureStyle(){
-    if (document.getElementById('g73-player-binder-v23')) return;
-    const css = `
-/* === G73 Player Binder v2.3 (icons: no glow) === */
+    function applyVars({primary,accent}){
+      $r.style.setProperty('--app-primary', primary);
+      $r.style.setProperty('--app-accent',  accent);
+      $r.style.setProperty('--primary-color', primary);
+      $r.style.setProperty('--accent-color',  accent);
+      $r.style.setProperty('--glow-color',    primary);
+      $r.style.setProperty('--prog-fill',     `linear-gradient(90deg, ${primary}, ${accent})`);
 
-/* globals */
+      $r.style.setProperty('--g73-icon',        `color-mix(in srgb, ${accent} 68%, black)`);
+      $r.style.setProperty('--g73-icon-hover',  `color-mix(in srgb, ${accent} 82%, black)`);
+      $r.style.setProperty('--g73-icon-muted',  `color-mix(in srgb, ${accent} 55%, black)`);
+      $r.style.setProperty('--g73-icon-primary',`color-mix(in srgb, ${primary} 72%, black)`);
+
+      let meta = document.querySelector('meta[name="theme-color"]');
+      if (!meta){ meta = document.createElement('meta'); meta.name='theme-color'; document.head.appendChild(meta); }
+      meta.setAttribute('content', primary);
+      window.dispatchEvent(new CustomEvent('theme:changed', { detail:{ primary, accent, source:'player-binder-v2.3' } }));
+    }
+
+    function ensureStyle(){
+      if (document.getElementById('g73-player-binder-v23')) return;
+      const css = `
 :root{ --primary-color: var(--app-primary); --accent-color: var(--app-accent); }
 
-/* NAV */
 .navbar{
   border-bottom:1px solid color-mix(in srgb, var(--app-primary) 36%, transparent) !important;
   box-shadow: 0 8px 24px rgba(0,0,0,.35) !important;
@@ -141,13 +229,11 @@
   outline:1px solid color-mix(in srgb, var(--app-primary) 40%, transparent) !important;
 }
 
-/* TITLES */
 .meta .name, h1,h2,h3{
   color: color-mix(in srgb, var(--app-primary) 86%, white 0%) !important;
   text-shadow: 0 0 8px color-mix(in srgb, var(--app-primary) 24%, transparent) !important;
 }
 
-/* ICONS — darker accent, NO glow/stroke/shadow */
 i.material-icons,
 .icon-btn i,
 .icon-btn svg, .icon-btn svg path,
@@ -165,7 +251,6 @@ i.material-icons,
 .icon-btn:hover i,
 .icon-btn:hover svg{ color: var(--g73-icon-hover) !important; }
 
-/* BUTTONS */
 .toolbar .icon-btn,
 button:not(.swatch){
   background: var(--prog-fill, linear-gradient(90deg, var(--app-primary), var(--app-accent))) !important;
@@ -181,10 +266,8 @@ button:not(.swatch):hover{
   box-shadow: 0 10px 22px rgba(0,0,0,.45), 0 0 16px color-mix(in srgb, var(--app-accent) 28%, transparent) !important;
 }
 
-/* PLAYER FRAME */
 #videoShell, #player{ border-color: color-mix(in srgb, var(--app-primary) 34%, transparent) !important; }
 
-/* REACTIONS */
 .video-reaction-bar .reaction-btn{
   border:1px solid color-mix(in srgb, var(--app-primary) 44%, transparent) !important;
   background: color-mix(in srgb, var(--app-primary) 10%, transparent) !important;
@@ -193,14 +276,9 @@ button:not(.swatch):hover{
   border-color: color-mix(in srgb, var(--app-primary) 70%, transparent) !important;
   box-shadow: 0 6px 14px rgba(0,0,0,.35), 0 0 10px color-mix(in srgb, var(--app-primary) 26%, transparent) !important;
 }
-.video-reaction-bar .reaction-btn[aria-pressed="true"]{
-  outline:1px solid color-mix(in srgb, var(--app-primary) 65%, transparent) !important;
-}
-.video-reaction-bar .material-icons{
-  color: var(--g73-icon) !important; -webkit-text-fill-color: currentColor !important;
-}
+.video-reaction-bar .reaction-btn[aria-pressed="true"]{ outline:1px solid color-mix(in srgb, var(--app-primary) 65%, transparent) !important; }
+.video-reaction-bar .material-icons{ color: var(--g73-icon) !important; -webkit-text-fill-color: currentColor !important; }
 
-/* STATS */
 .video-stats{
   border:1px solid color-mix(in srgb, var(--app-primary) 32%, transparent) !important;
   background:
@@ -211,21 +289,17 @@ button:not(.swatch):hover{
 }
 .video-stats span{ color: color-mix(in srgb, var(--app-primary) 86%, white 0%) !important; font-weight:700 !important; }
 
-/* FORMS */
 input, select, textarea{
   border:1px solid color-mix(in srgb, var(--app-primary) 32%, transparent) !important;
   background: color-mix(in srgb, #0b0d10 85%, transparent) !important;
   color: color-mix(in srgb, var(--app-accent) 88%, white) !important;
 }
-input::placeholder, textarea::placeholder{
-  color: color-mix(in srgb, var(--app-accent) 50%, white) !important;
-}
+input::placeholder, textarea::placeholder{ color: color-mix(in srgb, var(--app-accent) 50%, white) !important; }
 input:focus, select:focus, textarea:focus{
   border-color: color-mix(in srgb, var(--app-primary) 60%, transparent) !important;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-primary) 25%, transparent) !important;
 }
 
-/* FOOTER */
 footer, .branding-footer{
   border-top:1px solid color-mix(in srgb, var(--app-primary) 26%, transparent) !important;
   color: color-mix(in srgb, var(--app-primary) 82%, white 0%) !important;
@@ -234,290 +308,152 @@ footer, .branding-footer{
   color: color-mix(in srgb, var(--app-accent) 88%, white 0%) !important;
   text-shadow: 0 0 6px color-mix(in srgb, var(--app-accent) 32%, transparent) !important;
 }
-
-/* ===== VIDEOS LIST (#list) ===== */
-#list{
-  border:1px solid color-mix(in srgb, var(--app-primary) 26%, transparent) !important;
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--app-primary) 6%, transparent),
-      color-mix(in srgb, var(--app-accent) 4%, transparent)) !important;
-  border-radius: 12px !important; padding: 8px !important;
-}
-#list :is(.item,.video-item,.video-row,.video-card,li,a.media,.entry,[data-video-id],[data-id]){
-  border:1px solid color-mix(in srgb, var(--app-primary) 30%, transparent) !important;
-  background: color-mix(in srgb, var(--app-primary) 8%, transparent) !important;
-  border-radius: 12px !important; overflow: hidden;
-  box-shadow: 0 0 10px color-mix(in srgb, var(--app-primary) 16%, transparent) !important;
-}
-#list :is(.item,.video-item,.video-row,.video-card,li,a.media,.entry,[data-video-id],[data-id]):hover{
-  border-color: color-mix(in srgb, var(--app-accent) 42%, transparent) !important;
-  box-shadow: 0 8px 18px rgba(0,0,0,.35),
-              0 0 14px color-mix(in srgb, var(--app-accent) 22%, transparent) !important;
-}
-#list :is(.active,[aria-current="true"],[data-active="true"]){
-  border-color: color-mix(in srgb, var(--app-accent) 60%, transparent) !important;
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--app-accent) 12%, transparent),
-      color-mix(in srgb, var(--app-primary) 10%, transparent)) !important;
-}
-#list :is(img,.thumb,.thumbnail){ border-radius: 10px !important;
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--app-primary) 24%, transparent) !important; }
-#list :is(.title,.name,.video-title,.track-title){
-  color: color-mix(in srgb, var(--app-primary) 84%, white 0%) !important;
-  text-shadow: 0 0 8px color-mix(in srgb, var(--app-primary) 24%, transparent) !important;
-  font-weight: 800 !important;
-}
-#list :is(.artist,.subtitle,.meta){ color: color-mix(in srgb, var(--app-accent) 82%, white 0%) !important; }
-#list :is(.item,.video-item,.video-row,.video-card,li,a.media,.entry,[data-video-id],[data-id]) i.material-icons,
-#list :is(.item,.video-item,.video-row,.video-card,li,a.media,.entry,[data-video-id],[data-id]) svg{
-  color: var(--g73-icon) !important; fill: currentColor !important;
-  -webkit-text-stroke: 0 !important; filter: none !important; text-shadow: none !important; box-shadow: none !important;
-}
-
-/* ===== LOGIN MODAL (icons no glow) ===== */
-#auth-modal.modal{ background: color-mix(in srgb, #000 55%, transparent) !important; }
-#auth-modal .modal-content{
-  background:
-    linear-gradient(180deg,
-      color-mix(in srgb, var(--app-primary) 8%, transparent),
-      color-mix(in srgb, var(--app-accent) 6%, transparent)) !important;
-  color: color-mix(in srgb, var(--app-accent) 75%, white) !important;
-  border:1px solid color-mix(in srgb, var(--app-primary) 55%, transparent) !important;
-  border-radius:16px !important; box-shadow:0 10px 30px rgba(0,0,0,.55),
-                                      0 0 18px color-mix(in srgb, var(--app-primary) 28%, transparent) !important;
-  backdrop-filter: blur(6px);
-}
-#auth-modal .modal-content h2{
-  color: color-mix(in srgb, var(--app-accent) 90%, white 0%) !important;
-  text-align:center; text-shadow:0 0 8px color-mix(in srgb, var(--app-accent) 45%, transparent) !important;
-}
-#auth-modal .modal-content .close{
-  color: var(--g73-icon) !important; cursor:pointer; transition: transform .12s ease, color .12s ease;
-  -webkit-text-stroke: 0 !important; filter: none !important; text-shadow: none !important; box-shadow: none !important;
-}
-#auth-modal .modal-content .close:hover{
-  transform: scale(1.08); color: var(--g73-icon-hover) !important;
-}
-#auth-modal .modal-content input{
-  width:100%; padding:12px; margin:10px 0; border-radius:10px;
-  border:1px solid color-mix(in srgb, var(--app-primary) 35%, transparent) !important;
-  background: color-mix(in srgb, #0b0d10 78%, transparent) !important;
-  color: color-mix(in srgb, var(--app-accent) 88%, white) !important;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
-}
-#auth-modal .modal-content input::placeholder{
-  color: color-mix(in srgb, var(--app-accent) 50%, white) !important;
-}
-#auth-modal .modal-content input:focus{
-  border-color: color-mix(in srgb, var(--app-primary) 65%, transparent) !important;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-primary) 25%, transparent) !important;
-}
-/* password visibility icon (darker accent, no glow) */
-#toggle-password i#toggle-icon{
-  color: var(--g73-icon) !important; -webkit-text-fill-color: currentColor !important;
-  -webkit-text-stroke: 0 !important; filter: none !important; text-shadow: none !important; box-shadow: none !important;
-}
-#toggle-password:hover i#toggle-icon{ color: var(--g73-icon-hover) !important; }
-
-#password-requirements{ color: color-mix(in srgb, var(--app-accent) 85%, #ffd86b) !important; }
-
-/* modal buttons */
-#auth-modal .modal-content button{
-  display:inline-block; margin:8px 6px 0; padding:10px 16px; font-weight:700; border:none; border-radius:10px;
-  color:#0b0d10 !important; background: var(--prog-fill, linear-gradient(90deg, var(--app-primary), var(--app-accent))) !important;
-  box-shadow: 0 6px 18px rgba(0,0,0,.35), 0 0 14px color-mix(in srgb, var(--app-primary) 30%, transparent) !important;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
-#auth-modal .modal-content button:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(0,0,0,.45), 0 0 18px color-mix(in srgb, var(--app-accent) 35%, transparent) !important;
-}
-/* outline variant (Login) */
-#auth-modal .modal-content button:nth-of-type(2){
-  background: color-mix(in srgb, var(--app-primary) 12%, transparent) !important;
-  color: color-mix(in srgb, var(--g73-icon-primary) 100%, white 0%) !important;
-  border:1px solid color-mix(in srgb, var(--app-primary) 38%, transparent) !important;
-}
-#auth-modal .modal-content button:nth-of-type(2):hover{
-  background: color-mix(in srgb, var(--app-accent) 16%, transparent) !important;
-  border-color: color-mix(in srgb, var(--app-accent) 40%, transparent) !important;
-}
 `;
-    const el = document.createElement('style');
-    el.id = 'g73-player-binder-v23';
-    el.textContent = css;
-    document.head.appendChild(el);
-  }
+      const el = document.createElement('style');
+      el.id = 'g73-player-binder-v23';
+      el.textContent = css;
+      document.head.appendChild(el);
+    }
 
-  /* ---- boot & live updates ---- */
-  let queued = false;
-  const queue = ()=>{ if (queued) return; queued = true; requestAnimationFrame(()=>{ queued=false; applyVars(loadPalette()); ensureStyle(); }); };
+    let queued = false;
+    const queue = ()=>{ if (queued) return; queued = true; requestAnimationFrame(()=>{ queued=false; applyVars(loadPalette()); ensureStyle(); }); };
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', queue, { once:true });
-  else queue();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', queue, { once:true });
+    else queue();
 
-  window.addEventListener('theme:changed', queue, { passive:true });
-  window.addEventListener('storage', (e)=>{
-    if (e.key === 'siteThemeV1' || e.key === 'themeSettings') queue();
-  }, { passive:true });
-  new MutationObserver(queue).observe($r, { attributes:true, attributeFilter:['style','class','data-theme'] });
+    window.addEventListener('theme:changed', queue, { passive:true });
+    window.addEventListener('storage', (e)=>{ if (e.key === 'siteThemeV1' || e.key === 'themeSettings') queue(); }, { passive:true });
+    new MutationObserver(queue).observe($r, { attributes:true, attributeFilter:['style','class','data-theme'] });
 
-  // optional manual
-  window.G73PlayerBinder = { apply: queue };
-})();
-</script>
-<!-- ▲▲ G73 Player Binder v2.3 (icons: no glow) ▲▲ -->
-</head>  
+    window.G73PlayerBinder = { apply: queue };
+  })();
+  </script>
+  <!-- ▲▲ G73 Player Binder v2.3 (icons: no glow) ▲▲ -->
+</head>
 
-<body>  
-  <!-- NAVBAR (fixed via main.css) -->
-  <div class="navbar">  
-    <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>  
-    <span class="navbar-title">GJordan.music</span>  
-    <span id="account-btn" onclick="toggleAuthModal()"><i class="material-icons">account_circle</i></span>  
-    <div class="menu" id="menu" hidden>  
-      <a href="index.html">Music</a>  
-      <a href="#">Videos</a>  
-      <a href="about.html">About</a>  
-      <a href="contact.html">Contact</a>  
-    </div>  
+<body>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>
+    <span class="navbar-title">GJordan.music</span>
+    <span id="account-btn" onclick="toggleAuthModal()"><i class="material-icons">account_circle</i></span>
+    <div class="menu" id="menu" hidden>
+      <a href="index.html">Music</a>
+      <!-- ✅ fix: real link + aria-current -->
+      <a href="player.html" aria-current="page">Videos</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
   </div>
+
   <!-- Solid in-flow spacer that equals navbar height -->
   <div id="nav-spacer" aria-hidden="true" style="height:0"></div>
+
   <!-- Theme & Layout settings -->
-  <section id="settings" aria-label="Theme & Layout settings">  
-    <h3>Theme</h3>  
-    <div class="field"><label>Background</label><input type="color" id="bgPicker"></div>  
-    <div class="field"><label>Text</label><input type="color" id="textPicker"></div>  
-    <div class="field"><label>Primary</label><input type="color" id="primaryPicker" value="#D4AF37"></div>  
-    <div class="field"><label>Secondary</label><input type="color" id="secondaryPicker" value="#8B6B1B"></div>  
-    <div class="field"><label>Glow strength</label><input type="range" id="glowStrength" min="0.4" max="1.6" step="0.05" value="1"></div>  
-    <div class="field"><label>Glow opacity</label><input type="range" id="glowAlpha" min="0" max="1" step="0.05" value="0.55"></div>  
-    <div class="field"><label>Corner radius</label><input type="range" id="radius" min="6" max="24" step="1" value="12"></div>  
-    <div class="field"><label>Base font size</label><input type="range" id="fontSize" min="12" max="18" step="1" value="14"></div>  
+  <section id="settings" aria-label="Theme & Layout settings">
+    <h3>Theme</h3>
+    <div class="field"><label>Background</label><input type="color" id="bgPicker"></div>
+    <div class="field"><label>Text</label><input type="color" id="textPicker"></div>
+    <div class="field"><label>Primary</label><input type="color" id="primaryPicker" value="#D4AF37"></div>
+    <div class="field"><label>Secondary</label><input type="color" id="secondaryPicker" value="#8B6B1B"></div>
+    <div class="field"><label>Glow strength</label><input type="range" id="glowStrength" min="0.4" max="1.6" step="0.05" value="1"></div>
+    <div class="field"><label>Glow opacity</label><input type="range" id="glowAlpha" min="0" max="1" step="0.05" value="0.55"></div>
+    <div class="field"><label>Corner radius</label><input type="range" id="radius" min="6" max="24" step="1" value="12"></div>
+    <div class="field"><label>Base font size</label><input type="range" id="fontSize" min="12" max="18" step="1" value="14"></div>
 
-    <h3 style="margin-top:12px">Playlist Layout</h3>  
-    <div class="field"><label>Layout</label><select id="layoutMode"><option value="list">List</option><option value="grid">Grid</option></select></div>  
-    <div class="field"><label>Grid columns</label><input type="range" id="gridCols" min="1" max="4" step="1" value="2"></div>  
-    <div class="field"><label>Thumb width</label><input type="range" id="thumbW" min="56" max="200" step="4" value="64"></div>  
+    <h3 style="margin-top:12px">Playlist Layout</h3>
+    <div class="field"><label>Layout</label><select id="layoutMode"><option value="list">List</option><option value="grid">Grid</option></select></div>
+    <div class="field"><label>Grid columns</label><input type="range" id="gridCols" min="1" max="4" step="1" value="2"></div>
+    <div class="field"><label>Thumb width</label><input type="range" id="thumbW" min="56" max="200" step="4" value="64"></div>
 
-    <div class="settings-actions">  
-      <button class="icon-btn" id="saveTheme" title="Save">  
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.5z"/></svg>  
-      </button>  
-      <button class="icon-btn" id="resetTheme" title="Reset">  
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 6V3L8 7l4 4V6c2.76 0 5 2.24 5 5a5 5 0 11-5-5z"/></svg>  
-      </button>  
-      <button class="icon-btn" id="closeSettings" title="Close">  
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.3 10.59 10.6l6.3-6.3z"/></svg>  
-      </button>  
-    </div>  
+    <div class="settings-actions">
+      <button class="icon-btn" id="saveTheme" title="Save">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.5z"/></svg>
+      </button>
+      <button class="icon-btn" id="resetTheme" title="Reset">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 6V3L8 7l4 4V6c2.76 0 5 2.24 5 5a5 5 0 11-5-5z"/></svg>
+      </button>
+      <button class="icon-btn" id="closeSettings" title="Close">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M18.3 5.71L12 12l6.3 6.29-1.41 1.42L10.59 13.4 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.3 10.59 10.6l6.3-6.3z"/></svg>
+      </button>
+    </div>
     <small>Settings are stored locally in your browser.</small>
-  </section>  
+  </section>
 
   <!-- MAIN -->
-  <main>  
-    <aside id="list" aria-label="Playlist" layout="list"></aside>  
+  <main>
+    <aside id="list" aria-label="Playlist" layout="list"></aside>
 
-<section id="player" style="padding-top:0;margin-top:0;">
-  <div id="videoShell" style="padding-top:0;">
-    <div id="fsOverlay">
-      <button class="icon-btn" id="fsExit" title="Exit fullscreen">
-        <svg viewBox="0 0 24 24" width="18" height="18">
-          <path fill="currentColor" d="M7 10H5V5h5v2H7v3zm12-5h-5v2h3v3h2V5zM7 17h3v2H5v-5h2v3zm10-3h2v5h-5v-2h3v-3z"/>
-        </svg>
-      </button>
-    </div>
-    <video id="video" crossorigin="anonymous" controls playsinline preload="metadata"
-           controlslist="nodownload" oncontextmenu="return false"></video>
-  </div>
+    <section id="player" style="padding-top:0;margin-top:0;">
+      <div id="videoShell" style="padding-top:0;">
+        <div id="fsOverlay">
+          <button class="icon-btn" id="fsExit" title="Exit fullscreen">
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path fill="currentColor" d="M7 10H5V5h5v2H7v3zm12-5h-5v2h3v3h2V5zM7 17h3v2H5v-5h2v3zm10-3h2v5h-5v-2h3v-3z"/>
+            </svg>
+          </button>
+        </div>
+        <video id="video" crossorigin="anonymous" controls playsinline preload="metadata"
+               controlslist="nodownload" oncontextmenu="return false"></video>
+      </div>
 
-  <img src="G73.png" alt="G73"
-       style="display:block; margin:auto; width:100px; filter: drop-shadow(0 0 5px gold); padding:5px;">
+      <img src="G73.png" alt="G73"
+           style="display:block; margin:auto; width:100px; filter: drop-shadow(0 0 5px gold); padding:5px;">
 
-  <!-- ▼▼ NEW: Reactions + live stats (videos) ▼▼ -->
-  <div id="video-reaction-bar" class="video-reaction-bar" aria-label="Video reactions">
-    <button class="reaction-btn" id="video-like-btn" title="Like" aria-pressed="false">
-      <i class="material-icons" aria-hidden="true">thumb_up</i>
-    </button>
-    <button class="reaction-btn" id="video-dislike-btn" title="Dislike" aria-pressed="false">
-      <i class="material-icons" aria-hidden="true">thumb_down</i>
-    </button>
-  </div>
+      <!-- Reactions + live stats -->
+      <div id="video-reaction-bar" class="video-reaction-bar" aria-label="Video reactions">
+        <button class="reaction-btn" id="video-like-btn" title="Like" aria-pressed="false">
+          <i class="material-icons" aria-hidden="true">thumb_up</i>
+        </button>
+        <button class="reaction-btn" id="video-dislike-btn" title="Dislike" aria-pressed="false">
+          <i class="material-icons" aria-hidden="true">thumb_down</i>
+        </button>
+      </div>
 
-  <div id="video-stats" class="video-stats" aria-live="polite">
-    <span id="video-stats-views">Views 0</span>
-    <span id="video-stats-likes">Likes 0</span>
-    <span id="video-stats-dislikes">Dislikes 0</span>
-  </div>
-  <!-- ▲▲ NEW: Reactions + live stats (videos) ▲▲ -->
+      <div id="video-stats" class="video-stats" aria-live="polite">
+        <span id="video-stats-views">Views 0</span>
+        <span id="video-stats-likes">Likes 0</span>
+        <span id="video-stats-dislikes">Dislikes 0</span>
+      </div>
 
-  <div class="meta">
-    <span class="name" id="currentName">Select a video…</span>
-    <div class="toolbar">
-      <button class="icon-btn" id="settingsBtn" title="Theme">
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19.14 12.94a7 7 0 11-7.08-7.08 5 5 0 107.08 7.08z"/></svg>
-      </button>
-      <button class="icon-btn" id="clearCacheBtn" title="Clear thumbnails cache">
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm13-14h-3.5l-1-1h-5l-1 1H4v2h15V5z"/></svg>
-      </button>
-      <button class="icon-btn" id="shareBtn" title="Share">
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.26 3.26 0 000-1.39l7.05-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-3-3c0 .23.03 .45.08 .66l-7.05 4.11a3 3 0 100 4.64l7.05 4.11c-.05 .21-.08 .43-.08 .66a3 3 0 103-3z"/></svg>
-      </button>
+      <div class="meta">
+        <span class="name" id="currentName">Select a video…</span>
+        <div class="toolbar">
+          <button class="icon-btn" id="settingsBtn" title="Theme">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M19.14 12.94a7 7 0 11-7.08-7.08 5 5 0 107.08 7.08z"/></svg>
+          </button>
+          <button class="icon-btn" id="clearCacheBtn" title="Clear thumbnails cache">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm13-14h-3.5l-1-1h-5l-1 1H4v2h15V5z"/></svg>
+          </button>
+          <button class="icon-btn" id="shareBtn" title="Share">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.26 3.26 0 000-1.39l7.05-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-3-3c0 .23.03 .45.08 .66l-7.05 4.11a3 3 0 100 4.64l7.05 4.11c-.05 .21-.08 .43-.08 .66a3 3 0 103-3z"/></svg>
+          </button>
 
-      <div class="spacer"></div>
+          <div class="spacer"></div>
 
-      <button class="icon-btn" id="shuffleBtn" title="Shuffle" aria-pressed="false">
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M17 3h4v4h-2V6.41l-4.29 4.3-1.42-1.42L17.59 5H17V3zM3 7h5l3 4-3 4H3v-2h4.17L10 11 7.17 9H3V7zm18 10v4h-4v-2h1.59l-4.3-4.29 1.42-1.42L20 17.59V17h1z"/></svg>
-      </button>
-      <button class="icon-btn" id="loopBtn" title="Loop" aria-pressed="false">
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6h2a8 8 0 00-8-8zm-6 6H4a8 8 0 008 8v3l4-4-4-4v3a6 6 0 01-6-6z"/></svg>
-      </button>
-      <button class="icon-btn" id="pipBtn" title="Picture-in-Picture" style="display:none">
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M3 5h18v14H3V5zm2 2v10h14V7H5zm7 3h5v4h-5v-4z"/></svg>
-      </button>
-      <button class="icon-btn" id="fsBtn" title="Fullscreen">
-        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm12 5h-5v-2h3v-3h2v5zM7 7h3V5H5v5h2V7zm12 3V5h-5v2h3v3h2z"/></svg>
-      </button>
-    </div>
-  </div>
-</section>
-<!-- ▲▲ REPLACE ends ▲▲ -->
+          <button class="icon-btn" id="shuffleBtn" title="Shuffle" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M17 3h4v4h-2V6.41l-4.29 4.3-1.42-1.42L17.59 5H17V3zM3 7h5l3 4-3 4H3v-2h4.17L10 11 7.17 9H3V7zm18 10v4h-4v-2h1.59l-4.3-4.29 1.42-1.42L20 17.59V17h1z"/></svg>
+          </button>
+          <button class="icon-btn" id="loopBtn" title="Loop" aria-pressed="false">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6h2a8 8 0 00-8-8zm-6 6H4a8 8 0 008 8v3l4-4-4-4v3a6 6 0 01-6-6z"/></svg>
+          </button>
+          <button class="icon-btn" id="pipBtn" title="Picture-in-Picture" style="display:none">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M3 5h18v14H3V5zm2 2v10h14V7H5zm7 3h5v4h-5v-4z"/></svg>
+          </button>
+          <button class="icon-btn" id="fsBtn" title="Fullscreen">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M7 14H5v5h5v-2H7v-3zm12 5h-5v-2h3v-3h2v5zM7 7h3V5H5v5h2V7zm12 3V5h-5v2h3v3h2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
 
-<!-- One-time nav->player offset (runs on load only) -->
-<script>
-(function(){
-  const nav    = document.querySelector('.navbar');
-  const player = document.getElementById('player');
-  if (!nav || !player) return;
-
-  function navHeight(){
-    const r = nav.getBoundingClientRect();
-    return Math.ceil(r.height || nav.offsetHeight || 0);
-  }
-  function apply(){
-    const h = navHeight();
-    player.style.setProperty('padding-top', h + 'px', 'important'); // push under nav
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', apply, { once:true });
-  } else {
-    apply();
-  }
-  window.addEventListener('load', apply, { once:true });
-})();
-</script>
-
-  </main>  
+  </main>
 
   <!-- FOOTER -->
-  <footer>  
-    <div class="branding-footer">  
-      <p>&copy; 2025 G Jordan &nbsp;|&nbsp; <span class="tm">G73&trade; LLC</span></p>  
-      <!-- Footer video aggregates -->
+  <footer>
+    <div class="branding-footer">
+      <p>&copy; 2025 G Jordan &nbsp;|&nbsp; <span class="tm">G73&trade; LLC</span></p>
+
       <div id="footerVideoTotals"
            style="margin-top:8px; display:flex; justify-content:center; align-items:center; gap:18px; flex-wrap:wrap; font-size:0.95em;">
         <span style="display:inline-flex; align-items:center; gap:6px;">
@@ -533,61 +469,58 @@ footer, .branding-footer{
           <strong id="footerVideoHaters">0</strong>
         </span>
       </div>
-    </div>  
-  </footer>  
+    </div>
+  </footer>
 
   <!-- Modals -->
-  <div id="auth-modal" class="modal" hidden>  
-    <div class="modal-content">  
-      <span class="close" onclick="closeAuthModal()">&times;</span>  
-      <h2>Sign Up / Login</h2>  
-      <input type="email" id="modal-email" placeholder="Email" />  
-      <div style="position: relative;">  
-        <input type="password" id="modal-password" placeholder="Password" />  
-        <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">  
-          <i class="material-icons" id="toggle-icon">visibility</i>  
-        </span>  
-      </div>  
-      <div id="password-requirements" style="text-align: left; font-size: 13px; color: gold; margin-top: 10px;">  
-        <p id="length-check">• At least 8 characters</p>  
-        <p id="upper-check">• At least 1 uppercase letter</p>  
-        <p id="lower-check">• At least 1 lowercase letter</p>  
-        <p id="number-check">• At least 1 number</p>  
-      </div>  
-      <div>  
-        <button onclick="modalSignUp()">Sign Up</button>  
-        <button onclick="modalLogin()">Login</button>  
-      </div>  
-    </div>  
-  </div>  
+  <div id="auth-modal" class="modal" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="closeAuthModal()">&times;</span>
+      <h2>Sign Up / Login</h2>
+      <input type="email" id="modal-email" placeholder="Email" />
+      <div style="position: relative;">
+        <input type="password" id="modal-password" placeholder="Password" />
+        <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+          <i class="material-icons" id="toggle-icon">visibility</i>
+        </span>
+      </div>
+      <div id="password-requirements" style="text-align: left; font-size: 13px; color: gold; margin-top: 10px;">
+        <p id="length-check">• At least 8 characters</p>
+        <p id="upper-check">• At least 1 uppercase letter</p>
+        <p id="lower-check">• At least 1 lowercase letter</p>
+        <p id="number-check">• At least 1 number</p>
+      </div>
+      <div>
+        <button onclick="modalSignUp()">Sign Up</button>
+        <button onclick="modalLogin()">Login</button>
+      </div>
+    </div>
+  </div>
 
-  <div id="toast"></div>  
-  <div id="toastBox" aria-live="polite"></div>  
+  <div id="toast"></div>
+  <div id="toastBox" aria-live="polite"></div>
 
   <!-- Scripts -->
-  <script src="js/g73-player.js"></script>    
-  <script type="module" src="js/firebase/firebase-init.js"></script>    
-  <script type="module" src="js/firebase/firebase-stats.js"></script>    
-  <script type="module" src="js/firebase/firebase-auth.js"></script>    
+  <script src="js/g73-player.js"></script>
+  <script type="module" src="js/firebase/firebase-init.js"></script>
+  <script type="module" src="js/firebase/firebase-stats.js"></script>
+  <script type="module" src="js/firebase/firebase-auth.js"></script>
 
-  <!-- NEW: Video stats (views + reactions via subcollection) -->
   <script type="module" src="js/firebase/video-stats.js"></script>
 
-  <script src="js/theme/theme-init.js"></script>    
-  <script src="js/theme/theme-preview.js"></script>    
-  <script src="js/theme/theme-save.js"></script>    
-  <script src="js/theme/theme-sync.js"></script>    
-  <script src="js/ui/navbar.js"></script>    
-  <script src="js/ui/modals.js"></script>    
-  <script src="js/ui/toast.js"></script>    
-  <script src="js/ui/password-visibility.js"></script>    
-  <script src="js/ui/password-check.js"></script>    
+  <script src="js/theme/theme-init.js"></script>
+  <script src="js/theme/theme-preview.js"></script>
+  <script src="js/theme/theme-save.js"></script>
+  <script src="js/theme/theme-sync.js"></script>
+  <script src="js/ui/navbar.js"></script>
+  <script src="js/ui/modals.js"></script>
+  <script src="js/ui/toast.js"></script>
+  <script src="js/ui/password-visibility.js"></script>
+  <script src="js/ui/password-check.js"></script>
   <script src="js/main.js"></script>
 
-  <!-- Small utilities that were previously inline -->
   <script src="js/menu-init.js"></script>
   <script src="js/theme-controller.js"></script>
-  <!-- REMOVED: js/nav-height.js to avoid conflicts -->
 
   <!-- Fallback auto-wire: subscribe when #video src changes. -->
   <script>
@@ -620,20 +553,16 @@ footer, .branding-footer{
       };
     })();
   </script>
+
   <script type="module" src="/js/firebase/video-footer-totals.js"></script>
 
-  <!-- Spacer sync (no extra top scroll; preserves position only when scrolled) -->
+  <!-- ✅ IMPORTANT: you had THREE different nav-gap systems.
+       Keep ONE. This is the safest: nav-spacer + ResizeObserver adjust, no forced scrollTo(0,0). -->
   <script>
     (function(){
       const nav = document.querySelector('.navbar');
       const spacer = document.getElementById('nav-spacer');
       if (!nav || !spacer) return;
-
-      // Make sure first content blocks don't add their own top gaps
-      const player = document.getElementById('player') || document.getElementById('videoShell');
-      if (player) { player.style.marginTop = '0'; }
-      const vs = document.getElementById('videoShell');
-      if (vs) { vs.style.paddingTop = '0'; }
 
       let prevH = 0;
       const measure = () => Math.ceil(nav.getBoundingClientRect().height || 0);
@@ -644,10 +573,10 @@ footer, .branding-footer{
         if (force || h !== prevH) {
           const delta = h - prevH;
           spacer.style.height = h + 'px';
-          if (window.scrollY > 0 && delta !== 0) {
-            // Preserve visual position only if user isn't at top
-            window.scrollBy(0, delta);
-          }
+
+          // preserve visible position only when user isn't at top
+          if (window.scrollY > 0 && delta !== 0) window.scrollBy(0, delta);
+
           prevH = h;
         }
       }
@@ -659,124 +588,6 @@ footer, .branding-footer{
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => apply(false)).catch(()=>{});
     })();
   </script>
-  <script>
-/*! G73 nav-gap v1.2 — inline, modal-safe, theme-safe, with reliable start-at-top */
-(function(){
-  const NAV = '.navbar';
-  const VAR = '--nav-gap';
-  const TARGETS = ['#videoShell', '.container', 'main'];
 
-  function setGap(px){ document.documentElement.style.setProperty(VAR, px + 'px'); }
-
-  function measure(){
-    const nav = document.querySelector(NAV);
-    const h = nav ? Math.ceil(nav.getBoundingClientRect().height || 0) : 0;
-    setGap(h);
-    console.debug('[nav-gap] navbar height →', h);
-    return h;
-  }
-
-  function ensurePadding(){
-    // Inline styles beat resets; doesn’t touch fixed modals
-    for (const sel of TARGETS){
-      const el = document.querySelector(sel);
-      if (el) el.style.paddingTop = `calc(var(${VAR}, 0px) + 8px)`;
-    }
-  }
-
-  // ---- Start-at-top helpers (integrated) ----
-  function isBfcacheRestore(){
-    try{
-      const nav = performance.getEntriesByType('navigation')[0];
-      return nav && nav.type === 'back_forward';
-    }catch{ return false; }
-  }
-
-  // Don’t fight browser scroll restore on BFCache; enforce “manual” only for fresh loads
-  try{
-    if ('scrollRestoration' in history && !isBfcacheRestore()){
-      history.scrollRestoration = 'manual';
-      window.addEventListener('pageshow', ()=>{ history.scrollRestoration = 'auto'; }, { once:true });
-    }
-  }catch{}
-
-  let didAutoScroll = false;
-  let userInteracted = false;
-  const markInteracted = ()=>{ userInteracted = true; };
-  window.addEventListener('wheel', markInteracted, { passive:true, once:true });
-  window.addEventListener('touchstart', markInteracted, { passive:true, once:true });
-  window.addEventListener('pointerdown', markInteracted, { passive:true, once:true });
-  window.addEventListener('keydown', markInteracted, { passive:true, once:true });
-
-  function currentNavGap(){
-    return parseInt(getComputedStyle(document.documentElement).getPropertyValue(VAR)) || 0;
-  }
-
-  function firstContentEl(){
-    for (const sel of TARGETS){
-      const el = document.querySelector(sel);
-      if (el) return el;
-    }
-    return null;
-  }
-
-  function maybeScrollTop(reason){
-    if (didAutoScroll || userInteracted) return;
-    if (isBfcacheRestore()) return;        // preserve restored scroll
-    if (location.hash) return;             // don’t break anchor links
-
-    // Wait a tick so padding/vars apply, then check overlap
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      const navH = currentNavGap();
-      const target = firstContentEl();
-      if (!target) return;
-
-      const top = target.getBoundingClientRect().top;
-      // If content is still at/under the navbar, or the page isn’t at y=0, snap once
-      if (top < Math.max(0, navH - 1) || window.scrollY !== 0){
-        console.debug('[nav-gap] auto-scroll → top (reason:', reason, ', top:', top, ', navH:', navH, ')');
-        window.scrollTo(0, 0);
-        didAutoScroll = true;
-      }
-    }));
-  }
-
-  // Observe navbar height changes (theme, fonts, etc.)
-  const ro = 'ResizeObserver' in window ? new ResizeObserver(()=>{ measure(); }) : null;
-
-  function boot(){
-    ensurePadding();
-    measure();
-
-    const nav = document.querySelector(NAV);
-    if (ro && nav) ro.observe(nav);
-
-    window.addEventListener('resize', ()=>{ measure(); }, { passive:true });
-    if (document.fonts && document.fonts.ready){
-      document.fonts.ready.then(()=>{ measure(); maybeScrollTop('fonts.ready'); }).catch(()=>{});
-    }
-    // Your controls theme plugin emits this already
-    window.addEventListener('player:controls-theme', ()=>{ measure(); }, { passive:true });
-
-    // --- Start-at-top sequence (a few quick, safe retries for flaky first paints)
-    maybeScrollTop('boot');           // after DOM is ready
-    setTimeout(()=> maybeScrollTop('t+40ms'), 40);
-    setTimeout(()=> maybeScrollTop('t+120ms'), 120);
-
-    // And once more at full load (images may change nav height)
-    window.addEventListener('load', ()=>{
-      ensurePadding(); measure(); maybeScrollTop('window.load');
-      // very late nudge just in case a late font/image changed the navbar height
-      setTimeout(()=> maybeScrollTop('t+300ms post-load'), 300);
-    }, { passive:true, once:true });
-  }
-
-  if (document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', boot, { once:true });
-  } else {
-    boot();
-  }
-})();
-</script>
-</body>  
+</body>
 </html>
