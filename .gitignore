@@ -10,3 +10,8 @@ id_ed25519
 id_ed25519.pub
 id_ed25519_*
 *.pem
+
+# local backups (do not commit)
+backups/
+*.tgz
+*.tar.gz

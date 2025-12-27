@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>G Jordan (G73) — Official Website | Music, Videos, Bio</title>
+  <title>G Jordan | Home</title>
 
   <!-- ✅ SEO essentials (HOME) -->
   <meta name="description" content="Official home of G Jordan (G73 / Studio G73) — independent music artist and creator based in Kalamazoo, Michigan. Stream music, watch videos, explore the official bio, and find verified links." />
@@ -13,8 +13,8 @@
   <meta name="theme-color" content="#000000" />
 
   <!-- ✅ Help Google discover the canonical bio/about source -->
-  <link rel="about" href="https://gjordan.music/about.html" />
-  <link rel="author" href="https://gjordan.music/about.html" />
+  <link rel="about" href="https://gjordan.music/about/" />
+  <link rel="author" href="https://gjordan.music/about/" />
   <link rel="me" href="https://www.bandlab.com/g_jordan" />
 
   <!-- ✅ Open Graph / Social -->
@@ -43,7 +43,16 @@
   <!-- Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <link rel="icon" href="favicon.png" type="image/png" />
+<!-- Favicons -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#00ff88">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <!-- ✅ Structured data (Knowledge Graph / Information Panel wiring) -->
   <script type="application/ld+json">
   {
@@ -119,8 +128,8 @@
         "@id":"https://gjordan.music/#person",
         "name":"G Jordan",
         "alternateName":"Jordan Smith",
-        "url":"https://gjordan.music/about.html",
-        "mainEntityOfPage":"https://gjordan.music/about.html",
+        "url":"https://gjordan.music/about/",
+        "mainEntityOfPage":"https://gjordan.music/about/",
         "image":"https://gjordan.music/gjordan.jpg",
         "homeLocation":{"@type":"Place","name":"Kalamazoo, Michigan, United States"},
         "jobTitle":"Music artist, producer, founder",
@@ -140,7 +149,7 @@
         "@type":"MusicGroup",
         "@id":"https://gjordan.music/#musicgroup",
         "name":"G Jordan",
-        "mainEntityOfPage":"https://gjordan.music/about.html",
+        "mainEntityOfPage":"https://gjordan.music/about/",
         "genre":["Hip-Hop","R&B","Alternative","Rap"],
         "foundingLocation":{"@type":"Place","name":"Kalamazoo, Michigan, United States"},
         "url":"https://gjordan.music/",
@@ -641,6 +650,16 @@
 
   <!-- Core Inline Logic 001 -->
   <script src="js/index/core-inline-logic-001.js"></script>
+  <script id="G73_INDEX_CANONICAL">
+  (function(){
+    try {
+      var p = location.pathname || "";
+      if (/\/index\.htmli.test(p)) {
+        location.replace(p.replace(/index\.htmli, ""));
+      }
+    } catch(e) {}
+  })();
+  </script>
 </head>
 
 <body>
@@ -650,10 +669,10 @@
     <span id="account-btn" onclick="toggleAuthModal()"><i class="material-icons">account_circle</i></span>
 
     <div class="menu" id="menu" hidden>
-      <a href="index.html">Home</a>
-      <a href="player.html">Videos</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+      <a href="/">Home</a>
+      <a href="/player/">Videos</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
     </div>
   </div>
 
@@ -1085,7 +1104,7 @@
           <h2>Official Links — G Jordan (G73)</h2>
           <p>
             This is the official home of <strong>G Jordan</strong> (G73 / Studio G73).
-            For the official artist bio, visit the <a href="about.html" rel="me" style="font-weight:900; text-decoration: underline;">About page</a>.
+            For the official artist bio, visit the <a href="/about/" rel="me" style="font-weight:900; text-decoration: underline;">About page</a>.
           </p>
 
           <div class="kpi" aria-label="Key facts">
@@ -1097,7 +1116,7 @@
 
           <div class="official-links" aria-label="Verified profiles">
             <a href="https://gjordan.music/" rel="me">Official Website</a>
-            <a href="about.html" rel="me">About / Bio</a>
+            <a href="/about/" rel="me">About / Bio</a>
             <a href="https://open.spotify.com/artist/6pdXs7p04tLtS7zqeZXmIt?si=abnA5hFkSCqudZpMu-c6iw" target="_blank" rel="noopener noreferrer me">Spotify</a>
             <a href="https://music.apple.com/us/artist/g-jordan/1862575717?ls" target="_blank" rel="noopener noreferrer me">Apple Music</a>
             <a href="https://youtube.com/@gjordan73?si=0DDKqL8ceqMHYdql" target="_blank" rel="noopener noreferrer me">YouTube</a>
@@ -1106,7 +1125,7 @@
             <a href="https://www.tiktok.com/@gjordan73?_r=1&_t=ZP-92Sq17Zufi3" target="_blank" rel="noopener noreferrer me">TikTok</a>
             <a href="https://www.facebook.com/share/17xHGmRWXU/" target="_blank" rel="noopener noreferrer me">Facebook</a>
             <a href="https://www.bandlab.com/g_jordan" target="_blank" rel="noopener noreferrer me">BandLab</a>
-            <a href="contact.html" rel="me">Contact</a>
+            <a href="/contact/" rel="me">Contact</a>
           </div>
 
           <p style="margin-top:10px; opacity:.9; font-size:.92rem;">

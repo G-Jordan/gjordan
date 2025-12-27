@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G Jordan | Thank You</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary-color: limegreen;
+      --accent-color: gold;
+      --dark-bg: #111;
+      --text-color: #ddd;
+      --navbar-bg: #000;
+    }
+
+    /* General Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Arial", sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-color);
+      overflow-x: hidden;
+    }
+
+    /* Canvas Background */
+    #background-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.4;
+      mix-blend-mode: screen;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--navbar-bg);
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .navbar-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--accent-color);
+      text-shadow: 0 0 8px var(--accent-color);
+      transition: all 0.4s ease;
+    }
+
+    .menu-icon {
+      font-size: 30px;
+      cursor: pointer;
+      transition: transform 0.4s ease;
+    }
+
+    .menu-icon.open {
+      transform: rotate(180deg);
+      color: red;
+    }
+
+    .menu {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 65px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: right;
+      box-shadow: 0 0 12px var(--primary-color);
+    }
+
+    .menu a {
+      color: var(--accent-color);
+      text-decoration: none;
+      margin: 10px 0;
+      font-weight: bold;
+      display: block;
+      transition: color 0.3s;
+    }
+
+    .menu a:hover {
+      color: var(--primary-color);
+    }
+
+    .menu.show {
+      display: flex;
+      animation: fadeInMenu 0.5s ease forwards;
+    }
+
+    @keyframes fadeInMenu {
+      from {opacity: 0; transform: translateY(-10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    /* Thank You Container */
+    .thankyou-container {
+      text-align: center;
+      margin: 100px auto 50px;
+      max-width: 600px;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      box-shadow: 0 0 15px var(--primary-color);
+    }
+
+    .thankyou-container h1 {
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px var(--accent-color);
+    }
+
+    .thankyou-container p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .thankyou-container a {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--primary-color);
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .thankyou-container a:hover {
+      background: var(--accent-color);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: var(--accent-color);
+      font-size: 14px;
+      box-shadow: 0 0 8px var(--primary-color);
+      text-shadow: 0 0 6px var(--accent-color);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="background-canvas"></canvas>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>
+    <span class="navbar-title" id="navbarTitle">GJordan.music</span>
+    <div class="menu" id="menu">
+      <a href="/">Home</a>
+      <a href="/player/">Videos</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+    </div>
+  </div>
+
+  <!-- Thank You Message -->
+  <div class="thankyou-container">
+    <h1>Thank You!</h1>
+    <p>Your message has been sent. G Jordan will get back to you soon!</p>
+    <a href="/">Return Home</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 G Jordan | <span style="color: limegreen;">G73™ LLC</span>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Navbar Toggle
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      const menuIcon = document.getElementById("menuIcon");
+      const navbarTitle = document.getElementById("navbarTitle");
+      if (menu.classList.contains("show")) {
+        menu.classList.remove("show");
+        menuIcon.innerHTML = "☰";
+        menuIcon.classList.remove("open");
+        navbarTitle.innerText = "GJordan.music";
+      } else {
+        menu.classList.add("show");
+        menuIcon.innerHTML = "✖";
+        menuIcon.classList.add("open");
+        navbarTitle.innerText = "G Jordan’s World";
+      }
+    }
+  </script>
+
+  <script>
+    // Canvas Background Animation
+    const canvas = document.getElementById('background-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let particlesArray;
+
+    function initParticles() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      particlesArray = [];
+      const numberOfParticles = 70;
+
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 1,
+          speedX: Math.random() * 0.5 - 0.25,
+          speedY: Math.random() * 0.5 - 0.25,
+          color: `hsl(${Math.random() * 360}, 100%, 60%)`
+        });
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particlesArray.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    window.addEventListener('resize', initParticles);
+
+    // Start animation
+    initParticles();
+    animateParticles();
+  </script>
+<!-- ▼▼ G73 Thank You Binder v2.3.1 — preserves background; themed navbar/container/footer; darker accent icons (no glow) ▼▼ -->
+<script>
+(()=>{
+  const $r = document.documentElement;
+
+  /* ---------- Palette from storage/computed ---------- */
+  function loadPalette(){
+    try{ const s = JSON.parse(localStorage.getItem('siteThemeV1')||'null');
+      if (s?.main && s?.accent) return { primary:s.main, accent:s.accent }; }catch{}
+    try{ const t = JSON.parse(localStorage.getItem('themeSettings')||'null');
+      if (t?.mainColor && t?.accentColor) return { primary:t.mainColor, accent:t.accentColor }; }catch{}
+    const cs = getComputedStyle($r);
+    const p = (cs.getPropertyValue('--app-primary')||cs.getPropertyValue('--primary-color')).trim();
+    const a = (cs.getPropertyValue('--app-accent') ||cs.getPropertyValue('--accent-color')).trim();
+    return (p && a) ? { primary:p, accent:a } : { primary:'#00f0ff', accent:'#ff00f0' };
+  }
+
+  /* ---------- Vars + darker accent icons (no glow) ---------- */
+  function applyVars({primary,accent}){
+    $r.style.setProperty('--app-primary', primary);
+    $r.style.setProperty('--app-accent',  accent);
+    $r.style.setProperty('--primary-color', primary);
+    $r.style.setProperty('--accent-color',  accent);
+    $r.style.setProperty('--prog-fill',     `linear-gradient(90deg, ${primary}, ${accent})`);
+    // icon tokens (darker accent)
+    $r.style.setProperty('--g73-icon',        `color-mix(in srgb, ${accent} 68%, black)`);
+    $r.style.setProperty('--g73-icon-hover',  `color-mix(in srgb, ${accent} 82%, black)`);
+    $r.style.setProperty('--g73-icon-muted',  `color-mix(in srgb, ${accent} 55%, black)`);
+    $r.style.setProperty('--g73-icon-primary',`color-mix(in srgb, ${primary} 72%, black)`);
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta){ meta = document.createElement('meta'); meta.name='theme-color'; document.head.appendChild(meta); }
+    meta.setAttribute('content', primary);
+    window.dispatchEvent(new CustomEvent('theme:changed', { detail:{ primary, accent, source:'thankyou-binder-v2.3.1' } }));
+  }
+
+  /* ---------- Styles (do NOT touch body/canvas) ---------- */
+  function ensureStyle(){
+    if (document.getElementById('g73-thankyou-binder-v231')) return;
+    const css = `
+/* === G73 Thank You Binder v2.3.1 — safe theming === */
+:root{ --primary-color: var(--app-primary); --accent-color: var(--app-accent); }
+
+/* NAV + MENU */
+.navbar{
+  background: var(--navbar-bg, #000) !important;
+  border-bottom:1px solid color-mix(in srgb, var(--app-primary) 36%, transparent) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35) !important;
+}
+.menu-icon{
+  color: var(--g73-icon) !important; -webkit-text-fill-color: currentColor !important;
+  -webkit-text-stroke:0 !important; filter:none !important; text-shadow:none !important; box-shadow:none !important;
+  transition: color .12s ease, transform .2s ease;
+}
+.menu-icon.open{ color: var(--g73-icon-hover) !important; }
+.navbar-title{
+  color: color-mix(in srgb, var(--app-primary) 88%, white 0%) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--app-primary) 28%, transparent) !important;
+}
+.menu{
+  border:1px solid color-mix(in srgb, var(--app-primary) 28%, transparent) !important;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--app-primary) 24%, transparent) !important;
+}
+.menu a{
+  color: color-mix(in srgb, var(--app-accent) 88%, white 0%) !important;
+  text-shadow:none !important;
+}
+.menu a:hover{ color: color-mix(in srgb, var(--app-primary) 92%, white 0%) !important; }
+
+/* THANK YOU CARD */
+.thankyou-container{
+  border:1px solid color-mix(in srgb, var(--app-primary) 30%, transparent) !important;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--app-primary) 8%, transparent),
+      color-mix(in srgb, var(--app-accent) 6%, transparent)) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,.45),
+              0 0 14px color-mix(in srgb, var(--app-primary) 22%, transparent) !important;
+  border-radius: 15px !important;
+}
+.thankyou-container h1{
+  color: color-mix(in srgb, var(--app-accent) 92%, white 0%) !important;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--app-accent) 34%, transparent) !important;
+}
+.thankyou-container p{
+  color: color-mix(in srgb, var(--app-accent) 82%, white) !important;
+}
+
+/* CTA BUTTON */
+.thankyou-container a{
+  background: var(--prog-fill, linear-gradient(90deg, var(--app-primary), var(--app-accent))) !important;
+  color:#0b0d10 !important;
+  border:1px solid color-mix(in srgb, var(--app-primary) 40%, transparent) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35), 0 0 12px color-mix(in srgb, var(--app-primary) 22%, transparent) !important;
+  font-weight:800 !important;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+  text-decoration:none !important;
+}
+.thankyou-container a:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.45), 0 0 16px color-mix(in srgb, var(--app-accent) 28%, transparent) !important;
+}
+
+/* FOOTER + brand */
+footer{
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--app-primary) 8%, #000),
+      color-mix(in srgb, var(--app-accent) 10%, #000)) !important;
+  border-top:1px solid color-mix(in srgb, var(--app-primary) 26%, transparent) !important;
+  color: color-mix(in srgb, var(--app-primary) 85%, white 0%) !important;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--app-primary) 24%, transparent) !important;
+  text-shadow: none !important;
+}
+footer .tm{
+  background: linear-gradient(90deg, var(--app-primary), var(--app-accent));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent !important; text-shadow: none !important;
+  font-weight: 800;
+}
+
+/* ICONS — darker accent, NO glow */
+i.material-icons,
+.icon-btn i,
+.icon-btn svg, .icon-btn svg path{
+  color: var(--g73-icon) !important; fill: currentColor !important; -webkit-text-fill-color: currentColor !important;
+  -webkit-text-stroke:0 !important; filter:none !important; text-shadow:none !important; box-shadow:none !important;
+  transition: color .12s ease;
+}
+i.material-icons:hover{ color: var(--g73-icon-hover) !important; }
+`;
+    const el = document.createElement('style');
+    el.id = 'g73-thankyou-binder-v231';
+    el.textContent = css;
+    document.head.appendChild(el);
+  }
+
+  /* ---------- Make sure “G73™ LLC” gets gradient (.tm) ---------- */
+  function normalizeFooterBrand(){
+    try{
+      const foot = document.querySelector('footer');
+      if (!foot) return;
+      const candidate = [...foot.querySelectorAll('span')].find(s=>/G73/i.test(s.textContent||''));
+      if (candidate){
+        candidate.classList.add('tm');
+        candidate.style.color = '';
+      }
+    }catch{}
+  }
+
+  /* ---------- Boot & live updates ---------- */
+  let queued = false;
+  const queue = ()=>{
+    if (queued) return; queued = true;
+    requestAnimationFrame(()=>{
+      queued = false;
+      applyVars(loadPalette());
+      ensureStyle();
+      normalizeFooterBrand();
+    });
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', queue, { once:true });
+  else queue();
+
+  window.addEventListener('theme:changed', queue, { passive:true });
+  window.addEventListener('storage', (e)=>{
+    if (e.key === 'siteThemeV1' || e.key === 'themeSettings') queue();
+  }, { passive:true });
+  new MutationObserver(queue).observe($r, { attributes:true, attributeFilter:['style','class','data-theme'] });
+
+  // optional manual
+  window.G73ThankYouBinder = { apply: queue };
+})();
+</script>
+<!-- ▲▲ G73 Thank You Binder v2.3.1 ▲▲ -->
+</body>
+</html>

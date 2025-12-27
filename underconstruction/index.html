@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Under Construction - GJordan.Music</title>
+    <title>G Jordan | Under Construction</title>
     <style>
         body {
             margin: 0;
@@ -16,25 +16,14 @@
             color: gold;
             font-family: Arial, sans-serif;
             text-shadow: 0 0 10px gold;
-            flex-direction: column; /* Stack the image and title vertically */
-            text-align: center;
         }
-
-        /* Image at the top */
-        .logo {
-            width: 150px; /* Adjust the size of the logo */
-            margin-bottom: 20px; /* Add space below the logo */
-        }
-
-        /* Title styling */
         h1 {
             font-size: 3rem;
-            margin: 0;
-            position: relative;
-            z-index: 1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-
-        /* Canvas for the background particles */
         canvas {
             position: absolute;
             top: 0;
@@ -45,23 +34,14 @@
     </style>
 </head>
 <body>
-    <!-- Logo Image -->
-    <img src="G73.png" alt="G73 Logo" class="logo">
-
-    <!-- Title -->
     <h1>GJordan.Music - Under Construction</h1>
-
-    <!-- Background Canvas -->
     <canvas id="background"></canvas>
-
     <script>
         const canvas = document.getElementById("background");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
         let particles = [];
-
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -70,13 +50,11 @@
                 this.speedX = Math.random() * 3 - 1.5;
                 this.speedY = Math.random() * 3 - 1.5;
             }
-
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
                 if (this.size > 0.2) this.size -= 0.02;
             }
-
             draw() {
                 ctx.fillStyle = "gold";
                 ctx.shadowBlur = 10;
@@ -87,7 +65,6 @@
                 ctx.fill();
             }
         }
-
         function handleParticles() {
             for (let i = 0; i < particles.length; i++) {
                 particles[i].update();
@@ -98,7 +75,6 @@
                 }
             }
         }
-
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             handleParticles();
@@ -107,9 +83,7 @@
             }
             requestAnimationFrame(animate);
         }
-
         animate();
-
         window.addEventListener("resize", () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;

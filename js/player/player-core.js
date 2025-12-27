@@ -87,6 +87,130 @@
 
   function setMusicIndex(i){ musicIndex = i; window.musicIndex = i; }
 
+  // ==========================================================
+  // ✅ MEDIA SESSION (Android/iOS lockscreen + notification card)
+  // ==========================================================
+  const hasMediaSession = () => ("mediaSession" in navigator);
+  const canSetMeta = () => hasMediaSession() && typeof window.MediaMetadata === "function";
+
+  function toAbsUrl(u){
+    try { return new URL(u, location.href).href; } catch { return u || ""; }
+  }
+
+  function mimeFromUrl(u){
+    const s = (u || "").toLowerCase();
+    if (s.endsWith(".png")) return "image/png";
+    if (s.endsWith(".webp")) return "image/webp";
+    if (s.endsWith(".avif")) return "image/avif";
+    if (s.endsWith(".gif")) return "image/gif";
+    // default for .jpg/.jpeg/unknown
+    return "image/jpeg";
+  }
+
+  function msGetMeta(){
+    const LIST = resolvePlaylistNow();
+    const it = LIST[(musicIndex||1) - 1] || {};
+    const title  = it.name || musicName?.textContent || "";
+    const artist = it.artist || musicArt?.textContent || "G Jordan";
+    const album  = "G Jordan • G73";
+    const artRel = imgPath(it.img || "");
+    const artAbs = toAbsUrl(artRel);
+    const mime   = mimeFromUrl(artAbs);
+    return { title, artist, album, artwork: artAbs, mime };
+  }
+
+  function msSetMetadata(){
+    if (!canSetMeta()) return;
+    const m = msGetMeta();
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title:  m.title,
+        artist: m.artist,
+        album:  m.album,
+        artwork: m.artwork ? [
+          { src: m.artwork, sizes: "96x96",   type: m.mime },
+          { src: m.artwork, sizes: "128x128", type: m.mime },
+          { src: m.artwork, sizes: "192x192", type: m.mime },
+          { src: m.artwork, sizes: "256x256", type: m.mime },
+          { src: m.artwork, sizes: "384x384", type: m.mime },
+          { src: m.artwork, sizes: "512x512", type: m.mime },
+        ] : []
+      });
+    } catch (e) {
+      console.warn("[media-session] metadata error:", e);
+    }
+  }
+
+  function msSetPlaybackState(){
+    if (!hasMediaSession()) return;
+    try {
+      navigator.mediaSession.playbackState =
+        (mainAudio && !mainAudio.paused) ? "playing" : "paused";
+    } catch {}
+  }
+
+  function safeNum(n, fallback=0){
+    return (typeof n === "number" && isFinite(n)) ? n : fallback;
+  }
+
+  function msSetPositionState(){
+    if (!hasMediaSession() || !navigator.mediaSession.setPositionState || !mainAudio) return;
+    try {
+      const dur = safeNum(mainAudio.duration, 0);
+      const pos = safeNum(mainAudio.currentTime, 0);
+      const rate = safeNum(mainAudio.playbackRate, 1);
+      navigator.mediaSession.setPositionState({
+        duration: dur,
+        playbackRate: rate,
+        position: Math.min(pos, dur || pos)
+      });
+    } catch {}
+  }
+
+  function msWireHandlers(){
+    if (!hasMediaSession()) return;
+
+    const safe = (fn) => () => { try { fn?.(); } catch {} };
+
+    try {
+      navigator.mediaSession.setActionHandler("play",  safe(() => playMusic()));
+      navigator.mediaSession.setActionHandler("pause", safe(() => pauseMusic()));
+      navigator.mediaSession.setActionHandler("previoustrack", safe(() => prevMusic()));
+      navigator.mediaSession.setActionHandler("nexttrack",     safe(() => nextMusic()));
+
+      navigator.mediaSession.setActionHandler("seekbackward", (d) => {
+        if (!mainAudio) return;
+        const off = (d && typeof d.seekOffset === "number") ? d.seekOffset : 10;
+        mainAudio.currentTime = Math.max(0, mainAudio.currentTime - off);
+        msSetPositionState();
+      });
+
+      navigator.mediaSession.setActionHandler("seekforward", (d) => {
+        if (!mainAudio) return;
+        const off = (d && typeof d.seekOffset === "number") ? d.seekOffset : 10;
+        const dur = safeNum(mainAudio.duration, Infinity);
+        mainAudio.currentTime = Math.min(dur, mainAudio.currentTime + off);
+        msSetPositionState();
+      });
+
+      navigator.mediaSession.setActionHandler("seekto", (d) => {
+        if (!mainAudio || !d || typeof d.seekTime !== "number") return;
+        if (d.fastSeek && typeof mainAudio.fastSeek === "function") mainAudio.fastSeek(d.seekTime);
+        else mainAudio.currentTime = d.seekTime;
+        msSetPositionState();
+      });
+    } catch (e) {
+      console.warn("[media-session] handler error:", e);
+    }
+  }
+
+  function msRefreshAll(){
+    msSetMetadata();
+    msSetPlaybackState();
+    msSetPositionState();
+  }
+  // ==========================================================
+
   function loadMusic(idx){
     const LIST = resolvePlaylistNow();
     const it = LIST[idx - 1];
@@ -107,6 +231,9 @@
     window.subscribeToSongStats?.(window.currentSongId);
 
     logTrackChange();
+
+    // ✅ Update lockscreen/control-card metadata when track changes
+    msRefreshAll();
   }
 
   function playMusic(){
@@ -118,6 +245,9 @@
     if (p?.catch) p.catch(err => console.warn('[player-core] play() failed or blocked:', err));
     window.setupVisualizer?.();
     logPlay();
+
+    // ✅ Tell OS we are playing + set metadata
+    msRefreshAll();
   }
 
   function pauseMusic(){
@@ -127,6 +257,9 @@
     if (pp) pp.innerText = "play_arrow";
     mainAudio.pause();
     logPause();
+
+    // ✅ Tell OS we paused
+    msRefreshAll();
   }
 
   function prevMusic(){
@@ -149,6 +282,7 @@
     const len = LIST.length || 1;
     if (!len) return;
 
+    // ✅ log ended ONCE here (not twice)
     logEnded();
 
     if (repeatMode === "repeat_one" && mainAudio){
@@ -182,8 +316,6 @@
       const it = LIST[i];
       const li = document.createElement('li');
       li.setAttribute('li-index', i+1);
-
-      // Useful for CSS stagger animations: animation-delay: calc(var(--i) * 40ms);
       li.style.setProperty('--i', String(i + 1));
 
       li.innerHTML = `
@@ -201,7 +333,6 @@
       const durEl   = li.querySelector(`#${CSS.escape(it.src)}`);
 
       if (liAudio && durEl){
-        // Use loadedmetadata (duration available) instead of loadeddata
         const onMeta = () => {
           const d  = liAudio.duration || 0;
           const mm = Math.floor(d/60);
@@ -217,7 +348,6 @@
           durEl.setAttribute('t-duration', '--:--');
         }, { once:true });
 
-        // Force the browser to actually fetch metadata (prevents “last items never load”)
         try { liAudio.load(); } catch {}
       }
     }
@@ -268,10 +398,17 @@
 
   function wireTimeUpdates(){
     if (!mainAudio) return;
+
     const progressArea     = document.querySelector(".progress-area");
     const progressBar      = progressArea?.querySelector(".progress-bar");
     const musicCurrentTime = document.querySelector(".current-time");
     const musicDuration    = document.querySelector(".max-duration");
+
+    // ✅ Wire media session handlers once
+    msWireHandlers();
+
+    // Keep position in sync (throttled)
+    let lastPosMs = 0;
 
     mainAudio.addEventListener('timeupdate', (e)=>{
       if (!window.__viewLogged && mainAudio.currentTime >= 10 && window.currentSongId){
@@ -289,9 +426,10 @@
       const dur = e.target.duration || 1;
       if (progressBar) progressBar.style.width = `${(cur/dur)*100}%`;
 
-      const mm = Math.floor((mainAudio.duration||0)/60);
-      const ss = String(Math.floor((mainAudio.duration||0)%60)).padStart(2,'0');
-      if (musicDuration)    musicDuration.textContent = `${mm}:${ss}`;
+      const totalDur = safeNum(mainAudio.duration, 0);
+      const mm = Math.floor(totalDur/60);
+      const ss = String(Math.floor(totalDur%60)).padStart(2,'0');
+      if (musicDuration) musicDuration.textContent = `${mm}:${ss}`;
 
       const cm = Math.floor(cur/60);
       const cs = String(Math.floor(cur%60)).padStart(2,'0');
@@ -304,17 +442,34 @@
           logMilestone('percent', Math.round(p * 100));
         }
       });
+
+      // ✅ update OS scrubber about ~1/sec
+      const now = Date.now();
+      if (now - lastPosMs > 800) {
+        lastPosMs = now;
+        msSetPositionState();
+      }
     });
 
     mainAudio.addEventListener('ended', ()=>{
       window.__viewLogged = false;
-      logEnded();
       handleSongEnd();
     });
 
-    mainAudio.addEventListener('loadedmetadata', playingSong);
-    mainAudio.addEventListener('play',  playingSong);
-    mainAudio.addEventListener('pause', playingSong);
+    mainAudio.addEventListener('loadedmetadata', ()=>{
+      playingSong();
+      msRefreshAll();
+    });
+
+    mainAudio.addEventListener('play',  ()=>{
+      playingSong();
+      msRefreshAll();
+    });
+
+    mainAudio.addEventListener('pause', ()=>{
+      playingSong();
+      msRefreshAll();
+    });
   }
 
   function shouldIgnoreClick(t){
@@ -357,16 +512,19 @@
       loadMusic(musicIndex);
       playingSong();
       wireTimeUpdates();
+      msRefreshAll();
     } else {
       if (musicName) musicName.textContent = 'No playlist loaded';
       if (musicArt)  musicArt.textContent  = '';
       wireTimeUpdates();
+      msRefreshAll();
     }
   });
 
   window.addEventListener('playlist:reordered', ()=>{
     playingSong();
     fireGA(`${ANALYTICS_EVENT_PREFIX}_playlist_reordered`, { playlist_size: resolvePlaylistNow().length });
+    msRefreshAll();
   });
 
   window.loadMusic     = loadMusic;
