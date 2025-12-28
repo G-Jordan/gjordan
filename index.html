@@ -942,7 +942,7 @@
             <span class="current-time">0:00</span>
             <span class="max-duration">0:00</span>
           </div>
-          <audio id="main-audio" src=""></audio>
+         <audio id="main-audio" preload="metadata" playsinline></audio>
         </div>
 
         <div class="controls">
@@ -954,27 +954,41 @@
         </div>
 
         <div class="vz-row">
-          <button id="volume-knob" class="knob" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%" title="Volume">
-            <svg viewBox="0 0 100 100" aria-hidden="true">
-              <defs>
-                <linearGradient id="volGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#5ad1ff"/>
-                  <stop offset="100%" stop-color="#a97aff"/>
-                </linearGradient>
-              </defs>
-              <circle class="track" cx="50" cy="50" r="34"></circle>
-              <path class="arc" d="" />
-              <circle class="handle" cx="50" cy="16" r="3.8"></circle>
-            </svg>
-            <span class="label" id="knob-label">100%</span>
-          </button>
+  <!-- Volume knob -->
+  <button id="volume-knob" class="knob" role="slider"
+    aria-label="Volume" aria-valuemin="0" aria-valuemax="100"
+    aria-valuenow="100" aria-valuetext="100%" title="Volume">
 
-          <button id="vz-open-editor" class="vz-fab" aria-haspopup="dialog" aria-controls="vz-panel" title="Open Visualizer Editor" aria-label="Open Visualizer Editor"></button>
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <!-- ✅ theme-driven gradient (no hard-coded colors) -->
+        <linearGradient id="volGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="var(--app-primary, #5ad1ff)"/>
+          <stop offset="100%" stop-color="var(--app-accent, #a97aff)"/>
+        </linearGradient>
+      </defs>
 
-          <button id="open-eq" class="eq-fab" title="Open Equalizer" aria-haspopup="dialog" aria-controls="eq-modal">
-            <span class="material-icons" aria-hidden="true">equalizer</span>
-          </button>
-        </div>
+      <circle class="track" cx="50" cy="50" r="34"></circle>
+      <path class="arc" d="" />
+      <circle class="handle" cx="50" cy="16" r="3.8"></circle>
+    </svg>
+
+    <span class="label" id="knob-label">100%</span>
+  </button>
+
+  <!-- Visualizer Editor FAB -->
+  <button id="vz-open-editor" class="vz-fab"
+    aria-haspopup="dialog" aria-controls="vz-panel"
+    title="Open Visualizer Editor" aria-label="Open Visualizer Editor">
+    <span class="material-icons" aria-hidden="true">tune</span>
+  </button>
+
+  <!-- EQ FAB -->
+  <button id="open-eq" class="eq-fab"
+    title="Open Equalizer" aria-haspopup="dialog" aria-controls="eq-modal">
+    <span class="material-icons" aria-hidden="true">equalizer</span>
+  </button>
+</div>
 
         <div id="vz-editor-root"></div>
 
@@ -1161,7 +1175,7 @@
               <span>TikTok</span>
             </a>
             <a href="https://www.bandlab.com/g_jordan" target="_blank" rel="noopener noreferrer me" aria-label="G Jordan on BandLab">
-              <img src="https://img.icons8.com/color/96/soundcloud.png" alt="BandLab">
+              <img src="https://img.icons8.com/?size=128&id=QkamDBhcoMoP&format=png" alt="BandLab">
               <span>BandLab</span>
             </a>
             <a href="https://gjordan.music/" target="_self" rel="me" aria-label="G Jordan official website">
@@ -1208,6 +1222,7 @@
 
   <!-- Player -->
   <script src="js/player/player-core.js"></script>
+ <script src="js/player/vz-beat-glow.js"></script> 
   <script src="js/player/ui-events.js"></script>
 
   <!-- Visualizer -->

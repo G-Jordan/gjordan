@@ -38,15 +38,74 @@
     return `${m}:${r}`;
   };
 
+  // ✅ FIX: robust "same track" matcher (NO substring includes)
+  function normFile(s){
+    try{
+      if (!s) return "";
+      // If absolute URL, parse it; if relative, wrap with base
+      const u = new URL(s, location.href);
+      let p = u.pathname || "";
+      p = p.split('/').pop() || "";
+      p = decodeURIComponent(p);
+      // strip query-ish just in case
+      p = p.split('?')[0].split('#')[0];
+      return p.toLowerCase();
+    }catch{
+      // fallback: just grab tail
+      const t = String(s||"").split('?')[0].split('#')[0].split('/').pop() || "";
+      return t.toLowerCase();
+    }
+  }
+
+  function srcCandidatesFromItem(it){
+    // try src as stored, and also what audioPath would produce
+    const raw = it?.src || "";
+    const cand = [];
+    if (raw) cand.push(raw);
+    const ap = audioPath(raw);
+    if (ap && ap !== raw) cand.push(ap);
+    return cand;
+  }
+
   // --- true current index from audio.currentSrc ---
   function currentIndexBySrc(){
     const list = LIST();
     if (!list.length) return window._g73_idx || 1;
-    const src = audio.currentSrc || audio.src || "";
-    if (!src) return window._g73_idx || 1;
-    const idx0 = list.findIndex(it => src.includes(it.src || ''));
+
+    const cur = normFile(audio.currentSrc || audio.src || "");
+    if (!cur) return window._g73_idx || 1;
+
+    // match by filename (exact)
+    let idx0 = -1;
+    for (let i = 0; i < list.length; i++){
+      const it = list[i];
+      const cands = srcCandidatesFromItem(it);
+      for (const c of cands){
+        const f = normFile(c);
+        if (f && f === cur){
+          idx0 = i;
+          break;
+        }
+      }
+      if (idx0 >= 0) break;
+    }
+
+    // fallback: if list item src has no extension in data, try without extension
+    if (idx0 < 0){
+      const curStem = cur.replace(/\.[a-z0-9]{2,5}$/i,'');
+      for (let i = 0; i < list.length; i++){
+        const it = list[i];
+        const raw = normFile(it?.src || "");
+        const stem = raw.replace(/\.[a-z0-9]{2,5}$/i,'');
+        if (stem && stem === curStem){
+          idx0 = i; break;
+        }
+      }
+    }
+
     return idx0 >= 0 ? (idx0 + 1) : (window._g73_idx || 1);
   }
+
   function setCurrentIndex(i){
     window.musicIndex = i;
     try{ window.playingSong?.(); }catch{}
@@ -98,8 +157,7 @@
   window.addEventListener('player:controls-theme', applyListThemeFromControls);
 
   // -------------------------------------------------------------------
-  // ✅ FIX: Sequential duration probing (prevents mobile throttling where
-  // last few tracks never fire loadedmetadata)
+  // ✅ FIX: Sequential duration probing (prevents mobile throttling)
   // -------------------------------------------------------------------
   const __durProbe = new Audio();
   __durProbe.preload = "metadata";
@@ -128,7 +186,6 @@
       __durProbe.addEventListener('loadedmetadata', onMeta);
       __durProbe.addEventListener('error', onErr);
 
-      // timeout fallback (missing/broken files can hang)
       const t = setTimeout(() => finish(0), timeoutMs);
 
       __durProbe.src = src;
@@ -158,7 +215,6 @@
     ul.innerHTML = '';
     ul.classList.add('g73-adapted');
 
-    // ✅ queue for sequential duration fills
     const durQueue = [];
 
     list.forEach((it, idx)=>{
@@ -181,12 +237,10 @@
       `;
       ul.appendChild(li);
 
-      // ✅ Queue duration probe (sequential, reliable on mobile)
       durQueue.push({ li, src: audioPath(it.src) });
 
       measureMarquee(li);
 
-      // Play/Pause button
       li.querySelector('.g73-play-toggle')?.addEventListener('click', (e)=>{
         e.stopPropagation();
         const cur = currentIndexBySrc();
@@ -197,7 +251,7 @@
           else window.playMusic?.();
 
           setIconForIndex(i, !playing);
-          ensureVisualizerIn(li);                  // keep/restore visualizer
+          ensureVisualizerIn(li);
           li.classList.toggle('pre-playing', !playing);
           markActive(i, false);
           queueMicrotask(refreshIcons);
@@ -213,7 +267,6 @@
         window.playingSong?.();
       });
 
-      // Row click (not on play or progress)
       li.addEventListener('click', (e)=>{
         if (e.target.closest('.g73-play-toggle') || e.target.closest('.g73-row-progress')) return;
         tryPlayIndex(i);
@@ -224,20 +277,15 @@
         setTimeout(()=>measureMarquee(li), 0);
       });
 
-      // ---------- SCRUB (click + drag, mouse + touch) ----------
       const prog = li.querySelector('.g73-row-progress');
       bindScrub(prog, i);
     });
 
-    // Align to actual current track on first build
     markActive(currentIndexBySrc(), true);
     refreshIcons();
-
-    // ✅ Fill durations AFTER list is in DOM, sequentially
     fillDurationsSequentially(durQueue);
   }
 
-  // Title marquee setup per row
   function measureMarquee(li){
     const shell = li.querySelector('.g73-title');
     const inner = li.querySelector('.g73-title-text');
@@ -255,12 +303,11 @@
     }
   }
 
-  // Toggle play icon for a specific index
   function setIconForIndex(i, playing){
     const li = ul.querySelector(`li[li-index="${i}"]`);
     li?.querySelector('.g73-play-toggle i')?.replaceChildren(document.createTextNode(playing?'pause':'play_arrow'));
   }
-  // Refresh all icons based on current state
+
   function refreshIcons(){
     const cur = currentIndexBySrc();
     const playing = isAudioPlaying();
@@ -272,7 +319,6 @@
     });
   }
 
-  // Mini visualizer badge
   function ensureVisualizerIn(li){
     const host = li.querySelector('.audio-duration');
     if (!host) return;
@@ -288,7 +334,6 @@
   }
   function removeVisualizerFrom(li){ li.querySelector('.audio-duration .playing-visualizer')?.remove(); }
 
-  // Mark a row active/playing and reset others if needed
   function markActive(i, resetOthers){
     setCurrentIndex(i);
     ul.querySelectorAll('li').forEach(li=>{
@@ -297,7 +342,7 @@
       li.classList.toggle('active', isThis);
       li.classList.toggle('playing', isThis);
       if (isThis){
-        ensureVisualizerIn(li);                        // keep it visible on selection
+        ensureVisualizerIn(li);
       } else if (resetOthers){
         li.classList.remove('pre-playing','is-playing','is-paused');
         li.querySelector('.g73-row-bar')?.style.setProperty('width','0%');
@@ -309,7 +354,6 @@
     });
   }
 
-  // Play a specific index (switch)
   function tryPlayIndex(i){
     window.loadMusic?.(i);
     setCurrentIndex(i);
@@ -317,7 +361,6 @@
     setTimeout(refreshIcons, 120);
   }
 
-  // Audio watchers → update row progress + timestamp + icons + visualizer class
   function updateRowProgress(){
     const i = currentIndexBySrc();
     const li = ul.querySelector(`li[li-index="${i}"]`);
@@ -326,7 +369,6 @@
     const pct = (audio.currentTime && audio.duration) ? (audio.currentTime / audio.duration) * 100 : 0;
     li.querySelector('.g73-row-bar')?.style.setProperty('width', `${clamp(pct,0,100)}%`);
 
-    // update timestamp safely (do NOT wipe children)
     const host = li.querySelector('.audio-duration');
     if (host){
       let timeNode = host.querySelector('.g73-time');
@@ -336,12 +378,11 @@
         host.appendChild(timeNode);
       }
       timeNode.textContent = secondsToClock(audio.currentTime||0);
-      ensureVisualizerIn(li); // make sure visualizer stays present
+      ensureVisualizerIn(li);
     }
 
     li.querySelector('.g73-row-progress')?.setAttribute('aria-valuenow', String(Math.round(clamp(pct,0,100))));
 
-    // visual states
     li.classList.remove('pre-playing');
     li.classList.toggle('is-playing', isAudioPlaying());
     li.classList.toggle('is-paused',  !isAudioPlaying());
@@ -375,7 +416,6 @@
       setTimeout(()=> restoreDurationOn(prev), 0);
     }, {passive:true});
 
-    // When the source swaps, reset non-current rows
     const mo = new MutationObserver(()=> {
       ul.querySelectorAll('li').forEach(li=>{
         const idx = parseInt(li.getAttribute('li-index'),10);
@@ -389,7 +429,6 @@
     requestAnimationFrame(()=>{ updateRowProgress(); refreshIcons(); markActive(currentIndexBySrc(), true); });
   }
 
-  // ---- Drag scrubbing binder ----
   function bindScrub(prog, i){
     if (!prog) return;
     const bar = prog.querySelector('.g73-row-bar');
@@ -421,12 +460,10 @@
     };
     const end = ()=>{ dragging = false; };
 
-    // Mouse
     prog.addEventListener('mousedown', (e)=>{ e.preventDefault(); start(e.clientX); }, {passive:false});
     window.addEventListener('mousemove', (e)=>{ if (dragging){ e.preventDefault(); move(e.clientX); }}, {passive:false});
     window.addEventListener('mouseup',   ()=> end(), {passive:true});
 
-    // Touch
     let touchId = null;
     prog.addEventListener('touchstart', (e)=>{
       const t = e.changedTouches[0]; touchId = t.identifier;
@@ -439,7 +476,6 @@
     prog.addEventListener('touchend', ()=>{ touchId=null; end(); }, {passive:true});
     prog.addEventListener('touchcancel', ()=>{ touchId=null; end(); }, {passive:true});
 
-    // Simple click (non-drag)
     prog.addEventListener('click', (e)=>{
       const cur = currentIndexBySrc();
       if (cur !== i){ tryPlayIndex(i); markActive(i,true); }
@@ -449,11 +485,9 @@
     }, {passive:true});
   }
 
-  // Build + boot
   build();
   bootAudioWatchers();
 
-  // Recalculate marquee on resize and when playlist is reordered
   window.addEventListener('resize', ()=>{ ul.querySelectorAll('li').forEach(measureMarquee); }, {passive:true});
   window.addEventListener('playlist:reordered', ()=>{ build(); });
 })();

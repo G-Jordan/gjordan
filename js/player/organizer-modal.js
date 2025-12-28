@@ -61,7 +61,6 @@
     position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);
   }
 
-  /* Panel with ring + glow like main controls/list frames */
   #org-modal .org-panel{
     position:relative;z-index:1;width:min(960px,92vw);max-height:82vh;overflow:hidden;border-radius:20px;
     background:
@@ -107,7 +106,6 @@
   .g73-organizer{color:var(--_text)}
   .org-controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
 
-  /* Inputs / Selects themed */
   .org-input,.org-select{
     background: color-mix(in srgb, var(--_bg) 86%, transparent);
     border:1px solid color-mix(in srgb, var(--_border) 100%, transparent);
@@ -120,7 +118,6 @@
   }
   .org-select{min-width:160px}
 
-  /* Buttons */
   .org-btn{
     cursor:pointer;border:1px solid color-mix(in srgb, var(--_border) 100%, transparent);
     background: color-mix(in srgb, var(--_bg) 86%, transparent);
@@ -156,7 +153,6 @@
     border-radius: 999px;
   }
 
-  /* Rows */
   .org-row{
     display:grid;grid-template-columns:28px 48px 1fr auto;align-items:center;gap:12px;
     background: linear-gradient(180deg,
@@ -203,9 +199,7 @@
     background: color-mix(in srgb, var(--_bg) 90%, transparent);
   }
   .org-foot{display:flex;justify-content:space-between;align-items:center;color: color-mix(in srgb, var(--_text) 75%, #000 0%);font-size:12px;margin-top:10px}
-  .org-tip svg{vertical-align:middle}
 
-  /* Organizer opener button in main controls */
   .organize-btn{
     width:40px;height:40px;border-radius:14px;
     border:1px solid color-mix(in srgb, var(--_border) 95%, transparent);
@@ -297,10 +291,8 @@
     mountOrganizerModal(); safeInitialRender();
   }
 
-  // Live theme updates (from main controls)
   window.addEventListener('player:controls-theme', () => applyModalThemeFromControls(document.getElementById('org-modal')));
 
-  // Fallback: if DOM mutates later and modal is missing, re-mount + render
   const __orgMo = new MutationObserver(() => {
     const hasControls = !!document.querySelector('.controls');
     const hasModal = !!document.getElementById('org-modal');
@@ -311,6 +303,28 @@
   // ---------- Robust Controls Injection ----------
   let injectedOnce = false;
   function getControls() { return document.querySelector('.controls'); }
+
+  function openModal() {
+    syncFromGlobal();
+
+    // show first, then render
+    modal.setAttribute('aria-hidden', 'false');
+
+    // ensure theme current
+    applyModalThemeFromControls(document.getElementById('org-modal'));
+
+    // render fresh
+    render(true);
+
+    // IMPORTANT FIX:
+    // DO NOT mutate window.allMusic and rebuild UI just because the organizer opened.
+    // That causes stale index bindings + last items glitch in some player implementations.
+
+    const ctx = window.audioCtx || window.AudioContextInstance;
+    if (ctx && ctx.state === 'suspended') ctx.resume?.();
+  }
+
+  function closeModal() { modal.setAttribute('aria-hidden', 'true'); }
 
   function placeButton(controls){
     if (!controls) return false;
@@ -379,10 +393,16 @@
   }
 
   // ---------- Apply to global + notify helpers ----------
+  // IMPORTANT FIX: rebuild the player UI ONLY ONCE (avoid double-binding listeners)
   function bestEffortRebuildUI(){
-    try { typeof window.populateMusicList === 'function' && window.populateMusicList(); } catch {}
-    try { typeof window.buildMusicList     === 'function' && window.buildMusicList(); } catch {}
-    try { typeof window.initMusicList      === 'function' && window.initMusicList(); } catch {}
+    const fns = ['populateMusicList','buildMusicList','initMusicList'];
+    for (const name of fns){
+      const fn = window[name];
+      if (typeof fn === 'function'){
+        try { fn(); } catch {}
+        break;
+      }
+    }
   }
 
   function applyToGlobalAndNotify(source = 'organizer'){
@@ -415,8 +435,6 @@
   }
 
   // ---------- Cover resolver ----------
-  const COVER_BASES = ['', 'images/', 'image/', 'img/', 'imgs/', 'assets/', 'assets/img/', 'assets/images/'];
-  const COVER_EXTS  = ['.jpg','.jpeg','.png','.webp','.avif','.gif','.svg'];
   function resolveCover(key){
     if (!key) return null;
     if (/^https?:\/\//i.test(key) || /\.[a-z0-9]{2,5}$/i.test(key)) return key;
@@ -428,6 +446,9 @@
     const direct = resolveCover(key);
     const img = new Image();
     let tried = 0;
+
+    const COVER_BASES = ['', 'images/', 'image/', 'img/', 'imgs/', 'assets/', 'assets/img/', 'assets/images/'];
+    const COVER_EXTS  = ['.jpg','.jpeg','.png','.webp','.avif','.gif','.svg'];
 
     function set(url){ div.style.backgroundImage = `url("${url}")`; }
     function next(){
@@ -448,54 +469,18 @@
     next();
   }
 
-  // ---------- Modal show/hide ----------
-  function openModal() {
-    syncFromGlobal();
-
-    // show first, then render (prevents "0 songs" flash on slow DOM)
-    modal.setAttribute('aria-hidden', 'false');
-
-    // ensure theme is current at open time
-    applyModalThemeFromControls(document.getElementById('org-modal'));
-
-    // now render fresh
-    render(true);
-    applyToGlobalAndNotify('open');
-
-    const ctx = window.audioCtx || window.AudioContextInstance;
-    if (ctx && ctx.state === 'suspended') ctx.resume?.();
-  }
-
-  function closeModal() { modal.setAttribute('aria-hidden', 'true'); }
-
-  // Close on backdrop or [data-close]
+  // ---------- Close on backdrop / X ----------
   document.addEventListener('click', (e) => {
     const m = document.getElementById('org-modal');
     if (!m) return;
 
     if (e.target?.closest?.('#org-close')) return closeModal();
-
-    // If clicking the backdrop or anything marked data-close
-    if (e.target?.matches?.('.org-backdrop') || e.target?.hasAttribute?.('data-close')) {
-      closeModal();
-    }
+    if (e.target?.matches?.('.org-backdrop') || e.target?.hasAttribute?.('data-close')) closeModal();
   });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
   });
-
-  // ---------- Organizer UI refs ----------
-  const el = {
-    get list(){ return document.querySelector('#org-list'); },
-    get search(){ return document.querySelector('#org-search'); },
-    get sort(){ return document.querySelector('#org-sort'); },
-    get save(){ return document.querySelector('#org-save'); },
-    get reset(){ return document.querySelector('#org-reset'); },
-    get export(){ return document.querySelector('#org-export'); },
-    get import(){ return document.querySelector('#org-import'); },
-    get count(){ return document.querySelector('#org-count'); },
-  };
 
   function escapeHtml(s) {
     return String(s ?? '').replace(/[&<>\"']/g, c => ({
@@ -527,7 +512,6 @@
 
     const handle = r.querySelector('.org-handle');
 
-    // ----- Desktop HTML5 drag support -----
     handle.addEventListener('dragstart', (e) => {
       r.classList.add('dragging'); r.setAttribute('aria-grabbed', 'true');
       e.dataTransfer.effectAllowed = 'move';
@@ -548,13 +532,11 @@
       moveId(fromId, toId);
     });
 
-    // Keyboard move
     r.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowUp')   { e.preventDefault(); moveBy(id, -1); r.focus(); }
       if (e.key === 'ArrowDown') { e.preventDefault(); moveBy(id, +1); r.focus(); }
     });
 
-    // ----- Mobile/Pointer drag support -----
     let pointerDragging = false;
     let dragRow = null;
 
@@ -570,7 +552,6 @@
 
     function onPointerMove(e){
       if (!pointerDragging || !dragRow) return;
-
       const listEl = document.getElementById('org-list');
       if (!listEl) return;
 
@@ -615,7 +596,6 @@
     return r;
   }
 
-  // ---------- HARDENED RENDER ----------
   function render(fresh = false) {
     const list = document.getElementById('org-list');
     if (!list) {
@@ -667,7 +647,7 @@
     persistIfCustom(); render(); dispatch();
   }
 
-  function persistIfCustom() { 
+  function persistIfCustom() {
     const sortEl = document.getElementById('org-sort');
     if ((sortEl?.value || 'custom') === 'custom') writeOrder(working.map(getId));
   }

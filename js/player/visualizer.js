@@ -42,6 +42,22 @@
   const state = { settings: { ...defaults }, ready: false };
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
+  // --------------------------------------------------------
+  // NEW: expose the analyser + audio context to other modules
+  // (beat glow, UI, etc.) + signal readiness
+  // --------------------------------------------------------
+  function exposeAnalyser(){
+    window.__G73_AUDIOCTX = audioContext || null;
+    window.__G73_ANALYSER = analyser || null;
+
+    try {
+      window.dispatchEvent(new CustomEvent("g73:analyser-ready", {
+        detail: { analyser: analyser || null, ctx: audioContext || null }
+      }));
+    } catch {}
+  }
+  // --------------------------------------------------------
+
   // Performance governor
   const perf = {
     targetMs: 1000 / 60,
@@ -308,14 +324,18 @@
     if (s.maxBin !== 0) s.maxBin = clamp(s.maxBin, s.minBin + 1, dataArray.length);
     prevBins = null;
     capPositions = null;
+
+    // NEW: whenever analyser settings apply, keep globals fresh
+    exposeAnalyser();
   }
 
-  // ---- NEW: helper to attach an externally provided analyser (from EQ) ----
+  // ---- helper to attach an externally provided analyser (from EQ) ----
   function attachExternalAnalyser(an){
     if (!an || typeof an.getByteFrequencyData !== "function") return;
     analyser = an;
     audioContext = an.context;
-    applyAnalyserSettings();
+    applyAnalyserSettings(); // also exposes analyser
+
     if (!ctx) {
       ctx = canvas.getContext("2d");
       resizeCanvas();
@@ -324,7 +344,7 @@
     cancelAnimationFrame(rafId);
     requestAnimationFrame(loop);
   }
-  // ------------------------------------------------------------------------
+  // ------------------------------------------------------------------
 
   function setupVisualizer(){
     const audio = document.getElementById("main-audio");
@@ -339,15 +359,13 @@
       !!canvas.closest(".visualizer-wrap");
 
     if (isEmbedded) {
-      // Ensure the canvas lives UNDER sibling UI inside the player wrapper
       canvas.style.position = "absolute";
       canvas.style.inset = "0";
       canvas.style.width = "100%";
       canvas.style.height = "100%";
       canvas.style.pointerEvents = "none";
-      canvas.style.zIndex = "-1"; // behind siblings in the same stacking context
+      canvas.style.zIndex = "-1";
     } else {
-      // Fullscreen background fallback
       canvas.style.position = "fixed";
       canvas.style.inset = "0";
       canvas.style.pointerEvents = "none";
@@ -374,7 +392,7 @@
         source.connect(analyser);
         analyser.connect(audioContext.destination);
 
-        applyAnalyserSettings();
+        applyAnalyserSettings(); // also exposes analyser
 
         ctx = canvas.getContext("2d");
         resizeCanvas();
@@ -394,7 +412,10 @@
     }, { once:false });
   }
 
-  function updateSettings(patch = {}){ Object.assign(state.settings, patch); if (analyser && ("fftSize" in patch || "smoothing" in patch)) applyAnalyserSettings(); }
+  function updateSettings(patch = {}){
+    Object.assign(state.settings, patch);
+    if (analyser && ("fftSize" in patch || "smoothing" in patch)) applyAnalyserSettings();
+  }
   function getSettings(){ return { ...state.settings }; }
   function resetSettings(){ updateSettings({ ...defaults }); }
   function pause(){ cancelAnimationFrame(rafId); }
