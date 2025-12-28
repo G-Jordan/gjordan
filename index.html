@@ -10,7 +10,8 @@
   <meta name="description" content="Official home of G Jordan (G73 / Studio G73) — independent music artist and creator based in Kalamazoo, Michigan. Stream music, watch videos, explore the official bio, and find verified links." />
   <link rel="canonical" href="https://gjordan.music/" />
   <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-  <meta name="theme-color" content="#000000" />
+  <!-- ✅ Single theme-color (deduped) -->
+  <meta name="theme-color" content="#00ff88" />
 
   <!-- ✅ Help Google discover the canonical bio/about source -->
   <link rel="about" href="https://gjordan.music/about/" />
@@ -34,25 +35,25 @@
   <meta name="twitter:image" content="https://gjordan.music/gjordan.jpg" />
   <meta name="twitter:image:alt" content="G Jordan (G73) — official artist image" />
 
-  <!-- Base styles -->
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="css/main.css" />
-  <link rel="stylesheet" href="css/eq.css" />
-  <link rel="stylesheet" href="css/g73-fixes.css" />
+  <!-- Base styles (cache-busted so Chrome updates) -->
+  <link rel="stylesheet" href="style.css?v=20251228_1" />
+  <link rel="stylesheet" href="css/main.css?v=20251228_1" />
+  <link rel="stylesheet" href="css/eq.css?v=20251228_1" />
+  <link rel="stylesheet" href="css/g73-fixes.css?v=20251228_1" />
 
   <!-- Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-  <link rel="icon" href="favicon.png" type="image/png" />
-<!-- Favicons -->
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" href="/icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#00ff88">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Favicons (deduped) -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <!-- ✅ Structured data (Knowledge Graph / Information Panel wiring) -->
   <script type="application/ld+json">
   {
@@ -201,6 +202,9 @@
       user-select:none;
       color: var(--app-accent, #b478ff);
       transition: transform .25s ease;
+      background: transparent;
+      border: 0;
+      padding: 0;
     }
     .menu-icon.open{ transform: rotate(180deg); }
     .navbar-title{
@@ -215,6 +219,9 @@
       cursor:pointer;
       display:grid;
       place-items:center;
+      background: transparent;
+      border: 0;
+      padding: 0;
     }
     #account-btn i.material-icons{
       font-size:30px;
@@ -650,23 +657,23 @@
 
   <!-- Core Inline Logic 001 -->
   <script src="js/index/core-inline-logic-001.js"></script>
+
+  <!-- ✅ Canonical fixer (FIXED: regex + replace) -->
   <script id="G73_INDEX_CANONICAL">
   (function(){
-    try {
+    try{
       var p = location.pathname || "";
-      if (/\/index\.htmli.test(p)) {
-        location.replace(p.replace(/index\.htmli, ""));
-      }
-    } catch(e) {}
+      if (/\/index\.html$/i.test(p)) location.replace(p.replace(/index\.html$/i, ""));
+    }catch(e){}
   })();
   </script>
 </head>
 
 <body>
   <div class="navbar">
-    <span class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</span>
+    <button class="menu-icon" id="menuIcon" onclick="toggleMenu()" type="button">☰</button>
     <span class="navbar-title" id="navbarTitle">GJordan.music</span>
-    <span id="account-btn" onclick="toggleAuthModal()"><i class="material-icons">account_circle</i></span>
+    <button id="account-btn" onclick="toggleAuthModal()" type="button"><i class="material-icons">account_circle</i></button>
 
     <div class="menu" id="menu" hidden>
       <a href="/">Home</a>
@@ -954,41 +961,41 @@
         </div>
 
         <div class="vz-row">
-  <!-- Volume knob -->
-  <button id="volume-knob" class="knob" role="slider"
-    aria-label="Volume" aria-valuemin="0" aria-valuemax="100"
-    aria-valuenow="100" aria-valuetext="100%" title="Volume">
+          <!-- Volume knob -->
+          <button id="volume-knob" class="knob" role="slider"
+            aria-label="Volume" aria-valuemin="0" aria-valuemax="100"
+            aria-valuenow="100" aria-valuetext="100%" title="Volume">
 
-    <svg viewBox="0 0 100 100" aria-hidden="true">
-      <defs>
-        <!-- ✅ theme-driven gradient (no hard-coded colors) -->
-        <linearGradient id="volGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="var(--app-primary, #5ad1ff)"/>
-          <stop offset="100%" stop-color="var(--app-accent, #a97aff)"/>
-        </linearGradient>
-      </defs>
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <defs>
+                <!-- ✅ theme-driven gradient (no hard-coded colors) -->
+                <linearGradient id="volGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="var(--app-primary, #5ad1ff)"/>
+                  <stop offset="100%" stop-color="var(--app-accent, #a97aff)"/>
+                </linearGradient>
+              </defs>
 
-      <circle class="track" cx="50" cy="50" r="34"></circle>
-      <path class="arc" d="" />
-      <circle class="handle" cx="50" cy="16" r="3.8"></circle>
-    </svg>
+              <circle class="track" cx="50" cy="50" r="34"></circle>
+              <path class="arc" d="" />
+              <circle class="handle" cx="50" cy="16" r="3.8"></circle>
+            </svg>
 
-    <span class="label" id="knob-label">100%</span>
-  </button>
+            <span class="label" id="knob-label">100%</span>
+          </button>
 
-  <!-- Visualizer Editor FAB -->
-  <button id="vz-open-editor" class="vz-fab"
-    aria-haspopup="dialog" aria-controls="vz-panel"
-    title="Open Visualizer Editor" aria-label="Open Visualizer Editor">
-    <span class="material-icons" aria-hidden="true">tune</span>
-  </button>
+          <!-- Visualizer Editor FAB -->
+          <button id="vz-open-editor" class="vz-fab"
+            aria-haspopup="dialog" aria-controls="vz-panel"
+            title="Open Visualizer Editor" aria-label="Open Visualizer Editor">
+            <span class="material-icons" aria-hidden="true">tune</span>
+          </button>
 
-  <!-- EQ FAB -->
-  <button id="open-eq" class="eq-fab"
-    title="Open Equalizer" aria-haspopup="dialog" aria-controls="eq-modal">
-    <span class="material-icons" aria-hidden="true">equalizer</span>
-  </button>
-</div>
+          <!-- EQ FAB -->
+          <button id="open-eq" class="eq-fab"
+            title="Open Equalizer" aria-haspopup="dialog" aria-controls="eq-modal">
+            <span class="material-icons" aria-hidden="true">equalizer</span>
+          </button>
+        </div>
 
         <div id="vz-editor-root"></div>
 
@@ -1196,10 +1203,9 @@
 
   <!-- =======================================================
        FIXES APPLIED:
-       1) main.js was NOT running because type="modals" is invalid → changed to normal script
-       2) Out-Now popup dismissal: sessionStorage → localStorage (so “DISMISS_DAYS” actually works)
-       3) Out-Now popup: only locks page scroll when modal is actually shown; unlocks on close
-       4) target="_blank" links now use rel="noopener noreferrer"
+       1) canonical script regex fixed
+       2) deduped theme-color + favicons
+       3) cache-busting added to CSS + key JS so Chrome pulls updates
      ======================================================= -->
 
   <script src="js/index/core-inline-logic-005.js"></script>
@@ -1222,7 +1228,7 @@
 
   <!-- Player -->
   <script src="js/player/player-core.js"></script>
- <script src="js/player/vz-beat-glow.js"></script> 
+  <script src="js/player/vz-beat-glow.js?v=20251228_1"></script>
   <script src="js/player/ui-events.js"></script>
 
   <!-- Visualizer -->
@@ -1230,7 +1236,7 @@
   <script src="js/player/visualizer-editor.js"></script>
 
   <!-- Equalizer -->
-  <script src="js/player/equalizer.js"></script>
+  <script src="js/player/equalizer.js?v=20251228_1"></script>
 
   <script>
     window.G73_REACTIONS_MODULE_URL = "/js/index/song-reaction-buttons-and-stats.js";
@@ -1246,8 +1252,8 @@
   <script src="js/ui/password-visibility.js"></script>
   <script src="js/ui/password-check.js"></script>
 
-  <!-- ✅ Main Site Boot (FIXED: was type="modals" so it might not run at all) -->
-  <script src="js/main.js"></script>
+  <!-- ✅ Main Site Boot -->
+  <script src="js/main.js?v=20251228_1"></script>
 
   <!-- Safety/Boot helpers -->
   <script src="js/index/safety-boot-logic-in-case-main-js-doesn-t-start-it.js"></script>
@@ -1255,21 +1261,21 @@
   <script src="js/index/visualizer-orb-builder-builds-the-animated-orb-inside-vz-ope.js"></script>
   <script src="js/index/volume-knob-handler-volume-knob-logic.js"></script>
   <script src="js/index/core-inline-logic-011.js"></script>
-  <script src="js/index/equalizer-handler.js"></script>
-  <script src="js/index/eqsync.js"></script>
+  <script src="js/index/equalizer-handler.js?v=20251228_1"></script>
+  <script src="js/index/eqsync.js?v=20251228_1"></script>
   <script src="js/index/inline-014.js"></script>
   <script src="js/index/core-inline-logic-015.js"></script>
 
   <!-- Organizer -->
-  <script type="module" src="js/player/organizer-modal.js?v=debug1"></script>
-  <script src="js/player/organizer-adapter.js"></script>
+  <script type="module" src="js/player/organizer-modal.js?v=20251228_1"></script>
+  <script src="js/player/organizer-adapter.js?v=20251228_1"></script>
   <script src="js/index/organizer-modal-inline.js"></script>
 
-  <script src="js/theme-binder.v2.js" defer></script>
+  <script src="js/theme-binder.v2.js?v=20251228_1" defer></script>
   <script src="js/index/core-inline-logic-017.js"></script>
   <script src="js/index/core-inline-logic-018.js"></script>
 
-  <script src="js/metrics-footer.js" defer></script>
+  <script src="js/metrics-footer.js?v=20251228_1" defer></script>
 
   <script src="js/index/core-inline-logic-020.js"></script>
   <script src="js/index/core-inline-logic-021.js"></script>
