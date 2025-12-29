@@ -1471,5 +1471,110 @@
     }, AUTO_SHOW_MS);
   })();
   </script>
+  <script>
+(()=>{
+  const $r = document.documentElement;
+
+  function loadPalette(){
+    try{
+      const s = JSON.parse(localStorage.getItem('siteThemeV1')||'null');
+      if (s?.main && s?.accent) return { primary:s.main, accent:s.accent };
+    }catch{}
+    try{
+      const t = JSON.parse(localStorage.getItem('themeSettings')||'null');
+      if (t?.mainColor && t?.accentColor) return { primary:t.mainColor, accent:t.accentColor };
+    }catch{}
+    const cs = getComputedStyle($r);
+    const p = (cs.getPropertyValue('--app-primary')||cs.getPropertyValue('--primary-color')).trim();
+    const a = (cs.getPropertyValue('--app-accent') ||cs.getPropertyValue('--accent-color')).trim();
+    return (p && a) ? { primary:p, accent:a } : { primary:'#00f0ff', accent:'#ff00f0' };
+  }
+
+  // --- loop guard + diff check ---
+  let applying = false;
+  let lastKey = "";
+
+  function applyVars({primary,accent}){
+    const nextKey = `${primary}__${accent}`;
+    if (nextKey === lastKey) return;          // ✅ no-op if nothing changed
+    if (applying) return;                      // ✅ stop re-entry
+    applying = true;
+
+    try{
+      // write vars
+      $r.style.setProperty('--app-primary', primary);
+      $r.style.setProperty('--app-accent',  accent);
+      $r.style.setProperty('--primary-color', primary);
+      $r.style.setProperty('--accent-color',  accent);
+      $r.style.setProperty('--prog-fill', `linear-gradient(90deg, ${primary}, ${accent})`);
+
+      // theme-color meta
+      let meta = document.querySelector('meta[name="theme-color"]');
+      if (!meta){
+        meta = document.createElement('meta');
+        meta.name='theme-color';
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', primary);
+
+      lastKey = nextKey;
+
+      // ✅ only dispatch if we truly changed the theme
+      window.dispatchEvent(new CustomEvent('theme:changed', {
+        detail:{ primary, accent, source:'home-binder-safe' }
+      }));
+    } finally {
+      // release on next frame so MutationObserver doesn't immediately recurse
+      requestAnimationFrame(()=>{ applying = false; });
+    }
+  }
+
+  function ensureIconReset(){
+    const id='g73-home-icon-reset';
+    if (document.getElementById(id)) return;
+    const css = `
+      i.material-icons, .icon-btn i, .icon-btn svg, .icon-btn svg path{
+        color: currentColor !important; fill: currentColor !important;
+        -webkit-text-stroke: 0 !important;
+      }`;
+    const el = document.createElement('style');
+    el.id=id;
+    el.textContent=css;
+    document.head.appendChild(el);
+  }
+
+  let queued = false;
+  const queue = ()=>{
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(()=>{
+      queued = false;
+      const pal = loadPalette();
+      applyVars(pal);
+      ensureIconReset();
+    });
+  };
+
+  // ✅ DO NOT listen to theme:changed that we ourselves dispatch endlessly
+  // Instead: listen to storage changes and manual calls
+  if (document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', queue, {once:true});
+  } else {
+    queue();
+  }
+
+  window.addEventListener('storage', (e)=>{
+    if (e.key==='siteThemeV1' || e.key==='themeSettings') queue();
+  }, {passive:true});
+
+  // ✅ MutationObserver: only react to CLASS/DATA changes, NOT style
+  new MutationObserver(queue).observe($r, {
+    attributes:true,
+    attributeFilter:['class','data-theme']
+  });
+
+  window.G73HomeBinder = { apply: queue };
+})();
+</script>
 </body>
 </html>

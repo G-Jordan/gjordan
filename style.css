@@ -1,14 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
+/* =========================================
+   style.css (drop-in)
+   - Keeps your layout/visuals
+   - Fixes last-items click/glitch issues
+   ========================================= */
+
 /* GOOD reset */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-/* leave other margins/paddings alone */
 
 :root {
   --skyblue: #f40000;
   --green: #18e61f;
-  --lightblack:#ff2121;
+  --lightblack: #ff2121;
   --white: #ffffff;
   --grayscale: #eb3c3c;
 
@@ -25,19 +30,27 @@ body {
   min-height: 100vh;
   background: linear-gradient(var(--skyblue) 0%, var(--green) 100%);
   color: var(--app-text);
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
+/* Wrapper */
 .wrapper {
   width: 380px;
   padding: 25px 30px;
-  overflow: hidden;
   position: relative;
   border-radius: 15px;
-  background-color:#000000a9;
+  background-color: #000000a9;
+
+  /* Keep original behavior */
+  overflow: hidden;
+
+  /* Helps layering behave predictably */
+  isolation: isolate;
 }
 
 .wrapper i { cursor: pointer; }
 
+/* Flex rows */
 .top-bar,
 .progress-area .song-timer,
 .controls,
@@ -48,6 +61,7 @@ body {
   justify-content: space-between;
 }
 
+/* Top bar */
 .top-bar i {
   font-size: 30px;
   color: var(--app-primary);
@@ -59,6 +73,7 @@ body {
   color: var(--app-accent);
 }
 
+/* Artwork */
 .img-area {
   width: 100%;
   height: 256px;
@@ -72,20 +87,31 @@ body {
   object-fit: fill;
 }
 
+/* Song details */
 .song-details {
   text-align: center;
   margin: 30px 0;
 }
 .song-details p { color: var(--app-text); }
-.song-details .name { font-size: 21px; color: var(--app-primary); }
-.song-details .artist { font-size: 18px; opacity: 0.9; line-height: 35px; color: var(--app-accent); }
+.song-details .name {
+  font-size: 21px;
+  color: var(--app-primary);
+}
+.song-details .artist {
+  font-size: 18px;
+  opacity: 0.9;
+  line-height: 35px;
+  color: var(--app-accent);
+}
 
+/* Progress */
 .progress-area {
   height: 6px;
   width: 100%;
   border-radius: 50px;
   background: var(--app-accent);
   cursor: pointer;
+  position: relative;
 }
 .progress-area .progress-bar {
   height: inherit;
@@ -109,16 +135,15 @@ body {
   background: inherit;
   transition: opacity 0.2s ease;
 }
-.progress-area:hover .progress-bar::before {
-  opacity: 1;
-  pointer-events: auto;
-}
+.progress-area:hover .progress-bar::before { opacity: 1; }
+
 .progress-area .song-timer { margin-top: 2px; }
 .song-timer span { font-size: 13px; color: var(--app-text); }
 
+/* Controls */
 .controls { margin: 40px 0 5px 0; }
 
-/* Keep gradient for main player controls only */
+/* Gradient for main player controls only */
 .wrapper .controls i {
   font-size: 28px;
   user-select: none;
@@ -127,10 +152,14 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.controls i:nth-child(2), .controls i:nth-child(4) { font-size: 43px; }
+
+.controls i:nth-child(2),
+.controls i:nth-child(4) { font-size: 43px; }
+
 .controls #prev { margin-right: -13px; }
 .controls #next { margin-left: -13px; }
 
+/* Play/Pause button */
 .controls .play-pause {
   height: 54px;
   width: 54px;
@@ -141,6 +170,8 @@ body {
   border-radius: 50%;
   background: linear-gradient(var(--white) 0%, var(--grayscale) 100%);
   box-shadow: 0px 0px 5px var(--skyblue);
+  position: relative;
+  flex: 0 0 auto;
 }
 .play-pause::before {
   position: absolute;
@@ -162,25 +193,40 @@ body {
   position: absolute;
 }
 
+/* =========================
+   Music list (FIXED)
+   ========================= */
 .music-list {
   position: absolute;
-  background-color:#000000e6;
+  background-color: #000000e6;
   width: 100%;
   left: 0;
+
+  /* Keep your existing slide behavior (JS-friendly) */
   bottom: -55%;
+
   opacity: 0;
   pointer-events: none;
-  z-index: 5;
+
+  /* IMPORTANT: make sure it sits above other stuff */
+  z-index: 999;
+
   padding: 15px 30px;
   border-radius: 15px;
-  box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px -5px 10px rgba(0,0,0,0.1);
   transition: all 0.15s ease-out;
 }
+
+/* show state */
 .music-list.show {
   bottom: 0;
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Header */
+.music-list .header { position: relative; z-index: 2; }
+
 .header .row {
   display: flex;
   align-items: center;
@@ -191,8 +237,21 @@ body {
 .header .row span { margin-left: 5px; }
 .header #close { font-size: 22px; color: var(--lightblack); }
 
-.music-list ul { margin: 10px 0; max-height: 260px; overflow: auto; }
+/* Scroll list */
+.music-list ul {
+  margin: 10px 0;
+  max-height: 260px;
+  overflow: auto;
+  position: relative;
+  z-index: 2;
+
+  /* Better touch/scroll on mobile */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
 .music-list ul::-webkit-scrollbar { width: 0px; }
+
+/* Rows */
 .music-list ul li {
   list-style: none;
   display: flex;
@@ -201,12 +260,31 @@ body {
   margin-bottom: 5px;
   color: var(--app-text);
   border-bottom: 1px solid var(--app-primary);
+
+  /* CRITICAL FIX:
+     Don’t let any “playing” class disable clicks */
+  pointer-events: auto;
+
+  /* Helps avoid weird “tap selects wrong row” situations */
+  touch-action: manipulation;
 }
-.music-list ul li:last-child { border-bottom: 0px; }
+
+.music-list ul li:last-child {
+  border-bottom: 0px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Text */
 .music-list ul li .row span { font-size: 17px; }
 .music-list ul li .row p { opacity: 0.9; }
 ul li .audio-duration { font-size: 16px; }
-ul li.playing { pointer-events: none; color: var(--app-accent); }
+
+/* Active/playing styling (NO pointer-events removal) */
+ul li.playing {
+  color: var(--app-accent);
+  /* no pointer-events: none; (that breaks last items) */
+}
 
 /* Menu icon red variant */
 .menu-icon.red { color: red; }

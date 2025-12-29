@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>G73 Admin Uploader</title>
+  <link rel="stylesheet" href="/public/uploader.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="badge">G73</div>
+        <div class="title">
+          <h1>Admin Song Uploader</h1>
+          <p>Local GUI • Gold Theme • MP3 + JPG forced • Undo supported</p>
+        </div>
+      </div>
+      <div class="status" id="status">
+        <span class="dot" id="dot"></span>
+        <span id="statusText">Disconnected</span>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <h2>Upload</h2>
+
+        <div class="row2">
+          <div>
+            <label>Song name (optional — will auto-fill)</label>
+            <input id="songName" type="text" placeholder='e.g. "Broken Promises (prod. Cobra)"' />
+          </div>
+          <div>
+            <label>Artist (optional — will auto-fill)</label>
+            <input id="artistName" type="text" placeholder='e.g. "G Jordan, Cobra"' />
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>Audio (any format → forced MP3)</label>
+            <input id="audioFile" type="file" accept="audio/*" />
+            <div class="hint">Tip: you can drag & drop an audio file onto this input.</div>
+          </div>
+          <div>
+            <label>Cover (any format → forced JPG)</label>
+            <input id="coverFile" type="file" accept="image/*" />
+            <div class="hint">Tip: you can drag & drop an image file onto this input.</div>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label>Manual ID (optional)</label>
+            <input id="manualId" type="text" placeholder="music-32 (leave blank to auto)" />
+          </div>
+          <div class="mini">
+            <label>Actions</label>
+            <div class="btnRow">
+              <button class="btn" id="btnTest">Test</button>
+              <button class="btn primary" id="btnUpload">Upload</button>
+              <button class="btn warn" id="btnUndo">Undo Last</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="hint">
+          This tool edits your website repo folders:
+          <code>/songs</code>, <code>/images</code>, and <code>/js/music-list.js</code>.
+          <br/>
+          If uploads fail, check Console for debug details.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Console</h2>
+        <pre class="log" id="log"></pre>
+        <div class="historyWrap">
+          <h3>Recent uploads</h3>
+          <div id="history" class="history"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/public/uploader.js"></script>
+</body>
+</html>

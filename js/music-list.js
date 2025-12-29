@@ -2,6 +2,11 @@
 
 // ✅ Base playlist (never mutate this one)
 window.allMusicBase = [
+  { name: "Broken Promises", artist: "G Jordan", img: "music-36", src: "music-36" },
+  { name: "By My Side", artist: "G Jordan, Cobra", img: "music-35", src: "music-35" },
+  { name: "I See You", artist: "G Jordan, Cobra", img: "music-34", src: "music-34" },
+  { name: "ILLUSORY", artist: "G Jordan, 6tracks", img: "music-33", src: "music-33" },
+  { name: "I Tried", artist: "G Jordan, 6tracks", img: "music-32", src: "music-32" },
   { name: "Stay The Same (prod.Cobra)",               artist: "G Jordan, Cobra",                 img: "music-31", src: "music-31" },
   { name: "Going Out Here (prod.Cobra)",             artist: "G Jordan, Cobra",                 img: "music-30", src: "music-30" },
   { name: "Feels (prod.Cobra)",                      artist: "G Jordan, Cobra",                 img: "music-29", src: "music-29" },

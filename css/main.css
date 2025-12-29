@@ -838,3 +838,66 @@ footer, .social-links{ contain: paint; }
 @media (prefers-reduced-motion: reduce){
   #vz-open-editor.is-idle::before{ animation: none !important; }
 }
+/* ======================================================
+   G73 FIX: Force theme gradient on EQ buttons in Chrome
+   (last + 3rd EQ button not updating)
+   ====================================================== */
+
+/* 1) Make sure themed controls still work even with global icon rule */
+.controls[data-ctl-theme] i.material-icons,
+.controls[data-ctl-theme] .material-icons{
+  background-image: var(--prog-fill, var(--ctl-icon-gradient, var(--chip-grad))) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+/* 2) HARDENED: EQ icons — works even if buttons are outside .controls
+   Covers common IDs/classes + any element tagged as eq-related */
+#eq-btn i.material-icons,
+#eq-toggle i.material-icons,
+#eq-open i.material-icons,
+#eq-close i.material-icons,
+.eq-btn i.material-icons,
+.eq-toggle i.material-icons,
+.eq-open i.material-icons,
+.eq-close i.material-icons,
+button[id*="eq"] i.material-icons,
+button[class*="eq"] i.material-icons,
+*[data-eq] i.material-icons,
+*[data-eq] .material-icons{
+  background-image: var(--prog-fill, var(--ctl-icon-gradient, var(--chip-grad))) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--app-primary,#5fa0ff) 35%, transparent));
+}
+
+/* 3) If the EQ icon element itself has a class like "material-icons eq" */
+i.material-icons[id*="eq"],
+i.material-icons[class*="eq"],
+.material-icons[id*="eq"],
+.material-icons[class*="eq"]{
+  background-image: var(--prog-fill, var(--ctl-icon-gradient, var(--chip-grad))) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+/* 4) Safety: do NOT let the global rule "currentColor" win on EQ */
+#eq-btn i.material-icons,
+#eq-toggle i.material-icons,
+#eq-open i.material-icons,
+#eq-close i.material-icons,
+.eq-btn i.material-icons,
+.eq-toggle i.material-icons,
+.eq-open i.material-icons,
+.eq-close i.material-icons,
+button[id*="eq"] i.material-icons,
+button[class*="eq"] i.material-icons{
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}  

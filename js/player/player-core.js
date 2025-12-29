@@ -149,20 +149,23 @@
     } catch {}
   }
 
-  function safeNum(n, fallback=0){
-    return (typeof n === "number" && isFinite(n)) ? n : fallback;
-  }
-
+  // ✅ PATCH: Guard against invalid duration/position (prevents scrubber stuck at end on iOS/Android)
   function msSetPositionState(){
     if (!hasMediaSession() || !navigator.mediaSession.setPositionState || !mainAudio) return;
+
     try {
-      const dur = safeNum(mainAudio.duration, 0);
-      const pos = safeNum(mainAudio.currentTime, 0);
-      const rate = safeNum(mainAudio.playbackRate, 1);
+      const dur  = mainAudio.duration;
+      const pos  = mainAudio.currentTime;
+      const rate = mainAudio.paused ? 0 : (mainAudio.playbackRate || 1);
+
+      // CRITICAL: do NOT set position state until duration is real
+      if (!Number.isFinite(dur) || dur <= 0) return;
+      if (!Number.isFinite(pos) || pos < 0) return;
+
       navigator.mediaSession.setPositionState({
         duration: dur,
         playbackRate: rate,
-        position: Math.min(pos, dur || pos)
+        position: Math.min(Math.max(pos, 0), dur)
       });
     } catch {}
   }
@@ -188,15 +191,22 @@
       navigator.mediaSession.setActionHandler("seekforward", (d) => {
         if (!mainAudio) return;
         const off = (d && typeof d.seekOffset === "number") ? d.seekOffset : 10;
-        const dur = safeNum(mainAudio.duration, Infinity);
+        const dur = mainAudio.duration;
+        if (!Number.isFinite(dur) || dur <= 0) return;
         mainAudio.currentTime = Math.min(dur, mainAudio.currentTime + off);
         msSetPositionState();
       });
 
       navigator.mediaSession.setActionHandler("seekto", (d) => {
         if (!mainAudio || !d || typeof d.seekTime !== "number") return;
-        if (d.fastSeek && typeof mainAudio.fastSeek === "function") mainAudio.fastSeek(d.seekTime);
-        else mainAudio.currentTime = d.seekTime;
+
+        const dur = mainAudio.duration;
+        if (!Number.isFinite(dur) || dur <= 0) return;
+
+        const t = Math.min(Math.max(d.seekTime, 0), dur);
+        if (d.fastSeek && typeof mainAudio.fastSeek === "function") mainAudio.fastSeek(t);
+        else mainAudio.currentTime = t;
+
         msSetPositionState();
       });
     } catch (e) {
@@ -223,6 +233,9 @@
     if (mainAudio){
       const src = audioPath(it.src);
       if (src && !/index\.html$/i.test(src)) mainAudio.src = src;
+
+      // ✅ PATCH: force metadata load (helps iOS/Android get duration early)
+      try { mainAudio.load(); } catch {}
     }
 
     window.currentSongId = it.src || '';
@@ -426,10 +439,14 @@
       const dur = e.target.duration || 1;
       if (progressBar) progressBar.style.width = `${(cur/dur)*100}%`;
 
-      const totalDur = safeNum(mainAudio.duration, 0);
-      const mm = Math.floor(totalDur/60);
-      const ss = String(Math.floor(totalDur%60)).padStart(2,'0');
-      if (musicDuration) musicDuration.textContent = `${mm}:${ss}`;
+      const totalDur = mainAudio.duration;
+      if (Number.isFinite(totalDur) && totalDur > 0){
+        const mm = Math.floor(totalDur/60);
+        const ss = String(Math.floor(totalDur%60)).padStart(2,'0');
+        if (musicDuration) musicDuration.textContent = `${mm}:${ss}`;
+      } else {
+        if (musicDuration) musicDuration.textContent = `--:--`;
+      }
 
       const cm = Math.floor(cur/60);
       const cs = String(Math.floor(cur%60)).padStart(2,'0');
@@ -459,6 +476,17 @@
     mainAudio.addEventListener('loadedmetadata', ()=>{
       playingSong();
       msRefreshAll();
+    });
+
+    // ✅ PATCH: important for iOS + some Androids
+    mainAudio.addEventListener('durationchange', ()=>{
+      msSetPositionState();
+    });
+    mainAudio.addEventListener('seeking', ()=>{
+      msSetPositionState();
+    });
+    mainAudio.addEventListener('seeked', ()=>{
+      msSetPositionState();
     });
 
     mainAudio.addEventListener('play',  ()=>{
