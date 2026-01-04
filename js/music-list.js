@@ -2,6 +2,8 @@
 
 // ✅ Base playlist (never mutate this one)
 window.allMusicBase = [
+  { name: "Polaroid Frames", artist: "G Jordan", img: "music-39", src: "music-39" },
+  { name: "Star Struck", artist: "G Jordan", img: "music-38", src: "music-38" },
   { name: "Real $hit 2026", artist: "G Jordan", img: "music-37", src: "music-37" },
   { name: "Broken Promises", artist: "G Jordan", img: "music-36", src: "music-36" },
   { name: "By My Side", artist: "G Jordan, Cobra", img: "music-35", src: "music-35" },
