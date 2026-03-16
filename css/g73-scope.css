@@ -1,0 +1,29 @@
+/* =========================================================
+   css/g73-scope.css
+   Compatibility shim for legacy player include.
+   Prevents a missing stylesheet request and adds only
+   low-risk scoped sizing safeguards.
+   ========================================================= */
+
+:root { --g73-scope-ready: 1; }
+
+.wrapper,
+.video-shell,
+.player-shell,
+.music-list,
+.progress-area,
+.controls {
+  max-width: 100%;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Phase 11 layout expansion */
+.container,.main-container,.content,.info-panel{
+  width:min(1400px,96vw)!important;
+  margin:auto!important;
+}

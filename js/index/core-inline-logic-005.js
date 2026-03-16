@@ -1,0 +1,1 @@
+window.__VZ_EMBEDDED = true;

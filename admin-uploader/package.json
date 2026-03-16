@@ -1,0 +1,14 @@
+{
+  "name": "g73-admin-uploader",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0",
+    "music-metadata": "^10.8.0"
+  }
+}
