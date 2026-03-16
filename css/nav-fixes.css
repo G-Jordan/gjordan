@@ -1,0 +1,24 @@
+/* Keep the player header/footer as full-width blocks */
+header, footer {
+  display: block;
+  width: 100%;
+  float: none;
+  clear: both;
+}
+
+/* Make sure the top navbar is a horizontal bar */
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Keep the dropdown positioned under the menu button */
+.navbar .menu {
+  position: absolute;
+  z-index: 1000;
+}
+
+/* Space for sticky nav above (your player header is already sticky in g73 CSS) */
+body { margin: 0; }

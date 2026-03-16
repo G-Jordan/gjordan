@@ -1,0 +1,39 @@
+/* Kill any floats/absolute/flex hacks on the page chrome */
+body { margin: 0; }
+
+/* Force the page sections to stack correctly */
+body > header,
+body > main,
+body > footer {
+  display: block !important;
+  width: 100% !important;
+  float: none !important;
+  position: static !important;
+  clear: both !important;
+}
+
+/* Your player layout — ensure the 2-column grid is respected */
+main {
+  display: grid !important;
+  grid-template-columns: 320px 1fr !important;
+  min-height: calc(100vh - 64px); /* keep your original intent */
+}
+
+/* Make sure the playlist sits left and the player sits right */
+#list { grid-column: 1 !important; }
+#player { grid-column: 2 !important; }
+
+/* Keep the logo header centered as intended in g73-player.css */
+header {
+  text-align: center !important;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Footer spans full width and centers content */
+footer {
+  text-align: center !important;
+  border-top: 1px solid var(--border);
+}
+
+/* Navbar: ensure it stays above and doesn't push things sideways */
+.navbar { width: 100% !important; z-index: 1000; }
