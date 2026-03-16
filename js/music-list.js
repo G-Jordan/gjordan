@@ -2,6 +2,13 @@
 
 // ✅ Base playlist (never mutate this one)
 window.allMusicBase = [
+  { name: "Look So Fly", artist: "G Jordan", img: "music-46", src: "music-46" },
+  { name: "Codigo", artist: "G Jordan", img: "music-45", src: "music-45" },
+  { name: "Make U My Wife", artist: "G Jordan", img: "music-44", src: "music-44" },
+  { name: "Baby Why?", artist: "G Jordan", img: "music-43", src: "music-43" },
+  { name: "You Got Me", artist: "G Jordan", img: "music-42", src: "music-42" },
+  { name: "Wrong Season", artist: "G Jordan", img: "music-41", src: "music-41" },
+  { name: "OK", artist: "G Jordan", img: "music-40", src: "music-40" },
   { name: "Polaroid Frames", artist: "G Jordan", img: "music-39", src: "music-39" },
   { name: "Star Struck", artist: "G Jordan", img: "music-38", src: "music-38" },
   { name: "Real $hit 2026", artist: "G Jordan", img: "music-37", src: "music-37" },
