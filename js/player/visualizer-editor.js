@@ -3,6 +3,7 @@
   "use strict";
 
   const STORAGE_KEY = 'g73-vz-lite-preset';
+  const STAR_KEY = 'g73-starfield-v1';
   const root = document.getElementById('vz-editor-root');
   const openBtn = document.getElementById('vz-open-editor');
   if (!root || !openBtn) return;
@@ -124,6 +125,21 @@
               <div class="field"><label for="vz-spacing">Spacing</label><input id="vz-spacing" type="range" min="0" max="8" step="1"></div>
             </div>
           </section>
+          <section class="card">
+            <h3>Space</h3>
+            <div class="row2">
+              <div class="field"><label for="vz-stars-enabled">Stars</label><select id="vz-stars-enabled"><option value="on">On</option><option value="off">Off</option></select></div>
+              <div class="field"><label for="vz-stars-mode">Star Color</label><select id="vz-stars-mode"><option value="theme">Theme Driven</option><option value="white">Solid White</option><option value="custom">Custom Color</option></select></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="vz-stars-color">Custom Star Color</label><input id="vz-stars-color" type="color"></div>
+              <div class="field"><label for="vz-stars-count">Star Count</label><input id="vz-stars-count" type="range" min="40" max="480" step="10"></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="vz-stars-size">Star Size</label><input id="vz-stars-size" type="range" min="0.6" max="3.2" step="0.1"></div>
+              <div class="field"><label for="vz-stars-twinkle">Twinkle</label><input id="vz-stars-twinkle" type="range" min="0" max="1" step="0.01"></div>
+            </div>
+          </section>
         </div>
         <section class="card">
           <h3>Actions</h3>
@@ -133,7 +149,7 @@
             <button class="btn" type="button" id="vz-save"><span class="material-icons">save</span>Save Current Look</button>
             <button class="btn" type="button" id="vz-load"><span class="material-icons">download</span>Load Saved Look</button>
           </div>
-          <p class="hint">Presets apply style only. Density is fully controlled by the slider above. Higher values create thinner bars; this build prefers a WebGL renderer with a 2D fallback. Lockscreen and notification controls still use Media Session.</p>
+          <p class="hint">Presets apply style only. Density is fully controlled by the slider above. The starfield uses a WebGL point renderer with theme-aware color, and the lockscreen / notification controls still use Media Session.</p>
         </section>
       </div>
       <div class="foot">
@@ -156,7 +172,13 @@
     glow: root.querySelector('#vz-glow'),
     opacity: root.querySelector('#vz-opacity'),
     fps: root.querySelector('#vz-fps'),
-    spacing: root.querySelector('#vz-spacing')
+    spacing: root.querySelector('#vz-spacing'),
+    starsEnabled: root.querySelector('#vz-stars-enabled'),
+    starsMode: root.querySelector('#vz-stars-mode'),
+    starsColor: root.querySelector('#vz-stars-color'),
+    starsCount: root.querySelector('#vz-stars-count'),
+    starsSize: root.querySelector('#vz-stars-size'),
+    starsTwinkle: root.querySelector('#vz-stars-twinkle')
   };
 
   const safeAPI = () => window.visualizerAPI && typeof window.visualizerAPI.applySceneExact === 'function';
@@ -175,6 +197,12 @@
     const m = v.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
     if (m) return '#' + [m[1],m[2],m[3]].map(n=>('0'+parseInt(n,10).toString(16)).slice(-2)).join('');
     return fallback || '#000000';
+  };
+  const getStarAPI = () => window.G73Starfield && typeof window.G73Starfield.setOptions === 'function' ? window.G73Starfield : null;
+  const currentStars = () => {
+    const api = getStarAPI();
+    if (api && typeof api.getOptions === 'function') return api.getOptions();
+    try { return JSON.parse(localStorage.getItem(STAR_KEY) || 'null') || {}; } catch { return {}; }
   };
 
   function patchToScene(src){
@@ -271,6 +299,13 @@
     fields.opacity.value = String(s.opacity);
     fields.fps.value = String(s.fps);
     fields.spacing.value = String(s.spacing);
+    const stars = currentStars();
+    fields.starsEnabled.value = (stars.enabled === false) ? 'off' : 'on';
+    fields.starsMode.value = stars.colorMode || 'theme';
+    fields.starsColor.value = normalizeColor(stars.color || '#ffffff', '#ffffff');
+    fields.starsCount.value = String(Number(stars.count ?? 180));
+    fields.starsSize.value = String(Number(stars.size ?? 1.6));
+    fields.starsTwinkle.value = String(Number(stars.twinkle ?? 0.45));
     [...presetsEl.children].forEach(card=>{
       const key = card.dataset.key;
       const scene = PRESETS.find(p=>p.key===key);
@@ -278,7 +313,22 @@
     });
   }
 
+  function applyStars(){
+    const api = getStarAPI();
+    const next = {
+      enabled: fields.starsEnabled.value !== 'off',
+      colorMode: fields.starsMode.value,
+      color: fields.starsColor.value,
+      count: Number(fields.starsCount.value),
+      size: Number(fields.starsSize.value),
+      twinkle: Number(fields.starsTwinkle.value)
+    };
+    if (api) api.setOptions(next);
+    else { try { localStorage.setItem(STAR_KEY, JSON.stringify(next)); } catch {} }
+  }
+
   function applyFromFields(){
+    applyStars();
     applyScene({
       mode: fields.mode.value,
       color1: fields.color1.value,
@@ -300,11 +350,13 @@
     const c = siteColors();
     fields.color1.value = normalizeColor(c.color1, '#5fa0ff');
     fields.color2.value = normalizeColor(c.color2, '#b478ff');
+    fields.starsEnabled.value = 'on';
+    fields.starsMode.value = 'theme';
     applyFromFields();
   });
   root.querySelector('#vz-reset').addEventListener('click', ()=> applyScene(PRESETS.find(p=>p.key==='g73') || PRESETS[0]));
   root.querySelector('#vz-foot-defaults').addEventListener('click', ()=> applyScene(PRESETS.find(p=>p.key==='g73') || PRESETS[0]));
-  const saveCurrent = ()=> { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(currentScene())); } catch {} };
+  const saveCurrent = ()=> { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(currentScene())); } catch {} try { localStorage.setItem(STAR_KEY, JSON.stringify(currentStars())); } catch {} };
   root.querySelector('#vz-save').addEventListener('click', saveCurrent);
   root.querySelector('#vz-foot-save').addEventListener('click', saveCurrent);
   root.querySelector('#vz-load').addEventListener('click', ()=> {
@@ -313,6 +365,8 @@
       if (!raw) return;
       const saved = JSON.parse(raw);
       if (saved && typeof saved === 'object') applyScene(saved);
+      const starRaw = localStorage.getItem(STAR_KEY);
+      if (starRaw && getStarAPI()) { try { getStarAPI().setOptions(JSON.parse(starRaw)); } catch {} }
     } catch {}
   });
 
@@ -359,6 +413,8 @@
   function boot(){
     const saved = (()=>{ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; }})();
     if (safeAPI()) applyScene(saved && typeof saved === 'object' ? saved : (PRESETS.find(p=>p.key==='g73') || PRESETS[0]));
+    const starRaw = localStorage.getItem(STAR_KEY);
+    if (starRaw && getStarAPI()) { try { getStarAPI().setOptions(JSON.parse(starRaw)); } catch {} }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ()=> setTimeout(boot, 0), { once:true });
   else setTimeout(boot, 0);

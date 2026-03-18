@@ -1,0 +1,120 @@
+:root{
+  --g73-loader-green:#33ff66;
+  --g73-loader-purple:#c084fc;
+  --g73-loader-yellow:#ffd84d;
+}
+
+.img-area.g73-art-stage{
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--g73-loader-green) 12%, transparent), transparent 28%),
+    radial-gradient(circle at 80% 24%, color-mix(in srgb, var(--g73-loader-purple) 10%, transparent), transparent 26%),
+    radial-gradient(circle at 50% 82%, color-mix(in srgb, var(--g73-loader-yellow) 8%, transparent), transparent 32%),
+    linear-gradient(180deg, #0a0a0a, #050505 60%, #090909);
+}
+
+.g73-art-stage > img{
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: scale(.96);
+  transition: opacity .55s ease, transform .55s ease;
+}
+
+.g73-art-stage.is-loaded > img{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.g73-vinyl-loader,
+.g73-vinyl-disc-wrap,
+.g73-vinyl-overlay,
+.g73-vinyl-progress{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+}
+
+.g73-vinyl-loader{
+  z-index:2;
+  pointer-events:none;
+  transition: opacity .5s ease, transform .5s ease;
+}
+
+.g73-art-stage.is-loaded .g73-vinyl-loader{
+  opacity:0;
+  transform:scale(.9);
+}
+
+.g73-vinyl-pulse{
+  position:absolute;
+  inset:10%;
+  border-radius:50%;
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--g73-loader-green) 20%, transparent),
+    color-mix(in srgb, var(--g73-loader-purple) 16%, transparent),
+    color-mix(in srgb, var(--g73-loader-yellow) 10%, transparent),
+    transparent 70%);
+  filter: blur(18px);
+  animation:g73Pulse 2.2s ease-in-out infinite;
+}
+
+.g73-vinyl-disc,
+.g73-vinyl-overlay svg{
+  width:min(78%, 240px);
+  height:min(78%, 240px);
+  display:block;
+}
+
+.g73-vinyl-disc{
+  transform-origin:50% 50%;
+  animation:g73Spin 2.6s linear infinite;
+  filter: drop-shadow(0 14px 28px rgba(0,0,0,.45));
+}
+
+.g73-art-stage.is-buffering .g73-vinyl-disc{
+  animation-duration:5.6s;
+}
+
+.g73-art-stage.is-loaded .g73-vinyl-disc{
+  animation-play-state:paused;
+}
+
+.g73-vinyl-progress svg{
+  width:min(92%, 280px);
+  height:min(92%, 280px);
+  transform:rotate(-90deg);
+  overflow:visible;
+}
+
+.g73-progress-bg{
+  fill:none;
+  stroke:rgba(255,255,255,.08);
+  stroke-width:8;
+}
+
+.g73-progress-bar{
+  fill:none;
+  stroke:url(#g73ProgressGrad);
+  stroke-width:8;
+  stroke-linecap:round;
+  stroke-dasharray:804.25;
+  stroke-dashoffset:804.25;
+  filter: drop-shadow(0 0 8px rgba(168,85,247,.28));
+  transition: stroke-dashoffset .22s linear;
+}
+
+.g73-dot1,.g73-dot2,.g73-dot3{ opacity:0; animation:g73StepDots 1.2s infinite; }
+.g73-dot2{ animation-delay:.4s; }
+.g73-dot3{ animation-delay:.8s; }
+
+@keyframes g73Spin{ from{ transform:rotate(0deg);} to{ transform:rotate(360deg);} }
+@keyframes g73Pulse{ 0%,100%{ transform:scale(.97); opacity:.7;} 50%{ transform:scale(1.03); opacity:.95;} }
+@keyframes g73StepDots{ 0%,24%{ opacity:0;} 25%,100%{ opacity:1;} }
+
+@media (prefers-reduced-motion: reduce){
+  .g73-vinyl-disc, .g73-vinyl-pulse, .g73-dot1, .g73-dot2, .g73-dot3{ animation:none !important; }
+}

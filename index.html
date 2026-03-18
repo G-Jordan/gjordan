@@ -49,6 +49,8 @@
   <link rel="stylesheet" href="css/main.css?v=20251228_1" />
   <link rel="stylesheet" href="css/eq.css?v=20251228_1" />
   <link rel="stylesheet" href="css/g73-fixes.css?v=20251228_1" />
+  <link rel="stylesheet" href="css/vinyl-loader.css?v=20260318_1" />
+  <link rel="stylesheet" href="css/player-ambience.css?v=20260318_2" />
 
   <!-- Material Icons -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -924,7 +926,83 @@
           <i class="material-icons"></i>
         </div>
 
-        <div class="img-area">
+        <div class="img-area g73-art-stage is-loading" id="g73ArtStage">
+          <div class="g73-vinyl-loader" id="g73VinylLoader" aria-hidden="true">
+            <div class="g73-vinyl-pulse"></div>
+            <div class="g73-vinyl-disc-wrap">
+              <svg class="g73-vinyl-disc" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-label="Spinning G73 vinyl disc">
+                <defs>
+                  <radialGradient id="g73VinylCore" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#111116"/>
+                    <stop offset="55%" stop-color="#09090c"/>
+                    <stop offset="100%" stop-color="#040405"/>
+                  </radialGradient>
+                  <radialGradient id="g73VinylLabel" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#0c0c10"/>
+                    <stop offset="100%" stop-color="#07070a"/>
+                  </radialGradient>
+                  <mask id="g73ShineMask">
+                    <circle cx="120" cy="120" r="92" fill="white"/>
+                  </mask>
+                </defs>
+                <circle cx="120" cy="120" r="92" fill="url(#g73VinylCore)"/>
+                <circle cx="120" cy="120" r="92" stroke="#1d1d22" stroke-width="1.8" fill="none"/>
+                <circle cx="120" cy="120" r="87" stroke="#111116" stroke-width="1.1" fill="none"/>
+                <g stroke="rgba(255,255,255,0.07)" fill="none">
+                  <circle cx="120" cy="120" r="79"/>
+                  <circle cx="120" cy="120" r="72"/>
+                  <circle cx="120" cy="120" r="65"/>
+                  <circle cx="120" cy="120" r="58"/>
+                  <circle cx="120" cy="120" r="51"/>
+                  <circle cx="120" cy="120" r="44"/>
+                  <circle cx="120" cy="120" r="37"/>
+                </g>
+                <g stroke="rgba(255,255,255,0.03)" fill="none">
+                  <circle cx="120" cy="120" r="83"/>
+                  <circle cx="120" cy="120" r="76"/>
+                  <circle cx="120" cy="120" r="69"/>
+                  <circle cx="120" cy="120" r="62"/>
+                  <circle cx="120" cy="120" r="55"/>
+                  <circle cx="120" cy="120" r="48"/>
+                  <circle cx="120" cy="120" r="41"/>
+                </g>
+                <circle cx="120" cy="120" r="27" fill="url(#g73VinylLabel)"/>
+                <circle cx="120" cy="120" r="27" stroke="rgba(255,255,255,0.06)" stroke-width="1" fill="none"/>
+                <g mask="url(#g73ShineMask)" opacity="0.6">
+                  <rect x="38" y="20" width="20" height="200" fill="rgba(255,255,255,0.02)" transform="rotate(28 120 120)"/>
+                  <rect x="110" y="15" width="10" height="210" fill="rgba(255,255,255,0.05)" transform="rotate(28 120 120)"/>
+                  <rect x="182" y="20" width="16" height="200" fill="rgba(255,255,255,0.025)" transform="rotate(28 120 120)"/>
+                </g>
+              </svg>
+            </div>
+            <div class="g73-vinyl-overlay">
+              <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <filter id="g73GlowGreen" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <filter id="g73GlowPurple" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.0" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                  <filter id="g73GlowYellow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                </defs>
+                <text x="120" y="96" text-anchor="middle" fill="rgba(255,255,255,0.74)" font-family="Arial, Helvetica, sans-serif" font-size="7.2" letter-spacing="2.2">GJORDAN.MUSIC</text>
+                <text x="120" y="140" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="900">
+                  <tspan fill="#33ff66" data-g73-primary filter="url(#g73GlowGreen)">G</tspan><tspan dx="1" fill="#c084fc" data-g73-accent filter="url(#g73GlowPurple)">7</tspan><tspan dx="1" fill="#ffd84d" data-g73-tertiary filter="url(#g73GlowYellow)">3</tspan>
+                </text>
+                <text x="120" y="164" text-anchor="middle" fill="rgba(255,255,255,0.54)" font-family="Arial, Helvetica, sans-serif" font-size="6.8" letter-spacing="1.9">LOADING TRACK<tspan class="g73-dot1">.</tspan><tspan class="g73-dot2">.</tspan><tspan class="g73-dot3">.</tspan></text>
+              </svg>
+            </div>
+            <div class="g73-vinyl-progress">
+              <svg viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <defs>
+                  <linearGradient id="g73ProgressGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#33ff66" data-g73-stop="0"/>
+                    <stop offset="50%" stop-color="#a855f7" data-g73-stop="1"/>
+                    <stop offset="100%" stop-color="#ffd84d" data-g73-stop="2"/>
+                  </linearGradient>
+                </defs>
+                <circle class="g73-progress-bg" cx="140" cy="140" r="128"></circle>
+                <circle class="g73-progress-bar" id="g73LoaderProgressBar" cx="140" cy="140" r="128"></circle>
+              </svg>
+            </div>
+          </div>
           <img src="" alt="Album Art" />
         </div>
 
@@ -1239,6 +1317,8 @@
 
   <!-- Player -->
   <script src="js/player/player-core.js"></script>
+  <script src="js/player/cover-loader.js?v=20260318_1"></script>
+  <script src="js/player/player-ambience.js?v=20260318_2"></script>
   <script src="js/player/vz-beat-glow.js?v=20251228_1"></script>
   <script src="js/player/ui-events.js"></script>
 

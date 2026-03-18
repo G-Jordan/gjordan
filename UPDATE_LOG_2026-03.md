@@ -438,3 +438,17 @@ Phase 11.7c – Preview-safe visualizer and footer centering
 - Replaced unstable visualizer boot with a preview-safe renderer path that reliably draws bars in localhost/Acode/SPCK environments.
 - Kept the visualizer API surface compatible with the editor and equalizer.
 - Added stronger footer/info centering overrides to force equal left/right gutters under the player shell.
+
+## 2026-03-18 — Vinyl cover loader
+- Added a G73 spinning vinyl loader over the main player artwork on homepage load.
+- The vinyl appears immediately on site visit before the song cover is ready.
+- Once the active song artwork finishes loading, the vinyl fades out and the real cover fades in.
+- Added fallback handling so missing artwork falls back to `gjordan.jpg` instead of leaving the art stage blank.
+
+
+
+## 2026-03-18 — Vinyl loader theme sync + WebGL starfield
+- Made the G73 vinyl loader inherit the live site theme colors, including the loader progress ring and G73 letter glow colors.
+- Added a WebGL starfield ambience layer behind the visualizer and cover art for more depth and an outer-space look.
+- Added starfield controls inside Visualizer Studio so users can change star count, size, twinkle, and color mode.
+- Added automatic theme syncing so the starfield and vinyl loader respond to site theme changes in real time.

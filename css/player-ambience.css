@@ -1,0 +1,38 @@
+:root{
+  --g73-starfield-opacity: 0.9;
+}
+
+.wrapper{
+  position: relative;
+}
+
+#audio-starfield{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+  opacity: var(--g73-starfield-opacity);
+}
+
+#audio-visualizer{
+  z-index: -1;
+}
+
+.img-area.g73-art-stage{
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--app-primary, #5fa0ff) 18%, transparent),
+    0 22px 48px rgba(0,0,0,.32);
+}
+
+.img-area.g73-art-stage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.03), transparent 58%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+  z-index: 1;
+}
